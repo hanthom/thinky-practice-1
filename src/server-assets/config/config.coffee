@@ -8,5 +8,5 @@ module.exports =
         console.log 'REQUEST PARAMETERS >>>>', req.params
       next()
     port: 9999
-  db: require './db/dbConfig'
+  db: require './dbConfig'
     

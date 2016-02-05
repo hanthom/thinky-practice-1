@@ -1,14 +1,17 @@
 gulp = require 'gulp'
 paths =
-  server: './src/server-assets/server.coffee'
+  server: './build/server-assets/server.js'
   coffee:
     compile: ['./src/**/*.coffee', '!./src/config/secrets.coffee']
-    all: './**/*.coffee'
+    all: ['./**/*.coffee,', '!/node_modules']
 
 gulp.task 'default', (cb)->
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
   runSquence 'coffeelint', 'coffee', ['watch', 'nodemon'], cb
+
+gulp.task 'build', (cb)->
+  runSquence 'coffee', cb
 
 gulp.task 'coffeelint', ()->
   coffeelint = require 'gulp-coffeelint'
@@ -27,13 +30,13 @@ gulp.task 'coffee', ['coffeelint'], ()->
       this.emit 'end'
     .pipe gulp.dest './build'
 
-gulp.task 'tunnel', ()->
-  {createTunnels, localConfig, composeConfig} = require './config'
-  createTunnels localConfig, composeConfig
-    .then ()->
-      console.log 'Tunnels created!'
-    .catch (e)->
-      console.log 'Tunnel failure', e
+# gulp.task 'tunnel', ()->
+#   {createTunnels, localConfig, composeConfig} = require './config'
+#   createTunnels localConfig, composeConfig
+#     .then ()->
+#       console.log 'Tunnels created!'
+#     .catch (e)->
+#       console.log 'Tunnel failure', e
 
 
 gulp.task 'nodemon', ()->
