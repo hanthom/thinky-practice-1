@@ -1,50 +1,27 @@
 gulp = require 'gulp'
+{coffee, coffeelint, nodemon, tunnel} = require "#{__dirname}/config/tasks"
 paths =
-  server: './build/server-assets/server.js'
+  server: "#{__dirname}/build/server-assets/server.js"
   coffee:
-    compile: ['./src/**/*.coffee', '!./src/config/secrets.coffee']
-    all: ['./**/*.coffee,', '!/node_modules']
+    compile: ["#{__dirname}/src/**/*.coffee", "!#{__dirname}/src/config/secrets.coffee"]
+    all: ["#{__dirname}/**/*.coffee,", "#{__dirname}/node_modules"]
 
 gulp.task 'default', (cb)->
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
   runSquence 'coffeelint', 'coffee', ['watch', 'nodemon'], cb
 
-gulp.task 'build', (cb)->
-  runSquence 'coffee', cb
-
 gulp.task 'coffeelint', ()->
-  coffeelint = require 'gulp-coffeelint'
-  stylishCoffee = require 'coffeelint-stylish'
-  gulp.src paths.coffee.all
-    .pipe coffeelint()
-    .pipe coffeelint.reporter stylishCoffee
-
+  coffeelint paths.coffee.all
 
 gulp.task 'coffee', ['coffeelint'], ()->
-  coffee = require 'gulp-coffee'
-  gulp.src paths.coffee.compile
-    .pipe coffee()
-    .on 'error', (e)->
-      console.log "COFFEE ERROR >>>> #{e.message}"
-      this.emit 'end'
-    .pipe gulp.dest './build'
+  coffee paths.coffee.compile, './build'
 
-# gulp.task 'tunnel', ()->
-#   {createTunnels, localConfig, composeConfig} = require './config'
-#   createTunnels localConfig, composeConfig
-#     .then ()->
-#       console.log 'Tunnels created!'
-#     .catch (e)->
-#       console.log 'Tunnel failure', e
+gulp.task 'nodemon', ['tunnel'], ()->
+  nodemon paths.server
 
-
-gulp.task 'nodemon', ()->
-  nodemon = require 'gulp-nodemon'
-  console.log "ENV IN GULP >>>>  #{process.env.NODE_ENV}"
-  nodemon
-    script: paths.server
-    delay: 500
+gulp.task 'tunnel', ()->
+  tunnel()
 
 gulp.task 'watch', ()->
   gulp.watch paths.coffee.all, ['coffee']

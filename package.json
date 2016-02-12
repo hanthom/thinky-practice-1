@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "heroku": "node ./heroku/server-assets/server.js",
     "start": "node ./build/server-assets/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,9 +17,11 @@
     "gulp-coffeelint": "^0.6.0",
     "gulp-nodemon": "^2.0.6",
     "gulp-shell": "^0.5.2",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "tunnel-ssh": "^2.0.1"
   },
   "dependencies": {
+    "adit": "^0.1.13",
     "body-parser": "^1.14.2",
     "express": "^4.13.4",
     "rethinkdb": "^2.2.1",
