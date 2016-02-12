@@ -20,8 +20,7 @@ gulp.task 'coffee', ['coffeelint'], ()->
 gulp.task 'nodemon', ['tunnel'], ()->
   nodemon paths.server
 
-gulp.task 'tunnel', ()->
-  tunnel()
+gulp.task 'writeKey', ()->
 
 gulp.task 'watch', ()->
   gulp.watch paths.coffee.all, ['coffee']

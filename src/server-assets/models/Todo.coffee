@@ -1,5 +1,5 @@
-{db} = require '../config/config'
-{type, r} = db
+{getDb} = require '../config/config'
+{type, r} = getDb()
 Todo = db.createModel 'Todo',
   text: type.string()
   createdAt: type.date().default r.now

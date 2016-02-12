@@ -2,35 +2,48 @@ thinky = require 'thinky'
 q = require 'q'
 {readFile} = require 'fs'
 
-dbName = 'thinky_practice'
-{authKey, port} = require("#{__dirname}/../../../config/secrets").compose
-if process.env.NODE_ENV is 'development'
-  dbName = "#{dbName}_DEV"
-
 db = {}
+dbName = 'thinky_practice'
+dbConfig =
+  dbName: dbName
+  host: process.env.host
+  port: process.env.port
+  authKey: process.env.authKey
 
-createTunnel = ()->
+if process.env.NODE_ENV is 'development'
+  {authKey, host, sshPort} = require "#{__dirname}/../../../config/secrets"
+  dbconfig =
+    dbName: "#{dbName}_DEV"
+    host: host
+    port: port
+    authKey: authKey
+
+getCert = (path)->
   dfd = q.defer()
-  readFile "#{__dirname}/ca_cert.key", (err, caCert)->
-    if err then dfd.reject err
+  readFile "#{__dirname}/#{path}", (e, caCert)->
+    if e
+      console.log "ERROR WITH FILE READ >>>> #{e}"
+      dfd.reject e.message
     else
-      dbConfig =
-        db: dbName
-        host: 'localhost'
-        port: port
-        authKey: authKey
-        ssl:
-          ca: caCert
-      db = thinky dbConfig
-      dfd.resolve db
+      dfd.resolve caCert
   dfd.promise
 
-getDb = ()->
-  dfd = q.defer()
-  if db then db
-  else
-    createTunnel()
-      .then (db)->
-        console.log 'DB CONNECTED >>>> '
+createDb = ()->
+  getCert dbConfig.certPath
+  dbConfig.ssl = ca: caCert
+  db = thinky dbConfig
+  dfd.resolve db  
 
-module.exports = getDb
+module.exports =
+  getDb: ()->
+    if db is !{}
+      db
+    else
+      dfd = q.defer()
+      createTunnel()
+        .then (db)->
+          console.log 'DB CONNECTED'
+          dfd.resolve db
+        .catch (e)->
+          dfd.reject e
+      dfd.promise
