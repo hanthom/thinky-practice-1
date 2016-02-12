@@ -4,6 +4,7 @@ coffeelint = require 'gulp-coffeelint'
 stylishCoffee = require 'coffeelint-stylish'
 nodemon = require 'gulp-nodemon'
 
+
 module.exports =
   coffee: (src, dest)->
     gulp.src src
@@ -24,3 +25,5 @@ module.exports =
     nodemon
       script: script
       delay: 500
+  writeKey: (sslCert)->
+    
