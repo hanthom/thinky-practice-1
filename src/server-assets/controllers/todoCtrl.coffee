@@ -1,7 +1,7 @@
 {Todo} = require '../models/models'
 q = require 'q'
 
-{r} = require('../config/config').db
+{r} = require("#{__dirname}/../config").getDb()
 
 handleErr = (action, message, promise)->
   log = "ERROR #{action} >>>> #{message}"

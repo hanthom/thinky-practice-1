@@ -1,4 +1,5 @@
-{getOneTodo, getAllTodos, addTodo, editTodo, deleteTodo} = require '../controllers/todoCtrl'
+todoCtrl = require "#{__dirname}/../controllers/todoCtrl"
+{getOneTodo, getAllTodos, addTodo, editTodo, deleteTodo} = todoCtrl
 
 handleErr = (e, res)->
   res

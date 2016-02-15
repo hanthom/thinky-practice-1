@@ -11,31 +11,31 @@ dbConfig =
   authKey: process.env.authKey
 
 if process.env.NODE_ENV is 'development'
-  dbConfig = require "#{__dirname}/../../../config/secrets"
-  dbconfig.dbName: "#{dbName}_DEV"
+  {dbConfig} = require "#{__dirname}/../../../config/secrets"
+  dbConfig.dbName = "#{dbName}_DEV"
 
 createDb = ()->
   dfd = q.defer()
-  readFile "#{__dirname}/sslCert.ca", (e, caCert)->
+  readFile "#{__dirname}/sslCert.crt", (e, caCert)->
     if e
       console.log "ERROR WITH FILE READ >>>>", e
       dfd.reject e.message
     else
       dbConfig.ssl = ca: caCert
       db = thinky dbConfig
-      dfd.resolve db  
+      console.log db
+      dfd.resolve db
   dfd.promise
 
-module.exports =
-  getDb: ()->
-    if db is !db
-      db
-    else
-      dfd = q.defer()
-      createTunnel()
-        .then (db)->
-          console.log 'DB CONNECTED'
-          dfd.resolve()
-        .catch (e)->
-          dfd.reject e
-      dfd.promise
+module.exports = ()->
+  if db
+    db
+  else
+    dfd = q.defer()
+    createDb()
+      .then (db)->
+        console.log 'DB CONNECTED'
+        dfd.resolve()
+      .catch (e)->
+        dfd.reject e
+    dfd.promise
