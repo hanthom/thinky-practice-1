@@ -2,7 +2,6 @@ gulp = require 'gulp'
 {coffee, coffeelint, nodemon, move, paths, watch, build} = require "#{__dirname}/config/tasks"
 
 paths =
-  sslCert: 'src/server-assets/config/sslCert.crt'
   server: 'build/server-assets/server.js'
   coffee:
     compile: "src/**/*.coffee"
@@ -22,7 +21,7 @@ gulp.task 'coffee', ['coffeelint'], ()->
   coffee paths.coffee.compile, 'build'
 
 gulp.task 'move', ()->
-  move paths.sslCert, 'build/server-assets/config'
+  move 'build/server-assets/config'
 
 gulp.task 'nodemon', ()->
   nodemon paths.server

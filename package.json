@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./build/server-assets/server.js",
-    "postinstall": "gulp build",
+    "heroku": "node ./target/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chip Cantrell",
@@ -26,7 +26,6 @@
     "body-parser": "^1.14.2",
     "express": "^4.13.4",
     "rethinkdb": "^2.2.1",
-    "thinky": "^2.2.4",
-    "tunnel-ssh": "^2.0.1"
+    "thinky": "^2.2.4"
   }
 }

@@ -1,1 +1,1 @@
-web: python config/tunnel.py && npm start
+web: python config/tunnel.py && npm heroku
