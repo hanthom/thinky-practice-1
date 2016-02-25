@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-{coffee, coffeelint, nodemon, move, paths, watch} = require "#{__dirname}/config/tasks"
+{coffee, coffeelint, nodemon, move, paths, watch, build} = require "#{__dirname}/config/tasks"
 
 paths =
   sslCert: 'src/server-assets/config/sslCert.crt'
@@ -12,6 +12,8 @@ gulp.task 'default', (cb)->
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
   runSquence 'coffeelint',['coffee', 'move'],['nodemon','watch'], cb
+
+gulp.task 'build', ['coffee']
 
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.all
