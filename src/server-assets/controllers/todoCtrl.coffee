@@ -1,7 +1,7 @@
 {Todo} = require '../models/models'
 q = require 'q'
 
-{r} = require("#{__dirname}/../config").getDb()
+{r} = require("#{__dirname}/../config").db
 
 handleErr = (action, message, promise)->
   log = "ERROR #{action} >>>> #{message}"
@@ -9,7 +9,6 @@ handleErr = (action, message, promise)->
   promise.reject log
 
 module.exports =
-
   addTodo: (todo)->
     dfd = q.defer()
     new Todo todo

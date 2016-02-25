@@ -3,6 +3,7 @@ coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 stylishCoffee = require 'coffeelint-stylish'
 nodemon = require 'gulp-nodemon'
+pyShell = require 'python-shell'
 
 addBase = (end)->
   base = "#{__dirname}/../#{end}"
@@ -53,7 +54,7 @@ module.exports =
     nodemon
       script: script
       delay: 500
-
+  
   watch: (path, tasks)->
     {src} = fixPath path
     console.log "Should be watching #{src}"
