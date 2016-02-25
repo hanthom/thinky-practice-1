@@ -9,6 +9,9 @@
   },
   "author": "Chip Cantrell",
   "license": "ISC",
+  "engines": {
+    "node": "5.7.0"
+  }
   "devDependencies": {
     "coffee-script": "^1.10.0",
     "gulp": "^3.9.0",
