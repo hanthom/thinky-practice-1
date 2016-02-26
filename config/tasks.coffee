@@ -1,11 +1,4 @@
-browserify = require 'browserify'
-coffee = require 'gulp-coffee'
-coffeelint = require 'gulp-coffeelint'
 gulp = require 'gulp'
-nodemon = require 'gulp-nodemon'
-source = require 'vinyl-source-stream'
-stylishCoffee = require 'coffeelint-stylish'
-watchify = require 'watchify'
 
 addBase = (end)->
   base = "#{__dirname}/../#{end}"
@@ -16,6 +9,7 @@ addBase = (end)->
     base
 
 bundle = (bundler, dest)->
+  source = require 'vinyl-source-stream'
   dest = addBase dest
   bundler
     .bundle()
@@ -41,10 +35,12 @@ fixPath = (src, dest)->
 
 module.exports =
   browserify: (script)->
+    browserify = require 'browserify'
     script = addBase script
     bundle browserify script
 
   coffee: (src, dest)->
+    coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
     gulp.src src
       .pipe coffee()
@@ -54,6 +50,8 @@ module.exports =
       .pipe gulp.dest dest
 
   coffeelint: (src)->
+    coffeelint = require 'gulp-coffeelint'
+    stylishCoffee = require 'coffeelint-stylish'
     {src} = fixPath src
     gulp.src src
       .pipe coffeelint()
@@ -65,6 +63,7 @@ module.exports =
       .pipe gulp.dest dest
 
   nodemon: (script)->
+    nodemon = require 'gulp-nodemon'
     script = addBase script
     console.log "ENV IN GULP >>>> #{process.env.NODE_ENV}"
     nodemon
@@ -77,6 +76,7 @@ module.exports =
     gulp.watch src, tasks
 
   watchify: (script)->
+    watchify = require 'watchify'
     script = addBase script
     watcher = watchify browserify(script), watchify.args
     bundle watcher

@@ -1,1 +1,1 @@
-web: python config/tunnel.py & coffee src/app.coffee
+web: python config/tunnel.py & gulp build && npm start

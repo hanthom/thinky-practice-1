@@ -22,7 +22,7 @@ module.exports = (app)->
       .catch (e)->
         handleErr e, res
 
-  app.post '/api/todo', (req, res)->
+  app.post '/api/todos', (req, res)->
     addTodo req.body
       .then (todo)->
         res
@@ -31,7 +31,7 @@ module.exports = (app)->
       .catch (e)->
         handleErr e, res
 
-  app.route '/api/todo/:id'
+  app.route '/api/todos/:id'
     .get (req, res)->
       getOneTodo req.params.id
         .then (todo)->
