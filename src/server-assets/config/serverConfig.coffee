@@ -6,4 +6,4 @@ module.exports =
     if req.params is !{}
       console.log 'REQUEST PARAMETERS >>>>', req.params
     next()
-  port: 9999
+  port: process.env.PORT || 9999
