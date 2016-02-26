@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-{coffee, coffeelint, nodemon, paths, watch, tunnel} = require "#{__dirname}/config/tasks"
+{coffee, coffeelint, nodemon, paths, watch} = require "#{__dirname}/config/tasks"
 
 paths =
   server: 'build/app.js'
@@ -22,9 +22,6 @@ gulp.task 'coffee', ['coffeelint'], ()->
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
-
-gulp.task 'tunnel', ()->
-  tunnel()
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ['coffee']
