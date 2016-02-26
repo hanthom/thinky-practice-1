@@ -10,7 +10,7 @@ if process.env.NODE_ENV is 'development'
 opts =
   db: dbName
   authKey: process.env.SSH_TUNNEL_AUTHKEY || authKey
-  
+
 db = thinky opts
 
 module.exports = db
