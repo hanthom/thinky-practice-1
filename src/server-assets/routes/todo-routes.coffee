@@ -11,7 +11,7 @@ module.exports = (app)->
   app.get '/api/todos/:status', (req, res)->
     getAllTodos req.params.status
       .then (todos)->
-        if todos
+        if todos.length >= 1
           res
             .status 200
             .send todos

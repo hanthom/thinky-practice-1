@@ -7,7 +7,6 @@ source = require 'vinyl-source-stream'
 stylishCoffee = require 'coffeelint-stylish'
 watchify = require 'watchify'
 
-
 addBase = (end)->
   base = "#{__dirname}/../#{end}"
   if end[0] is '!'
@@ -24,14 +23,14 @@ bundle = (bundler, dest)->
       console.log "ERROR WITH BUNDLING >>>> #{e.message}"
     .pipe source 'bundle.js'
     .pipe gulp.dest dest
-    
+
 fixPath = (src, dest)->
   fixedPaths = {}
   if Array.isArray src
     fixedSrc = []
     fixedSrc.push addBase path for path in src
   else
-    fixedSrc = addBase src 
+    fixedSrc = addBase src
   if dest
     fixedDest = addBase dest
   fixedPaths =
@@ -71,7 +70,7 @@ module.exports =
     nodemon
       script: script
       delay: 500
-  
+
   watch: (path, tasks)->
     {src} = fixPath path
     console.log "Should be watching #{src}"
