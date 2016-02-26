@@ -1,1 +1,1 @@
-web: python config/tunnel.py && npm heroku
+web: python config/tunnel.py && coffee src/app.coffee
