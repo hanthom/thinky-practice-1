@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-{coffee, coffeelint, nodemon, paths, watch, tunnel} = require "#{__dirname}/config/tasks"
+{coffee, coffeelint, nodemon, paths, watch} = require "#{__dirname}/config/tasks"
 
 paths =
   server: 'build/app.js'
@@ -10,21 +10,18 @@ paths =
 gulp.task 'default', (cb)->
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
-  runSquence ['tunnel', 'coffeelint'], 'coffee', ['nodemon','watch'], cb
+  runSquence 'coffeelint','coffee', ['nodemon','watch'], cb
 
 gulp.task 'build', ['coffee']
 
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.all
 
-gulp.task 'coffee', ['coffeelint'], ()->
+gulp.task 'coffee', ()->
   coffee paths.coffee.compile, 'build'
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
 
-gulp.task 'tunnel', ()->
-  tunnel()
-
 gulp.task 'watch', ()->
-  watch paths.coffee.all, ['coffee']
+  watch paths.coffee.all, ['coffeelint','coffee']
