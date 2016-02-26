@@ -11,7 +11,7 @@
   "author": "Chip Cantrell",
   "license": "ISC",
   "engines": {
-    "Node.js": "5.7.0"
+    "node": "5.7.0"
   },
   "devDependencies": {
     "gulp-coffeelint": "^0.6.0",
