@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./build/server-assets/server.js",
-    "heroku": "node ./target/server.js",
+    "start": "node ./build/app.js",
+    "heroku": "node ./target/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chip Cantrell",
@@ -14,18 +14,20 @@
     "node": "5.7.0"
   },
   "devDependencies": {
-    "coffee-script": "^1.10.0",
     "gulp": "^3.9.0",
     "gulp-coffee": "^2.3.1",
     "gulp-coffeelint": "^0.6.0",
     "gulp-nodemon": "^2.0.6",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "watchify": "^3.7.0"
   },
   "dependencies": {
-    "adit": "^0.1.13",
     "body-parser": "^1.14.2",
+    "browserify": "^13.0.0",
+    "coffee-script": "^1.10.0",
     "express": "^4.13.4",
     "rethinkdb": "^2.2.1",
-    "thinky": "^2.2.4"
+    "thinky": "^2.2.4",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

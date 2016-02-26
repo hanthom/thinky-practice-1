@@ -1,9 +1,12 @@
-gulp = require 'gulp'
+browserify = require 'browserify'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
-stylishCoffee = require 'coffeelint-stylish'
+gulp = require 'gulp'
 nodemon = require 'gulp-nodemon'
-pyShell = require 'python-shell'
+source = require 'vinyl-source-stream'
+stylishCoffee = require 'coffeelint-stylish'
+watchify = require 'watchify'
+
 
 addBase = (end)->
   base = "#{__dirname}/../#{end}"
@@ -12,6 +15,15 @@ addBase = (end)->
     "!#{base}"
   else
     base
+
+bundle = (bundler, dest)->
+  dest = addBase dest
+  bundler
+    .bundle()
+    .on 'error', (e)->
+      console.log "ERROR WITH BUNDLING >>>> #{e.message}"
+    .pipe source 'bundle.js'
+    .pipe gulp.dest dest
     
 fixPath = (src, dest)->
   fixedPaths = {}
@@ -27,7 +39,12 @@ fixPath = (src, dest)->
     dest: fixedDest
   fixedPaths
 
+
 module.exports =
+  browserify: (script)->
+    script = addBase script
+    bundle browserify script
+
   coffee: (src, dest)->
     {src, dest} = fixPath src, dest
     gulp.src src
@@ -59,3 +76,15 @@ module.exports =
     {src} = fixPath path
     console.log "Should be watching #{src}"
     gulp.watch src, tasks
+
+  watchify: (script)->
+    script = addBase script
+    watcher = watchify browserify(script), watchify.args
+    bundle watcher
+    watcher
+      .on 'update', ()->
+        console.log 'Watchify Updating...'
+        bundle watcher
+      .on 'log', (log)->
+        console.log 'Watchify Log:'
+        console.log log
