@@ -2,7 +2,7 @@ express = require 'express'
 {port} = require("#{__dirname}/server-assets/config").server
 
 app = express()
-app.listen process.env.PORT || port, (e)->
+app.listen port, (e)->
   if e
     console.log "SPIN UP ERROR >>>> #{e.message}"
   else
