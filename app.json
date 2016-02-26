@@ -1,0 +1,31 @@
+{
+  "name": "thinky-practice",
+  "description": "Practice with hosted services",
+  "scripts": {
+  },
+  "env": {
+    "BUILDPACK_URL": {
+      "required": true
+    },
+    "SSH_TUNNEL_AUTHKEY": {
+      "required": true
+    },
+    "SSH_TUNNEL_FORWARDS": {
+      "required": true
+    },
+    "SSH_TUNNEL_KEY": {
+      "required": true
+    },
+    "SSH_TUNNEL_TARGET": {
+      "required": true
+    }
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/aergonaut/heroku-buildpack-coffeescript.git"
+    }
+  ]
+}
