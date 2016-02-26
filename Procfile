@@ -1,1 +1,1 @@
-web: python tunnel.py & coffee src/app.coffee
+web: python tunnel.py && coffee src/app.coffee
