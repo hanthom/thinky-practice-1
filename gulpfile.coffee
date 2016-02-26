@@ -10,18 +10,18 @@ paths =
 gulp.task 'default', (cb)->
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
-  runSquence 'coffee', ['nodemon','watch'], cb
+  runSquence 'coffeelint','coffee', ['nodemon','watch'], cb
 
 gulp.task 'build', ['coffee']
 
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.all
 
-gulp.task 'coffee', ['coffeelint'], ()->
+gulp.task 'coffee', ()->
   coffee paths.coffee.compile, 'build'
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
 
 gulp.task 'watch', ()->
-  watch paths.coffee.all, ['coffee']
+  watch paths.coffee.all, ['coffeelint','coffee']
