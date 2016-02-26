@@ -10,7 +10,7 @@ paths =
 gulp.task 'default', (cb)->
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
-  runSquence ['tunnel', 'coffeelint'], 'coffee', ['nodemon','watch'], cb
+  runSquence 'coffee', ['nodemon','watch'], cb
 
 gulp.task 'build', ['coffee']
 

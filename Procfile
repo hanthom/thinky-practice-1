@@ -1,1 +1,2 @@
-web: python config/tunnel.py & coffee src/app.coffee
+postinstall: gulp build
+web: python config/tunnel.py & npm start
