@@ -37,9 +37,9 @@ fixPath = (src, dest)->
     fixedSrc = addBase src
   if dest
     fixedDest = addBase dest
-    fixedPaths =
-      src: fixedSrc
-      dest: fixedDest
+  fixedPaths =
+    src: fixedSrc
+    dest: fixedDest
   fixedPaths
 
 

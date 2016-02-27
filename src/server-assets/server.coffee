@@ -1,5 +1,5 @@
 express = require 'express'
-{port} = require "#{__dirname}/server-assets/serverConfig"
+{port} = require "#{__dirname}/config/serverConfig"
 
 app = express()
 app.listen port, (e)->

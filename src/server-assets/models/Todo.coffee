@@ -1,4 +1,4 @@
-{db} = require "#{__dirname}/../config"
+db = require "#{__dirname}/../config/dbConfig"
 {type, r} = db
 Todo = db.createModel 'Todo',
   text: type.string()
