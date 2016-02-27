@@ -1,4 +1,4 @@
-# Sets the dbName and only requires 'secrets' file if in development
+# Sets the dbName and only requires 'secrets' file if in env not available
 # Exports one instance of thinky so tables are shared
 thinky = require 'thinky'
 authKey = ''
