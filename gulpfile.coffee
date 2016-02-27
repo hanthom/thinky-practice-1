@@ -4,7 +4,7 @@ tasks = require "#{__dirname}/config/tasks"
 
 # Place to store paths that will be used again
 paths =
-  server: 'build/server.js'
+  server: 'build/server-assets/server.js'
   coffee:
     compile: "src/**/*.coffee"
     all: ["src/**/*.coffee", "!node_modules"]
