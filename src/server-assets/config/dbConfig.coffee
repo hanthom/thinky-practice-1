@@ -1,3 +1,5 @@
+# Sets the dbName and only requires 'secrets' file if in development
+# Exports one instance of thinky so tables are shared
 thinky = require 'thinky'
 
 dbName = 'thinky_practice'
