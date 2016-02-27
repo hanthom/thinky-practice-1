@@ -4,12 +4,20 @@ q = require 'q'
 {r} = require "#{__dirname}/../config/dbConfig"
 
 handleErr = (action, message, promise)->
+  # Creates a log message and rejects promise with log
+  # @params: action -> string
+  # @params: message -> string
+  # @params: promise -> q.defer object
   log = "ERROR #{action} >>>> #{message}"
   console.log log
   promise.reject log
 
 module.exports =
   addTodo: (todo)->
+    # Adds a todo to the database
+    # @params: object
+    # @returns: promise
+    # @resolves: object
     dfd = q.defer()
     new Todo todo
       .save()
@@ -21,6 +29,10 @@ module.exports =
     dfd.promise
 
   getOneTodo: (id)->
+    # Retrieves one todo from the database
+    # @params: string
+    # @returns: promise
+    # @resolves: object
     dfd = q.defer()
     Todo
       .get id
