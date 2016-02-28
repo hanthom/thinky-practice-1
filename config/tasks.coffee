@@ -87,9 +87,11 @@ module.exports =
   # @param string
   # @param string
   jade: (src, dest) ->
+    prettify = require 'gulp-prettify'
     jade = require 'gulp-jade'
     {src, dest} = fixPath src, dest
     gulp.src src
+      # prettify tossing error in html
       # .pipe prettify {indent_size: 2}
       .pipe jade()
       .pipe gulp.dest dest
