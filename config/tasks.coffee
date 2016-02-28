@@ -17,6 +17,7 @@ addBase = (path)->
 bundle = (bundler, dest)->
   source = require 'vinyl-source-stream'
   dest = addBase dest
+  console.log __dirname
   bundler
     .bundle()
     .on 'error', (e)->
@@ -48,7 +49,7 @@ module.exports =
   # Calls bundle with browserify as bundler
   browserify: (dest)->
     browserify = require 'browserify'
-    bundle browserify, dest
+    bundle browserify(), dest
 
   # Accepts string src and dest
   # Compiles coffeescript files to js
@@ -86,17 +87,6 @@ module.exports =
       .pipe jade()
       .pipe gulp.dest dest
 
-  # Compiles Stylus into css
-  # @param string
-  # @param string
-  stylus: (src, dest) ->
-    styl = require 'gulp-stylus'
-
-    {src, dest} = fixPath src, dest
-    gulp.src src
-      .pipe styl()
-      .pipe gulp.dest dest
-
   # Accepts string src and dest
   # Moves src files to dest path
   move: (src, dest)->
@@ -115,6 +105,17 @@ module.exports =
       script: script
       delay: 500
 
+  # Compiles Stylus into css
+  # @param string
+  # @param string
+  stylus: (src, dest) ->
+    styl = require 'gulp-stylus'
+
+    {src, dest} = fixPath src, dest
+    gulp.src src
+      .pipe styl()
+      .pipe gulp.dest dest
+
   # Accepts string path
   # Tasks is an array of string task names
   # Watches for changes in files and runs tasks on save
@@ -126,10 +127,10 @@ module.exports =
   # Accepts string dest to write updated bundle.js
   # Creates watcher to update after changes in bundled js files
   # Calls bundle with watchify as bundler
-  watchify: (dest)->
+  watchify: (watch, dest)->
     watchify = require 'watchify'
-    dest = addBase dest
-    watcher = watchify browserify(dest), watchify.args
+    browserify = require 'browserify'
+    watcher = watchify browserify(watch), watchify.args
     bundle watcher, dest
     watcher
       .on 'update', ()->

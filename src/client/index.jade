@@ -5,6 +5,16 @@ html(lang="en")
       Hello World
     link(href="style.css", rel="stylesheet")
   body
-    p.
-      Hello World
+    div(ng-app="todoApp")
+      div.container
+        nav
+          ul
+            li
+              button(ui-sref="/home", onclick="console.log('Click Home')") Home
+            li
+              button(ui-sref="/page",  onclick="console.log('Click Page')") Page
+              {{'Sup'}}
+        section.container(ng-view)
+        
+    script(src="./bundle.js")
     
