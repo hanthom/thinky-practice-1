@@ -3,8 +3,7 @@ q = require 'q'
 
 {r} = require "#{__dirname}/../config/dbConfig"
 
-#---------#
-# handleErr
+##### handleErr #####
 # Creates a log message and rejects promise with log
 # @params: action -> string
 # @params: message -> string
@@ -16,8 +15,7 @@ handleErr = (action, message, promise)->
 
 module.exports =
 
-  #---------#
-  # addTodo
+  ##### addTodo #####
   # Adds a todo to the database
   # @params: object
   # @returns: promise
@@ -33,8 +31,7 @@ module.exports =
         handleErr 'SAVING TODO', e.message, dfd
     dfd.promise
 
-  #---------#
-  # getOneTodo
+  ##### getOneTodo #####
   # Retrieves one todo from the database
   # @params: string
   # @returns: promise
@@ -51,8 +48,7 @@ module.exports =
         handleErr 'GETTING TODO', e.message, dfd
     dfd.promise
 
-  #---------#
-  # getAllTodos
+  ##### getAllTodos #####
   # Gets all todos matching the given status
   # Returns todos ordered with newest first
   # @params: string
@@ -73,8 +69,7 @@ module.exports =
         handleErr 'GETTING TODOS', e.message, dfd
     dfd.promise
 
-  #---------#
-  # editTodo
+  ##### editTodo #####
   # Updates the specified todo with the changes given
   # @params: id -> string
   # @params: changes -> object
@@ -92,8 +87,8 @@ module.exports =
         handleErr 'UPDATING TODO', e.message, dfd
     dfd.promise
 
-  #---------#
-  # deleteTodo
+
+  ##### deleteTodo #####
   # Removes the specified todo
   # @params: id
   # @returns: promise
