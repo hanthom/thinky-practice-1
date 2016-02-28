@@ -19,7 +19,7 @@ gulp.task 'default', (cb)->
   # Sets env and ensures proper sequence of tasks
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
-  runSquence ['jade', 'stylus', 'coffeelint','coffee',], ['watch'], cb
+  runSquence ['jade', 'stylus', 'coffeelint','coffee'], ['watch'], cb
 
 gulp.task 'build', ['coffee']
 

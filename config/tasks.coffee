@@ -86,17 +86,6 @@ module.exports =
       .pipe jade()
       .pipe gulp.dest dest
 
-  # Compiles Stylus into css
-  # @param string
-  # @param string
-  stylus: (src, dest) ->
-    styl = require 'gulp-stylus'
-
-    {src, dest} = fixPath src, dest
-    gulp.src src
-      .pipe styl()
-      .pipe gulp.dest dest
-
   # Accepts string src and dest
   # Moves src files to dest path
   move: (src, dest)->
@@ -114,6 +103,17 @@ module.exports =
     nodemon
       script: script
       delay: 500
+
+  # Compiles Stylus into css
+  # @param string
+  # @param string
+  stylus: (src, dest) ->
+    styl = require 'gulp-stylus'
+
+    {src, dest} = fixPath src, dest
+    gulp.src src
+      .pipe styl()
+      .pipe gulp.dest dest
 
   # Accepts string path
   # Tasks is an array of string task names
