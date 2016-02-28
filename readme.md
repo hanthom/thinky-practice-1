@@ -1,3 +1,8 @@
+# Making changes to the repo #
+Create your own fork and fool around with the api. You can create pull requests on/ push to the Slant Six dev branch and Heroku will deploy the updates to:  
+https://thinky-practice-dev.herokuapp.com/
+
+# Useful Snippet in Atom #
 Atom snippets for formatted comments and function creations  
 Add these to your snippets.cson  
 Use tab to get to each spot preceded by a $
