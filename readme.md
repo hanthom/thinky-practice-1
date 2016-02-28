@@ -1,4 +1,5 @@
-Atom snippets for formatted comments and function creations
+Atom snippets for formatted comments and function creations.
+
 Add these to your snippets.cson
 ```
 '.source.coffee':
