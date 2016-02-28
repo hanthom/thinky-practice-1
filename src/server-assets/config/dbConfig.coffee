@@ -6,7 +6,8 @@ dbName = 'thinky_practice'
 if process.env.NODE_ENV is 'development'
   dbName = "#{dbName}_DEV"
 if !process.env.SSH_TUNNEL_AUTHKEY
-  authKey = require("#{__dirname}/../../../config/secrets.coffee").dbConfig.authKey
+  path = "#{__dirname}/../../../config/secrets.coffee"
+  authKey = require(path).dbConfig.authKey
 
 opts =
   db: dbName
