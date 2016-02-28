@@ -127,10 +127,10 @@ module.exports =
   # Accepts string dest to write updated bundle.js
   # Creates watcher to update after changes in bundled js files
   # Calls bundle with watchify as bundler
-  watchify: (dest)->
+  watchify: (watch, dest)->
     watchify = require 'watchify'
     browserify = require 'browserify'
-    watcher = watchify browserify(dest), watchify.args
+    watcher = watchify browserify(watch), watchify.args
     bundle watcher, dest
     watcher
       .on 'update', ()->
