@@ -1,5 +1,5 @@
 module.exports = ($urlRouterProvider, $stateProvider) ->
-  $urlRouterProvider.otherwise '/home'
+  $urlRouterProvider.otherwise '/'
   $stateProvider
     .state 'home',
       url: '/'
