@@ -3,21 +3,26 @@ q = require 'q'
 
 {r} = require "#{__dirname}/../config/dbConfig"
 
+#---------#
+# handleErr
+# Creates a log message and rejects promise with log
+# @params: action -> string
+# @params: message -> string
+# @params: promise -> q.defer object
 handleErr = (action, message, promise)->
-  # Creates a log message and rejects promise with log
-  # @params: action -> string
-  # @params: message -> string
-  # @params: promise -> q.defer object
   log = "ERROR #{action} >>>> #{message}"
   console.log log
   promise.reject log
 
 module.exports =
+
+  #---------#
+  # addTodo
+  # Adds a todo to the database
+  # @params: object
+  # @returns: promise
+  # @resolves: object
   addTodo: (todo)->
-    # Adds a todo to the database
-    # @params: object
-    # @returns: promise
-    # @resolves: object
     dfd = q.defer()
     new Todo todo
       .save()
@@ -28,11 +33,13 @@ module.exports =
         handleErr 'SAVING TODO', e.message, dfd
     dfd.promise
 
+  #---------#
+  # getOneTodo
+  # Retrieves one todo from the database
+  # @params: string
+  # @returns: promise
+  # @resolves: object
   getOneTodo: (id)->
-    # Retrieves one todo from the database
-    # @params: string
-    # @returns: promise
-    # @resolves: object
     dfd = q.defer()
     Todo
       .get id
@@ -44,6 +51,13 @@ module.exports =
         handleErr 'GETTING TODO', e.message, dfd
     dfd.promise
 
+  #---------#
+  # getAllTodos
+  # Gets all todos matching the given status
+  # Returns todos ordered with newest first
+  # @params: string
+  # @returns: promise
+  # @resolves: array
   getAllTodos: (status)->
     dfd = q.defer()
     query = Todo
@@ -59,6 +73,13 @@ module.exports =
         handleErr 'GETTING TODOS', e.message, dfd
     dfd.promise
 
+  #---------#
+  # editTodo
+  # Updates the specified todo with the changes given
+  # @params: id -> string
+  # @params: changes -> object
+  # @returns: promise
+  # @resolves: object
   editTodo: (id, changes)->
     dfd = q.defer()
     Todo
@@ -71,6 +92,12 @@ module.exports =
         handleErr 'UPDATING TODO', e.message, dfd
     dfd.promise
 
+  #---------#
+  # deleteTodo
+  # Removes the specified todo
+  # @params: id
+  # @returns: promise
+  # @resolves: undefined
   deleteTodo: (id)->
     dfd = q.defer()
     Todo

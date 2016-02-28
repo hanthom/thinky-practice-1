@@ -9,6 +9,9 @@ handleErr = (e, res)->
 module.exports = (app)->
 
   app.get '/api/todos/:status', (req, res)->
+    #
+    # @params ""
+    # @returns ""
     getAllTodos req.params.status
       .then (todos)->
         if todos.length >= 1
