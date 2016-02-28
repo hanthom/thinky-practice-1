@@ -4,6 +4,9 @@ tasks = require "#{__dirname}/config/tasks"
 
 # Place to store paths that will be used again
 paths =
+  bundle:
+    root: 'build/client/js/app.js'
+    dest: 'build/client'
   jade:
     compile: 'src/**/*.jade'
     all: ['src/**/*.jade']
@@ -27,7 +30,7 @@ gulp.task 'default', (cb)->
 gulp.task 'build', ['coffee']
 
 gulp.task 'browserify', () ->
-  browserify './build/client/js/'
+  browserify paths.bundle.root, paths.bundle.dest
 
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.compile
@@ -50,4 +53,4 @@ gulp.task 'watch', ()->
   watch paths.stylus.all, ['stylus']
 
 gulp.task 'watchify', () ->
-  watchify './build/client/js/app.js'
+  watchify paths.bundle.root, paths.bundle.dest

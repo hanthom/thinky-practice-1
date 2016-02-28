@@ -47,9 +47,9 @@ module.exports =
   # Accepts a string destination
   # Creates initial bundle with browserify
   # Calls bundle with browserify as bundler
-  browserify: (dest)->
+  browserify: (root, dest)->
     browserify = require 'browserify'
-    bundle browserify(), dest
+    bundle browserify(root), dest
 
   # Accepts string src and dest
   # Compiles coffeescript files to js
@@ -127,15 +127,15 @@ module.exports =
   # Accepts string dest to write updated bundle.js
   # Creates watcher to update after changes in bundled js files
   # Calls bundle with watchify as bundler
-  watchify: (dest)->
+  watchify: (root, dest)->
     watchify = require 'watchify'
     browserify = require 'browserify'
-    watcher = watchify browserify(dest), watchify.args
+    watcher = watchify browserify(root), watchify.args
     bundle watcher, dest
     watcher
       .on 'update', ()->
         console.log 'Watchify Updating...'
-        bundle watcher
+        bundle watcher, dest
       .on 'log', (log)->
         console.log 'Watchify Log:'
         console.log log
