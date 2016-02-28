@@ -5,12 +5,12 @@ For this repo I'm using [RethinkDB]("https://www.rethinkdb.com/") with the [thin
 Run ```brew install rethinkdb```.
 Then from your home folder you can run ```rethinkdb```.
 This will spin up a rethinkdb server on your machine.
-After it starts you can access the GUI at [localhost:8080/]("localhost:8080/").
+After it starts you can access the GUI at [localhost:8080/](localhost:8080/).
 
-I assume you've got [homebrew]("http://brew.sh/").
+I assume you've got [homebrew](http://brew.sh/).
 I also assume you're using a OS X system.
 If not, checkout the
-[instructions]("https://www.rethinkdb.com/docs/install/")
+[instructions](https://www.rethinkdb.com/docs/install/)
 for installing to your OS.
 Don't worry about getting the client driver, that will be installed with npm.
 
