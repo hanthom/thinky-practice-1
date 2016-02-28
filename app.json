@@ -7,9 +7,6 @@
     "INHERIT_THIS_CONFIG_VAR": {
       "required": true
     },
-    "BUILDPACK_URL": {
-      "required": true
-    },
     "SSH_TUNNEL_AUTHKEY": {
       "required": true
     },
