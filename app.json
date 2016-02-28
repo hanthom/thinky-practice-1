@@ -4,9 +4,6 @@
   "scripts": {
   },
   "env": {
-    "INHERIT_THIS_CONFIG_VAR": {
-      "required": true
-    },
     "SSH_TUNNEL_AUTHKEY": {
       "required": true
     },
