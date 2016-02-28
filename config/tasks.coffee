@@ -1,20 +1,20 @@
 gulp = require 'gulp'
 
+# Accepts a path from the gulpfile and accounts for this file location
+# Checks to see if path is for ignore and adds !
+# Returns full path (string)
 addBase = (path)->
-  # Accepts a path from the gulpfile and accounts for this file location
-  # Checks to see if path is for ignore and adds !
-  # Returns full path (string)
+
   base = "#{__dirname}/../#{path}"
   if path[0] is '!'
     path = path.slice 1, path.length - 1
     "!#{base}"
   else
     base
-
+# Accepts a bundler package and destination path
+# Bundles using provided package and handles errs
+# Writes a 'bundle.js' file to dest
 bundle = (bundler, dest)->
-  # Accepts a bundler package and destination path
-  # Bundles using provided package and handles errs
-  # Writes a 'bundle.js' file to dest
   source = require 'vinyl-source-stream'
   dest = addBase dest
   bundler
@@ -24,10 +24,10 @@ bundle = (bundler, dest)->
     .pipe source 'bundle.js'
     .pipe gulp.dest dest
 
+# Accepts srting src and dest
+# Dynamically calls addBase fn with a src and dest
+# Returns an object with src, dest keys
 fixPath = (src, dest)->
-  # Accepts srting src and dest
-  # Dynamically calls addBase fn with a src and dest
-  # Returns an object with src, dest keys
   fixedPaths = {}
   if Array.isArray src
     # Handling for array type src
@@ -42,18 +42,17 @@ fixPath = (src, dest)->
     dest: fixedDest
   fixedPaths
 
-
 module.exports =
+  # Accepts a string destination
+  # Creates initial bundle with browserify
+  # Calls bundle with browserify as bundler
   browserify: (dest)->
-    # Accepts a string destination
-    # Creates initial bundle with browserify
-    # Calls bundle with browserify as bundler
     browserify = require 'browserify'
     bundle browserify, dest
 
+  # Accepts string src and dest
+  # Compiles coffeescript files to js
   coffee: (src, dest)->
-    # Accepts string src and dest
-    # Compiles coffeescript files to js
     coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
     gulp.src src
@@ -63,10 +62,10 @@ module.exports =
         this.emit 'end'
       .pipe gulp.dest dest
 
+  # Accepts string src
+  # Lints coffee files
+  # Logs reports with stylish coffee package
   coffeelint: (src)->
-    # Accepts string src
-    # Lints coffee files
-    # Logs reports with stylish coffee package
     coffeelint = require 'gulp-coffeelint'
     stylishCoffee = require 'coffeelint-stylish'
     {src} = fixPath src
@@ -74,17 +73,41 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter stylishCoffee
 
+  # Compiles JADE into HTML
+  # @param string
+  # @param string
+  jade: (src, dest) ->
+    prettify = require 'gulp-prettify'
+    jade = require 'gulp-jade'
+    {src, dest} = fixPath src, dest
+    gulp.src src
+      # prettify tossing error in html
+      # .pipe prettify {indent_size: 2}
+      .pipe jade()
+      .pipe gulp.dest dest
+
+  # Compiles Stylus into css
+  # @param string
+  # @param string
+  stylus: (src, dest) ->
+    styl = require 'gulp-stylus'
+
+    {src, dest} = fixPath src, dest
+    gulp.src src
+      .pipe styl()
+      .pipe gulp.dest dest
+
+  # Accepts string src and dest
+  # Moves src files to dest path
   move: (src, dest)->
-    # Accepts string src and dest
-    # Moves src files to dest path
     {src, dest} = fixPath src, dest
     gulp.src src
       .pipe gulp.dest dest
 
+  # Accepts string script
+  # Runs nodemon with provided script
+  # Delays restart by hald second to handle for async tasks
   nodemon: (script)->
-    # Accepts string script
-    # Runs nodemon with provided script
-    # Delays restart by hald second to handle for async tasks
     nodemon = require 'gulp-nodemon'
     script = addBase script
     console.log "ENV IN GULP >>>> #{process.env.NODE_ENV}"
@@ -92,18 +115,18 @@ module.exports =
       script: script
       delay: 500
 
+  # Accepts string path
+  # Tasks is an array of string task names
+  # Watches for changes in files and runs tasks on save
   watch: (path, tasks)->
-    # Accepts string path
-    # Tasks is an array of string task names
-    # Watches for changes in files and runs tasks on save
     {src} = fixPath path
     console.log "Should be watching #{src}"
     gulp.watch src, tasks
 
+  # Accepts string dest to write updated bundle.js
+  # Creates watcher to update after changes in bundled js files
+  # Calls bundle with watchify as bundler
   watchify: (dest)->
-    # Accepts string dest to write updated bundle.js
-    # Creates watcher to update after changes in bundled js files
-    # Calls bundle with watchify as bundler
     watchify = require 'watchify'
     dest = addBase dest
     watcher = watchify browserify(dest), watchify.args
