@@ -32,7 +32,7 @@
     "q": "^1.4.1",
     "rethinkdb": "^2.2.1",
     "thinky": "^2.2.4",
-    "ui-router": "^0.2.15",
+    "angular-ui-router": "^0.2.15",
     "vinyl-source-stream": "^1.1.0"
   }
 }

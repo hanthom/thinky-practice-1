@@ -1,5 +1,9 @@
 gulp = require 'gulp'
 
+######
+# All @params will be strings unless specified
+# src @params may be arrays passed to fixPath.
+
 # Accepts a path from the gulpfile and accounts for this file location
 # Checks to see if path is for ignore and adds !
 # Returns full path (string)
@@ -43,16 +47,21 @@ fixPath = (src, dest)->
     dest: fixedDest
   fixedPaths
 
+######
+# All @returns a .pipe to a gulp.dest unless specified
 module.exports =
-  # Accepts a string destination
+  ##### browserify #####
   # Creates initial bundle with browserify
   # Calls bundle with browserify as bundler
+  # @params: root -> string
+  # @params: dest -> string
   browserify: (root, dest)->
     browserify = require 'browserify'
     bundle browserify(root), dest
 
-  # Accepts string src and dest
+  ##### coffee #####
   # Compiles coffeescript files to js
+  # @returns:
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
