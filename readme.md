@@ -23,8 +23,8 @@ To quit use ```ctrl + c``` in the terminal twice (once for nodemon and once for 
 
 # Making changes to the repo ##
 Use your own fork to get familiar with the code in a local environment.
-Once you're ready to make changes you can create pull requests on/ push to the Slant Six dev branch and Heroku will deploy the updates to:
-[thinky-practice-dev.herokuapp.com/](https://thinky-practice-dev.herokuapp.com/)
+Once you're ready to make changes you can create pull requests on/ push to the dev branch first and Heroku will deploy the updates to:
+[chip-thinky-practice-dev.herokuapp.com/](https://chip-thinky-practice-dev.herokuapp.com/)
 
 ### Useful Snippets in [Atom](https://atom.io/) ###
 Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) for formatted comments and function creations  
