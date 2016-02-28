@@ -130,7 +130,7 @@ module.exports =
   watchify: (root, dest)->
     watchify = require 'watchify'
     browserify = require 'browserify'
-    watcher = watchify browserify(root), watchify.args
+    watcher = watchify browserify(watch), watchify.args
     bundle watcher, dest
     watcher
       .on 'update', ()->

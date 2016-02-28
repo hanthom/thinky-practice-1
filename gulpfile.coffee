@@ -54,4 +54,4 @@ gulp.task 'watch', ()->
   watch paths.stylus.all, ['stylus']
 
 gulp.task 'watchify', () ->
-  watchify paths.bundle.root, paths.bundle.dest
+  watchify './build/client/js/app.js', './build/client/'
