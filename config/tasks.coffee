@@ -4,20 +4,20 @@ gulp = require 'gulp'
 # Checks to see if path is for ignore and adds !
 # Returns full path (string)
 addBase = (path)->
-
   base = "#{__dirname}/../#{path}"
   if path[0] is '!'
     path = path.slice 1, path.length - 1
     "!#{base}"
   else
     base
-# Accepts a bundler package and destination path
+##### bundle #####
 # Bundles using provided package and handles errs
+# @params: bundle ->
+# @returns:
 # Writes a 'bundle.js' file to dest
 bundle = (bundler, dest)->
   source = require 'vinyl-source-stream'
   dest = addBase dest
-  console.log __dirname
   bundler
     .bundle()
     .on 'error', (e)->
@@ -72,7 +72,7 @@ module.exports =
     {src} = fixPath src
     gulp.src src
       .pipe coffeelint()
-      .pipe coffeelint.reporter stylishCoffee
+      .pipe coffeelint.reporter 'coffeelint-stylish'
 
   # Compiles JADE into HTML
   # @param string
