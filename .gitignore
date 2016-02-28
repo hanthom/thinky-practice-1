@@ -2,4 +2,5 @@
 /build
 .env
 /config/secrets.coffee
+/config/secrets.js
 npm-log.log
