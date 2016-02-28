@@ -28,7 +28,7 @@ gulp.task 'default', (cb)->
     , ['watchify', 'nodemon', 'watch']
     , cb
 
-gulp.task 'build', ['coffee']
+gulp.task 'build', ['coffee', 'jade', 'stylus']
 
 gulp.task 'browserify', () ->
   browserify paths.bundle.root, paths.bundle.dest

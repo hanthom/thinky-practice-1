@@ -3,6 +3,6 @@ bodyParser = require 'body-parser'
 express = require 'express'
 
 module.exports = (app)->
-  app.use express.static(__dirname + '/../../client')
+  app.use express.static("#{__dirname}/../../client")
   app.use bodyParser.json()
   app.use logger
