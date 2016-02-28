@@ -6,12 +6,12 @@ handleErr = (e, res)->
     .status 500
     .send e
 
+#---------#
+# Calls appropriate controller methods with required arguements
+# Handles resolves and handleErr calls
 module.exports = (app)->
 
   app.get '/api/todos/:status', (req, res)->
-    #
-    # @params ""
-    # @returns ""
     getAllTodos req.params.status
       .then (todos)->
         if todos.length >= 1
