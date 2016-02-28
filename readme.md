@@ -1,5 +1,5 @@
-Atom snippets for formatted comments and function creations \n
-Add these to your snippets.cson \n
+Atom snippets for formatted comments and function creations
+Add these to your snippets.cson
 Use tab to get to each spot preceded by a $
 ```
 '.source.coffee':
