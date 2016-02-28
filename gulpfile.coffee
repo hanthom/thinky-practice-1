@@ -1,6 +1,6 @@
 gulp = require 'gulp'
 tasks = require "#{__dirname}/config/tasks"
-{coffee, coffeelint, jade, nodemon, paths, stylus, watch} = tasks
+{browserify, coffee, coffeelint, jade, nodemon, paths, stylus, watch} = tasks
 
 # Place to store paths that will be used again
 paths =
@@ -19,9 +19,15 @@ gulp.task 'default', (cb)->
   # Sets env and ensures proper sequence of tasks
   runSquence = require 'run-sequence'
   process.env.NODE_ENV = 'development'
-  runSquence ['jade', 'stylus', 'coffeelint','coffee'], ['watch'], cb
+  runSquence ['jade', 'stylus', 'coffeelint','coffee']
+    , 'browserify'
+    , ['watch']
+    , cb
 
 gulp.task 'build', ['coffee']
+
+gulp.task 'browserify', () ->
+  browserify './build/client/js/'
 
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.compile

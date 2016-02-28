@@ -48,7 +48,7 @@ module.exports =
   # Calls bundle with browserify as bundler
   browserify: (dest)->
     browserify = require 'browserify'
-    bundle browserify, dest
+    bundle browserify(), dest
 
   # Accepts string src and dest
   # Compiles coffeescript files to js
