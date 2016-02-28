@@ -4,20 +4,20 @@ gulp = require 'gulp'
 # Checks to see if path is for ignore and adds !
 # Returns full path (string)
 addBase = (path)->
-
   base = "#{__dirname}/../#{path}"
   if path[0] is '!'
     path = path.slice 1, path.length - 1
     "!#{base}"
   else
     base
-# Accepts a bundler package and destination path
+##### bundle #####
 # Bundles using provided package and handles errs
+# @params: bundle ->
+# @returns:
 # Writes a 'bundle.js' file to dest
 bundle = (bundler, dest)->
   source = require 'vinyl-source-stream'
   dest = addBase dest
-  console.log __dirname
   bundler
     .bundle()
     .on 'error', (e)->
@@ -47,9 +47,9 @@ module.exports =
   # Accepts a string destination
   # Creates initial bundle with browserify
   # Calls bundle with browserify as bundler
-  browserify: (dest)->
+  browserify: (root, dest)->
     browserify = require 'browserify'
-    bundle browserify(), dest
+    bundle browserify(root), dest
 
   # Accepts string src and dest
   # Compiles coffeescript files to js
@@ -72,7 +72,7 @@ module.exports =
     {src} = fixPath src
     gulp.src src
       .pipe coffeelint()
-      .pipe coffeelint.reporter stylishCoffee
+      .pipe coffeelint.reporter 'coffeelint-stylish'
 
   # Compiles JADE into HTML
   # @param string
@@ -128,7 +128,7 @@ module.exports =
   # Accepts string path to file to be sent to browserify
   # Creates watcher to update after changes in bundled js files
   # Calls bundle with watchify as bundler
-  watchify: (watch, dest)->
+  watchify: (root, dest)->
     watchify = require 'watchify'
     browserify = require 'browserify'
     watcher = watchify browserify(watch), watchify.args
@@ -136,7 +136,7 @@ module.exports =
     watcher
       .on 'update', ()->
         console.log 'Watchify Updating...'
-        bundle watch
+        bundle watcher, dest
       .on 'log', (log)->
         console.log 'Watchify Log:'
         console.log log
