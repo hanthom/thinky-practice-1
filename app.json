@@ -1,12 +1,9 @@
 {
-  "name": "thinky-practice",
+  "name": "chip-thinky-practice",
   "description": "Practice with dev flow on hosted services",
   "scripts": {
   },
   "env": {
-    "BUILDPACK_URL": {
-      "required": true
-    },
     "SSH_TUNNEL_AUTHKEY": {
       "required": true
     },
