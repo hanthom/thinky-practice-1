@@ -2,3 +2,4 @@
 /build
 .env
 /config/secrets.js
+npm-log.log
