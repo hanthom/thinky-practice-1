@@ -4,8 +4,8 @@ module.exports = ($urlRouterProvider, $stateProvider) ->
     .state 'home',
       url: '/'
       controller: 'homeCtrl'
-      templateUrl: '../templates/home'
+      templateUrl: '../templates/home.html'
     .state 'page',
       url: '/page'
       controller: 'homeCtrl'
-      templateUrl: '../templates/page'
+      templateUrl: '../templates/page.html'
