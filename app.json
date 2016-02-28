@@ -1,9 +1,12 @@
 {
-  "name": "thinky-practice",
+  "name": "chip-thinky-practice",
   "description": "Practice with dev flow on hosted services",
   "scripts": {
   },
   "env": {
+    "INHERIT_THIS_CONFIG_VAR": {
+      "required": true
+    },
     "BUILDPACK_URL": {
       "required": true
     },
