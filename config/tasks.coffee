@@ -17,6 +17,7 @@ addBase = (path)->
 bundle = (bundler, dest)->
   source = require 'vinyl-source-stream'
   dest = addBase dest
+  console.log __dirname
   bundler
     .bundle()
     .on 'error', (e)->
@@ -128,7 +129,7 @@ module.exports =
   # Calls bundle with watchify as bundler
   watchify: (dest)->
     watchify = require 'watchify'
-    dest = addBase dest
+    browserify = require 'browserify'
     watcher = watchify browserify(dest), watchify.args
     bundle watcher, dest
     watcher

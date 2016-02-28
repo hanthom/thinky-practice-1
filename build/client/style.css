@@ -1,0 +1,30 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.container {
+  max-width: 980px;
+  width: 100%;
+  margin: 0 auto;
+}
+ul {
+  list-style: none;
+}
+ul li {
+  display: inline-block;
+}
+button {
+  padding: 10px;
+  margin: 10px;
+  border: 0;
+  background: #fff;
+  font-size: 18px;
+}
+button:focus {
+  outline: none;
+}
+button:hover {
+  color: #5f9ea0;
+  cursor: pointer;
+}

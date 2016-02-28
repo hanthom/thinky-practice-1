@@ -1,0 +1,27 @@
+(function() {
+  var authKey, db, dbName, opts, thinky;
+
+  thinky = require('thinky');
+
+  authKey = '';
+
+  dbName = 'thinky_practice';
+
+  if (process.env.NODE_ENV === 'development') {
+    dbName = dbName + "_DEV";
+  }
+
+  if (!process.env.SSH_TUNNEL_AUTHKEY) {
+    authKey = require('../../../config/secrets').dbConfig.authKey;
+  }
+
+  opts = {
+    db: dbName,
+    authKey: process.env.SSH_TUNNEL_AUTHKEY || authKey
+  };
+
+  db = thinky(opts);
+
+  module.exports = db;
+
+}).call(this);
