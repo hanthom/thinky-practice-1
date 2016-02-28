@@ -23,20 +23,20 @@ gulp.task 'default', (cb)->
 
 gulp.task 'build', ['coffee']
 
-gulp.task 'jade', () ->
-  jade paths.jade.compile, 'build'
-
-gulp.task 'stylus', () ->
-  stylus paths.stylus.compile, 'build'
-
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.compile
 
 gulp.task 'coffee', ()->
   coffee paths.coffee.compile, 'build'
 
+gulp.task 'jade', () ->
+  jade paths.jade.compile, 'build'
+
 gulp.task 'nodemon', ()->
   nodemon paths.server
+
+gulp.task 'stylus', () ->
+  stylus paths.stylus.compile, 'build'
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ['coffeelint','coffee']
