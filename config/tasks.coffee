@@ -134,12 +134,13 @@ module.exports =
     gulp.watch src, tasks
 
   # Accepts string dest to write updated bundle.js
+  # Accepts string path to file to be sent to browserify
   # Creates watcher to update after changes in bundled js files
   # Calls bundle with watchify as bundler
   watchify: (root, dest)->
     watchify = require 'watchify'
     browserify = require 'browserify'
-    watcher = watchify browserify(watch), watchify.args
+    watcher = watchify browserify(root), watchify.args
     bundle watcher, dest
     watcher
       .on 'update', ()->
