@@ -1,16 +1,15 @@
 ## Getting Started ##
 ### RethinkDB ###
-For this repo I'm using [RethinkDB]("https://www.rethinkdb.com/") with the [thinky]("https://thinky.io/") ORM.
+For this repo I'm using [RethinkDB](https://www.rethinkdb.com/) with the [thinky](https://thinky.io/) ORM.
 
 Run ```brew install rethinkdb```.
 Then from your home folder you can run ```rethinkdb```.
 This will spin up a rethinkdb server on your machine.
-After it starts you can access the GUI at [localhost:8080/](localhost:8080/).
+After it starts you can access the GUI at [localhost:8080/](http://localhost:8080/).
 
 I assume you've got [homebrew](http://brew.sh/).
 I also assume you're using a OS X system.
-If not, checkout the
-[instructions](https://www.rethinkdb.com/docs/install/)
+If not, checkout the [instructions](https://www.rethinkdb.com/docs/install/)
 for installing to your OS.
 Don't worry about getting the client driver, that will be installed with npm.
 
@@ -25,7 +24,7 @@ To quit use ```ctrl + c``` in the terminal twice (once for nodemon and once for 
 # Making changes to the repo ##
 Use your own fork to get familiar with the code in a local environment.
 Once you're ready to make changes you can create pull requests on/ push to the Slant Six dev branch and Heroku will deploy the updates to:
-[thinky-practice-dev.herokuapp.com/]("https://thinky-practice-dev.herokuapp.com/")
+[thinky-practice-dev.herokuapp.com/](https://thinky-practice-dev.herokuapp.com/)
 
 ### Useful Snippets in Atom ###
 Atom snippets for formatted comments and function creations  
