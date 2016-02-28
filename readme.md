@@ -17,10 +17,10 @@ Use tab to get to each spot preceded by a $
   'Function Commentor':
     'prefix': 'fncom'
     'body': """
-      ##### ${1:Funtion Name} #####
-      # ${2:Description}
-      # @params: $3
-      # @returns: $4
+    ##### ${1:Funtion Name} #####
+    # ${2:Description}
+    # @params: $3
+    # @returns: $4
     """
 
   'Comment':
