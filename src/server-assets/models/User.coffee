@@ -7,4 +7,5 @@ User = db.createModel 'User',
   password: type.string()
   createdAt: Date
   updatedAt: Date
-  
+
+module.exports = User
