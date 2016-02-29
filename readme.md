@@ -14,6 +14,7 @@ for installing to your OS.
 Don't worry about getting the client driver, that will be installed with npm.
 
 Talk to me about getting env variables for running on the hosted db.
+If you've got the login for the [Compose](https://compose.io/) gui you can login to the gui for our db at [aws-us-east-1-portal7.dblayer.com:10583](https://aws-us-east-1-portal7.dblayer.com:10583/)
 
 ### Compiling and spinning up nodemon server ###
 Once you fork and clone the repo and run ```npm install```.
