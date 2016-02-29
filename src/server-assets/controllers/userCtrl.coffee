@@ -1,20 +1,10 @@
-{User} = require '../models/models'
 q = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
-{handleErr} = require "#{__dirname}/../helpers/utils"
 
+{handleErr} = require "#{__dirname}/../helpers/utils"
+{User} = require '../models/models'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
-
-# ##### handleErr #####
-# # Creates a log message and rejects promise with log
-# # @params: action -> string
-# # @params: message -> string
-# # @params: promise -> q.defer object
-# handleErr = (action, message, promise)->
-#   log = "ERROR #{action} >>>> #{message}"
-#   console.log log
-#   promise.reject log
 
 module.exports =
   #---------#
@@ -31,16 +21,7 @@ module.exports =
   # @params: string
   # @returns: promise
   getOneUser: (id) ->
-    dfd = q.defer()
-    User
-      .get id
-      .run()
-      .then (user) ->
-        console.log 'USER >>>>', user
-        dfd.resolve user
-      .catch (err) ->
-        handleErr 'READING USER >>>>', err.message, dfd
-    dfd.promise
+    crudHelper.crudRead User.get id
 
   #---------#
   # readAllUsers
@@ -48,34 +29,15 @@ module.exports =
   # @params: status
   # @returns: promise
   getAllUsers: (id) ->
-    dfd = q.defer()
-    query = User
-      .orderBy index: r.desc 'createdAt'
-    if status != 'all'
-      query = query.filter id: id
-    query
-      .run()
-      .then (users) ->
-        console.log 'USERS >>>>>', users
-      .catch (err) ->
-        handleErr 'GETTING USERS >>>>', err.message, dfd
-    dfd.promise
+
   #---------#
   # updateUser
   # Updates user information
   # @params: string
   # @returns: promisee
   updateUser : (id, changes)->
-    dfd = q.defer()
-    User
-      .get id
-      .update changes
-      .run()
-      .then (res) ->
-        dfd.resolve res
-      .catch (err) ->
-        handleErr 'UPDATING USER', err.message, dfd
-    dfd.promise
+    query = User.get id
+    crudHelper.crudUpdate query, chages
 
   #---------#
   # deleteUser
@@ -83,12 +45,4 @@ module.exports =
   # @params: string
   # @returns: boolean
   deleteUser : (id)->
-    dfd = q.defer()
-    User
-      .get id
-      .delete()
-      .run()
-      .then (res) ->
-        console.log "USER DELETED #{id}"
-      .catch (err) ->
-        handleErr 'DELETING USER', err.message, dfd
+    crudHelper.crudDelete User, id
