@@ -1,5 +1,4 @@
-baseUrl = 'http://localhost:9999/'
-url = "#{baseUrl}api/users"
+url = "/api/users"
 new class UserService
   constructor: ($http, $q)->
     @addUser =  (user)->
