@@ -1,17 +1,8 @@
 doctype html
-html(lang="en")
+html(lang='en')
   head
-    title. 
-      Hello World!
-    link(href="style.css", rel="stylesheet")
-  body
-    div(ng-app="todoApp")
-      nav.container
-        ul
-          li
-            button(ui-sref="home", onclick="console.log('Click Home')") Home
-          li
-            button(ui-sref="page",  onclick="console.log('Click Page')") Page
-      section.container(ui-view)        
-    script(src="./bundle.js")
-    
+    title Thinky Practice
+    link(rel='stylesheet' href='style.css')
+  body(ng-app='todoApp')
+    .container(ui-view)
+    script(src='bundle.js')

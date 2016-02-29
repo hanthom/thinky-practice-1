@@ -8,5 +8,4 @@ User = db.createModel 'User',
   createdAt: Date
   updatedAt: Date
 
-
 module.exports = User
