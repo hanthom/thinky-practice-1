@@ -4,9 +4,8 @@ gulp = require 'gulp'
 # All @params will be strings unless specified
 # src @params may be arrays passed to fixPath.
 
-# Accepts a path from the gulpfile and accounts for this file location
-# Checks to see if path is for ignore and adds !
-# Returns full path (string)
+
+
 addBase = (path)->
   base = "#{__dirname}/../#{path}"
   if path[0] is '!'
@@ -124,6 +123,17 @@ module.exports =
     gulp.src src
       .pipe styl()
       .pipe gulp.dest dest
+
+  # Mocha Task
+  # @params: string, string
+  test: (src, opts) ->
+    mocha = require 'gulp-mocha'
+    gulp.src src
+      .pipe mocha opts
+      .on 'error', (err) ->
+        console.log "MOCHA ERROR >>>> ", err.message
+        @emit 'end'
+
 
   # Accepts string path
   # Tasks is an array of string task names

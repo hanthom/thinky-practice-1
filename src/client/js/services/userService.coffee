@@ -1,4 +1,4 @@
-url = '/api/user'
+url = "/api/users"
 new class UserService
   constructor: ($http, $q)->
     @addUser =  (user)->
