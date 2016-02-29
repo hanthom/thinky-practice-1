@@ -1,6 +1,6 @@
 should = require('chai').should()
 {pristineUser} = require "../../util"
-host = 'http://localhost:8888'
+host = 'https://thinky-practice-dev.herokuapp.com'
 api = require('supertest') host
 userUrl = '/api/user'
 
