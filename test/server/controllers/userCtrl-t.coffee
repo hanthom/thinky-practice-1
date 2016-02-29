@@ -12,7 +12,7 @@
 #   after (done)->
 #     done()
 #
-#   describe 'createUser', ()->
+#   describe 'submitUser', ()->
 #     newUser = pristineUser()
 #     userIds = []
 #     user = {}
