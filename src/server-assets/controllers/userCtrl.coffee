@@ -1,18 +1,20 @@
 {User} = require '../models/models'
 q = require 'q'
+crudHelper = require "#{__dirname}/../helpers/crudHelper"
+{handleErr} = require "#{__dirname}/../helpers/utils"
 
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
 
-##### handleErr #####
-# Creates a log message and rejects promise with log
-# @params: action -> string
-# @params: message -> string
-# @params: promise -> q.defer object
-handleErr = (action, message, promise)->
-  log = "ERROR #{action} >>>> #{message}"
-  console.log log
-  promise.reject log
+# ##### handleErr #####
+# # Creates a log message and rejects promise with log
+# # @params: action -> string
+# # @params: message -> string
+# # @params: promise -> q.defer object
+# handleErr = (action, message, promise)->
+#   log = "ERROR #{action} >>>> #{message}"
+#   console.log log
+#   promise.reject log
 
 module.exports =
   #---------#
@@ -21,15 +23,7 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    dfd = q.defer()
-    new User user
-      .save()
-      .then (doc) ->
-        console.log 'USER ADDED >>>>', doc
-        dfd.resolve doc
-      .catch (err) ->
-        handleErr 'ADDING USER >>>>', err.message, dfd
-      dfd.promise
+    crudHelper.crudCreate User, user
 
   #---------#
   # readUser
