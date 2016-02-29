@@ -132,7 +132,7 @@ module.exports =
     gulp.src src
       .pipe mocha opts
       .on 'error', (err) ->
-        console.log "MOCHA ERROR >>>> ", err
+        console.log "MOCHA ERROR >>>> ", err.message
         @emit 'end'
 
 

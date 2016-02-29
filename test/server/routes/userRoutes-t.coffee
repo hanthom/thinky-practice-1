@@ -1,4 +1,5 @@
 should = require('chai').should()
+expect = require('chai').expect()
 {pristineUser} = require "../../util"
 host = 'http://localhost:9999'
 api = require('supertest') host
@@ -12,8 +13,8 @@ describe 'userRoutes', ()->
         .post userUrl
         .send pristineUser()
         .end (err, r)->
-          if err then console.log "userRoutes ERROR >>>> ", err
-          else console.log "userRoutes STATUS >>>> " , r.status
+          if err then console.log "userRoutesTEST ERROR >>>> ", err
+          else console.log "userRoutesTEST STATUS >>>> " , r.status
           res = r
           console.log "REST BEFORE DONE >>>> ", res.status
       done()
