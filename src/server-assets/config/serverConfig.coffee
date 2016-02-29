@@ -1,6 +1,7 @@
 module.exports =
   logger: (req, res, next)->
     console.log "#{req.method} request to >>>> #{req.originalUrl}"
+    console.log "REQ BODY >>>>> ", req.body
     if req.body is !{}
       console.log 'REQUEST BODY >>>>', req.body
     if req.params is !{}

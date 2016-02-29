@@ -21,6 +21,7 @@ paths =
     all: ['src/**/*.coffee']
   test:
     src: 'test/server/**/*.coffee'
+    all: 'test/server/*.coffee'
     config: require('./test/config').mochaSetup
 
 gulp.task 'default', (cb)->
@@ -44,7 +45,7 @@ gulp.task 'browserify', () ->
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.compile
 
-gulp.task 'coffee',['coffeelint'], ()->
+gulp.task 'coffee', ['coffeelint'], ()->
   coffee paths.coffee.compile, 'build'
 
 gulp.task 'jade', () ->
@@ -56,13 +57,14 @@ gulp.task 'nodemon', ()->
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
-gulp.task 'tests',['coffee'], () ->
+gulp.task 'tests', ['coffee'], () ->
   test paths.test.src, {reporter: paths.test.config.reporter}
 
 gulp.task 'watch', ()->
-  watch paths.coffee.all, ['coffeelint','coffee']
+  watch paths.coffee.all, ['coffeelint', 'tests', 'coffee']
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
+  watch paths.test.src, ['tests']
 
 gulp.task 'watchify', () ->
   watchify './build/client/js/app.js', './build/client/'

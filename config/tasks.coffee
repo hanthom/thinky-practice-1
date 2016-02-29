@@ -129,7 +129,11 @@ module.exports =
   test: (src, opts) ->
     mocha = require 'gulp-mocha'
     gulp.src src
-    .pipe mocha opts
+      .pipe mocha opts
+      .on 'error', (err) ->
+        console.log "MOCHA ERROR >>>> ", err
+        @emit 'end'
+
 
   # Accepts string path
   # Tasks is an array of string task names
