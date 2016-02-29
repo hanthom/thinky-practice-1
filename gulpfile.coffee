@@ -32,7 +32,7 @@ gulp.task 'default', (cb)->
     , 'browserify'
     , ['watchify'
     , 'nodemon'
-    , 'tests'
+    # , 'tests'
     , 'watch']
     , cb
 
