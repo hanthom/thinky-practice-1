@@ -20,13 +20,27 @@ module.exports =
   # @returns: promise
   getOneUser: (id) ->
     crudRead User.get id
+    # dfd = q.defer()
+    # User
+    #   .get id
+    #   .run()
+    #   .then (user) ->
+    #     console.log "USER >>>> ", user
+    #     dfd.resolve user
+    #   .catch (err) ->
+    #     handleErr "GETTING USER >>>> ", err.message, dfd
 
   ##### getAllUsers #####
   # Gathers information for ALL users
   # @params: string
   # @returns: promise
-  getAllUsers: (id) ->
-
+  getAllUsers: (filter) ->
+    query = User
+      .orderBy index: r.desc 'username'
+    if filter != 'all'
+      query = query.filter id: filter
+    # crudRead not returning promise
+    crudRead query
   ##### updateUser #####
   # Updates specific users
   # @params: string, object
