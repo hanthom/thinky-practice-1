@@ -30,7 +30,7 @@ gulp.task 'default', (cb)->
   process.env.NODE_ENV = 'development'
   runSequence ['jade', 'stylus', 'coffeelint','coffee']
     , 'browserify'
-    , ['watchify', 'nodemon', 'tests' , 'watch']
+    , ['watchify', 'nodemon', 'test' , 'watch']
     , cb
 
 gulp.task 'build', (cb)->
@@ -54,7 +54,7 @@ gulp.task 'nodemon', ()->
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
-gulp.task 'tests', () ->
+gulp.task 'test', () ->
   test paths.test.src, {reporter: paths.test.config.reporter}
 
 gulp.task 'watch', ()->
@@ -62,7 +62,7 @@ gulp.task 'watch', ()->
     runSequence 'coffeelint', 'coffee', 'test'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
-  watch paths.test.src, ['tests']
+  watch paths.test.src, ['test']
 
 gulp.task 'watchify', () ->
   watchify './build/client/js/app.js', './build/client/'
