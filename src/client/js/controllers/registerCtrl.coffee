@@ -3,7 +3,7 @@ module.exports = ($scope, userService)->
     userService.addUser credentials
       .then (res)->
         $scope.credentials = {}
-        $state.go 'secured.home'
+        # $state.go 'secured.home'
       .catch (e)->
         console.log 'Err', e
         credentials = {}
