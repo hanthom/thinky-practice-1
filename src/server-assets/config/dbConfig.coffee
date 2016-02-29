@@ -11,8 +11,12 @@ if !process.env.SSH_TUNNEL_AUTHKEY
 
 opts =
   db: dbName
+  host: process.env.DB_HOST || 'localhost'
+  port: process.env.DB_PORT || 28015
   authKey: process.env.SSH_TUNNEL_AUTHKEY || authKey
 
 db = thinky opts
 
-module.exports = db
+module.exports =
+  db: db
+  config:

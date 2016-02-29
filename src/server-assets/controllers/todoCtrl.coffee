@@ -90,7 +90,7 @@ module.exports =
 
   ##### deleteTodo #####
   # Removes the specified todo
-  # @params: id
+  # @params: string
   # @returns: promise
   # @resolves: undefined
   deleteTodo: (id)->

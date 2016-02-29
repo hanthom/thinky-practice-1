@@ -1,6 +1,7 @@
 should = require('chai').should()
 {pristineUser} = require "../../util"
-api = require('supertest') 'http://localhost:8888'
+host = 'http://localhost:8888'
+api = require('supertest') host
 userUrl = '/api/user'
 
 describe 'userRoutes', ()->
@@ -14,4 +15,3 @@ describe 'userRoutes', ()->
     it 'should return a 201', (done)->
       res.status.should.equal 201
       done()
-
