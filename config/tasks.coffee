@@ -125,6 +125,13 @@ module.exports =
       .pipe styl()
       .pipe gulp.dest dest
 
+  # Mocha Task
+  # @params: string, string
+  test: (src, opts) ->
+    mocha = require 'gulp-mocha'
+    gulp.src src
+    .pipe mocha opts
+
   # Accepts string path
   # Tasks is an array of string task names
   # Watches for changes in files and runs tasks on save
