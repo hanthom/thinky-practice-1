@@ -3,8 +3,8 @@
 Todo = require "#{__dirname}/Todo"
 User = require "#{__dirname}/User"
 
-User.hasMany(Todo, 'todos', 'id', 'userId')
-Todo.belongsTo(User, 'user', 'userId', 'id')
+User.hasMany Todo, 'todos', 'id', 'userId'
+Todo.belongsTo User, 'user', 'userId', 'id'
 
 module.exports =
   Todo: Todo
