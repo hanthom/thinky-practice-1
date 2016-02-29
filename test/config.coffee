@@ -1,6 +1,6 @@
 module.exports =
   mochaSetup:
-    reporter: null
+    reporter: 'nyan'
   startTest: ()->
     process.env['DB'] = testDb
 

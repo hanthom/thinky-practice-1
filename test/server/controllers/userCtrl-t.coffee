@@ -17,7 +17,7 @@ describe 'user', ()->
     userIds = []
     user = {}
     before (done)->
-      userCtrl.submitUser newUser, (err, id)->
+      userCtrl.createUser newUser, (err, id)->
         if err then console.log 'error submiting user', err
         if !id then console.log 'no user returned'
         User

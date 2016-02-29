@@ -57,7 +57,7 @@ gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
 gulp.task 'tests', () ->
-  test paths.test.src, paths.test.config
+  test paths.test.src, {reporter: paths.test.config.reporter}
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ['coffeelint','coffee']
