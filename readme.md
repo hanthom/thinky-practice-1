@@ -14,6 +14,7 @@ for installing to your OS.
 Don't worry about getting the client driver, that will be installed with npm.
 
 Talk to me about getting env variables for running on the hosted db.
+If you've got the login for the [Compose](https://compose.io/) gui you can login to the gui for our db at [aws-us-east-1-portal7.dblayer.com:10583](https://aws-us-east-1-portal7.dblayer.com:10583/)
 
 ### Compiling and spinning up nodemon server ###
 Once you fork and clone the repo and run ```npm install```.
@@ -25,6 +26,7 @@ To quit use ```ctrl + c``` in the terminal twice (once for nodemon and once for 
 Use your own fork to get familiar with the code in a local environment.
 Once you're ready to make changes you can create pull requests on/ push to the dev branch first and Heroku will deploy the updates to:
 [chip-thinky-practice-dev.herokuapp.com/](https://chip-thinky-practice-dev.herokuapp.com/)
+Pull requests to master will generate [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). I'll send out the link when the review app is created.
 
 ### Useful Snippets in [Atom](https://atom.io/) ###
 Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) for formatted comments and function creations  
