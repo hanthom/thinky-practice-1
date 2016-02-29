@@ -1,7 +1,8 @@
 {Todo} = require '../models/models'
 q = require 'q'
 
-{r} = require "#{__dirname}/../config/dbConfig"
+{db} = require "#{__dirname}/../config/dbConfig"
+{r} = db
 
 ##### handleErr #####
 # Creates a log message and rejects promise with log

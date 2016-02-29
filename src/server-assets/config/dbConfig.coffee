@@ -19,4 +19,4 @@ db = thinky opts
 
 module.exports =
   db: db
-  config:
+  config: opts
