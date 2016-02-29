@@ -27,7 +27,7 @@ gulp.task 'default', (cb)->
   runSquence ['jade', 'stylus', 'coffeelint','coffee']
     , 'browserify'
     , ['watchify'
-    # , 'nodemon'
+    , 'nodemon'
     , 'watch']
     , cb
 
