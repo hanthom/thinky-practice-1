@@ -1,5 +1,5 @@
 paths =
-  server: '../../../src/server/'
+  server: '../../../src/server-assets/'
 userCtrl = require "#{paths.server}controllers/userCtrl"
 User = require "#{paths.server}models/User"
 {startTest, endTest} = require "../../config"
@@ -41,4 +41,3 @@ describe 'user', ()->
   describe 'getByUsername', ()->
     it 'should find & return a user given an existing username', (done)->
       done()
-  

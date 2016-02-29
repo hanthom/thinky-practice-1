@@ -1,7 +1,7 @@
 q = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
-{handleErr} = require "#{__dirname}/../helpers/utils"
+{handleErr} = require "#{__dirname}/../helpers/utilsHelper"
 {User} = require '../models/models'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
