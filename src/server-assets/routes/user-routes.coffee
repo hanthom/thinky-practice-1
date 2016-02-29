@@ -7,8 +7,8 @@ handleErr = (e, res)->
     .send e
 
 module.exports = (app) ->
-  app.get '/api/users/:id', (req, res) ->
-    getAllUsers req.params.id
+  app.get '/api/users/:status', (req, res) ->
+    getAllUsers req.params.status
       .then (users) ->
         if users.length >= 1
           res

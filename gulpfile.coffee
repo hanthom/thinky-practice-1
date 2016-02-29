@@ -30,9 +30,9 @@ gulp.task 'default', (cb)->
   process.env.NODE_ENV = 'development'
   runSquence ['jade', 'stylus', 'coffeelint','coffee']
     , 'browserify'
-    , 'tests'
     , ['watchify'
     , 'nodemon'
+    , 'tests'
     , 'watch']
     , cb
 
