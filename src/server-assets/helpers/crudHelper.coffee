@@ -12,10 +12,12 @@ module.exports =
         console.log 'CRUD CREATE ERROR >>>> ', err.message
     dfd.promise
 
-  crudRead: (modelObj, get) ->
+  crudRead: (query) ->
     dfd = q.defer()
-    modelObj
-      .get get
+    # modelObj
+    #   .get
+    #   .run()
+    query
       .run()
       .then (res) ->
         console.log 'CRUD READ >>>> ', res
@@ -24,7 +26,7 @@ module.exports =
         console.log 'CRUD READ ERROR >>> ', err.message
     dfd.promise
 
-  crudUpdate: (modelObj, get, changes) ->
+  crudUpdate: (query, changes) ->
     dfd = q.defer()
     modelObj
       .get get
@@ -37,7 +39,7 @@ module.exports =
         console.log 'CRUD EDIT ERROR >>>> ', err.message
     dfd.promise
 
-  crudDelete: (modelObj, get) ->
+  crudDelete: (modelObj, get, query) ->
     dfd = q.defer()
     modelObj
       .get get
