@@ -1,5 +1,5 @@
 gulp = require 'gulp'
-runSquence = require 'run-sequence'
+runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
 {browserify, coffee, coffeelint, jade, nodemon, paths, stylus, test, watchify, watch} = tasks
 
@@ -28,16 +28,13 @@ gulp.task 'default', (cb)->
   # Sets env and ensures proper sequence of tasks
 
   process.env.NODE_ENV = 'development'
-  runSquence ['jade', 'stylus', 'coffeelint','coffee']
+  runSequence ['jade', 'stylus', 'coffeelint','coffee']
     , 'browserify'
-    , ['watchify'
-    , 'nodemon'
-    , 'tests'
-    , 'watch']
+    , ['watchify', 'nodemon', 'tests' , 'watch']
     , cb
 
 gulp.task 'build', (cb)->
-  runSquence ['jade', 'stylus', 'coffee'], 'browserify', cb
+  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'browserify', () ->
   browserify paths.bundle.root, paths.bundle.dest
@@ -45,7 +42,7 @@ gulp.task 'browserify', () ->
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.compile
 
-gulp.task 'coffee', ['coffeelint'], ()->
+gulp.task 'coffee', ()->
   coffee paths.coffee.compile, 'build'
 
 gulp.task 'jade', () ->
@@ -57,11 +54,12 @@ gulp.task 'nodemon', ()->
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
-gulp.task 'tests', ['coffee'], () ->
+gulp.task 'tests', () ->
   test paths.test.src, {reporter: paths.test.config.reporter}
 
 gulp.task 'watch', ()->
-  watch paths.coffee.all, ['coffeelint', 'tests', 'coffee']
+  watch paths.coffee.all, ()->
+    runSequence 'coffeelint', 'coffee', 'test'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
   watch paths.test.src, ['tests']
