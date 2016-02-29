@@ -1,4 +1,4 @@
-db = require "#{__dirname}/../config/dbConfig"
+{db} = require "#{__dirname}/../config/dbConfig"
 {type, r} = db
 
 User = db.createModel 'User',
@@ -7,6 +7,5 @@ User = db.createModel 'User',
   password: type.string()
   createdAt: Date
   updatedAt: Date
-
 
 module.exports = User

@@ -1,17 +1,8 @@
 {Todo} = require '../models/models'
 q = require 'q'
 
-{r} = require "#{__dirname}/../config/dbConfig"
-
-##### handleErr #####
-# Creates a log message and rejects promise with log
-# @params: action -> string
-# @params: message -> string
-# @params: promise -> q.defer object
-handleErr = (action, message, promise)->
-  log = "ERROR #{action} >>>> #{message}"
-  console.log log
-  promise.reject log
+{db} = require "#{__dirname}/../config/dbConfig"
+{r} = db
 
 module.exports =
 
@@ -90,7 +81,7 @@ module.exports =
 
   ##### deleteTodo #####
   # Removes the specified todo
-  # @params: id
+  # @params: string
   # @returns: promise
   # @resolves: undefined
   deleteTodo: (id)->

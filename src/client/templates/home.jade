@@ -1,2 +1,7 @@
-p.
-  Home Page
+div
+  h1 All todos
+  ul
+    li(ng-repeat='todo in todos')
+      |{{todo.title}}
+      br
+      |Created At: {{todo.createdAt | date: 'short'}}
