@@ -6,3 +6,5 @@ User = db.createModel 'User',
   username: type.string()
   password: type.string()
   createdAt: Date
+  updatedAt: Date
+  
