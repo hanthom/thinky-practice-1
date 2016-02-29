@@ -26,7 +26,9 @@ gulp.task 'default', (cb)->
   process.env.NODE_ENV = 'development'
   runSquence ['jade', 'stylus', 'coffeelint','coffee']
     , 'browserify'
-    , ['watchify', 'nodemon', 'watch']
+    , ['watchify'
+    # , 'nodemon'
+    , 'watch']
     , cb
 
 gulp.task 'build', (cb)->
