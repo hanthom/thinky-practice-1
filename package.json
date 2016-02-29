@@ -13,14 +13,17 @@
     "node": "5.7.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "faker": "^3.0.1",
     "gulp-coffeelint": "^0.6.0",
     "gulp-mocha": "^2.2.0",
     "gulp-nodemon": "^2.0.6",
+    "supertest": "^1.2.0",
     "watchify": "^3.7.0"
   },
   "dependencies": {
     "angular": "^1.5.0",
+    "angular-ui-router": "^0.2.15",
     "body-parser": "^1.14.2",
     "browserify": "^13.0.0",
     "coffee-script": "^1.10.0",
@@ -32,9 +35,8 @@
     "gulp-stylus": "^2.3.0",
     "q": "^1.4.1",
     "rethinkdb": "^2.2.1",
-    "thinky": "^2.2.4",
     "run-sequence": "^1.1.5",
-    "angular-ui-router": "^0.2.15",
+    "thinky": "^2.2.4",
     "vinyl-source-stream": "^1.1.0"
   }
 }

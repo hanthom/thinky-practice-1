@@ -5,21 +5,21 @@ crudHelper = require "#{__dirname}/../helpers/crudHelper"
 {User} = require '../models/models'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
-
+{crudCreate, crudRead, crudUpdate, crudDelete} = crudHelper
 module.exports =
   ##### createUser #####
   # Creates new user
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    crudHelper.crudCreate User, user
+    crudCreate User, user
 
   ##### getOneUser #####
   # Gathers information for unique user
   # @params: string
   # @returns: promise
   getOneUser: (id) ->
-    crudHelper.crudRead User.get id
+    crudRead User.get id
 
   ##### getAllUsers #####
   # Gathers information for ALL users
@@ -33,11 +33,11 @@ module.exports =
   # @returns:
   updateUser : (id, changes)->
     query = User.get id
-    crudHelper.crudUpdate query, chages
+    crudUpdate query, chages
 
   ##### deleteUser #####
   # Deletes user permanently
   # @params: string
   # @returns: promise
   deleteUser : (id)->
-    crudHelper.crudDelete User, id
+    crudDelete User, id
