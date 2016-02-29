@@ -4,3 +4,4 @@
 /config/secrets.coffee
 /config/secrets.js
 npm-log.log
+npm-debug.log
