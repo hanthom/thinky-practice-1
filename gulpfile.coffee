@@ -44,7 +44,7 @@ gulp.task 'browserify', () ->
 gulp.task 'coffeelint', ()->
   coffeelint paths.coffee.compile
 
-gulp.task 'coffee', ()->
+gulp.task 'coffee',['coffeelint'], ()->
   coffee paths.coffee.compile, 'build'
 
 gulp.task 'jade', () ->
@@ -56,7 +56,7 @@ gulp.task 'nodemon', ()->
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
-gulp.task 'tests', () ->
+gulp.task 'tests',['coffee'], () ->
   test paths.test.src, {reporter: paths.test.config.reporter}
 
 gulp.task 'watch', ()->
