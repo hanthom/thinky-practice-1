@@ -10,6 +10,5 @@ Todo = db.createModel 'Todo',
 
 #---------#
 # Ensures controller can order by createdAt later
-Todo.ensureIndex 'createdAt'
 
 module.exports = Todo
