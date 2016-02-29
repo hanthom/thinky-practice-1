@@ -4,16 +4,6 @@ q = require 'q'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
 
-##### handleErr #####
-# Creates a log message and rejects promise with log
-# @params: action -> string
-# @params: message -> string
-# @params: promise -> q.defer object
-handleErr = (action, message, promise)->
-  log = "ERROR #{action} >>>> #{message}"
-  console.log log
-  promise.reject log
-
 module.exports =
 
   ##### addTodo #####
