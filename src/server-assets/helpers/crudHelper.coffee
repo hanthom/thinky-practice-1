@@ -1,6 +1,7 @@
 q = require 'q'
 
 module.exports =
+
   crudCreate: (modelObj, insert) ->
     dfd = q.defer()
     new modelObj insert
@@ -14,9 +15,6 @@ module.exports =
 
   crudRead: (query) ->
     dfd = q.defer()
-    # modelObj
-    #   .get
-    #   .run()
     query
       .run()
       .then (res) ->
@@ -28,8 +26,7 @@ module.exports =
 
   crudUpdate: (query, changes) ->
     dfd = q.defer()
-    modelObj
-      .get get
+    query
       .update changes
       .run()
       .then (res) ->
@@ -39,10 +36,10 @@ module.exports =
         console.log 'CRUD EDIT ERROR >>>> ', err.message
     dfd.promise
 
-  crudDelete: (modelObj, get, query) ->
+  crudDelete: (modelObj, id) ->
     dfd = q.defer()
     modelObj
-      .get get
+      .get id
       .delete()
       .run()
       .then (res) ->
