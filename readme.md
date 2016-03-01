@@ -22,7 +22,7 @@ Once you fork and clone the repo and run `npm install`. Once everything is downl
 
 # Making changes to the repo
 
-Use your own fork to get familiar with the code in a local environment. Once you're ready to make changes you can create pull requests on/ push to the dev branch first and Heroku will deploy the updates to: [chip-thinky-practice-dev.herokuapp.com/](https://ph-todo-app-dev.herokuapp.com/). Pull requests to master will generate [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). If you're in the on the Pink Hippos slack team you'll see updates in the thinky-practice channel.
+Check out [this](https://guides.github.com/introduction/flow/index.html) guide on the git flow I use. Use your own fork to get familiar with the code in a local environment. Once you're ready to make changes you can create pull requests on/ push to the dev branch first and Heroku will deploy the updates to: [chip-thinky-practice-dev.herokuapp.com/](https://ph-todo-app-dev.herokuapp.com/). Pull requests to master will generate [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). If you're in the on the Pink Hippos slack team you'll see updates in the thinky-practice channel.
 
 # Useful Tips
 
