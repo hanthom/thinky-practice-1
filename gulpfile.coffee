@@ -37,6 +37,10 @@ gulp.task 'build-dev', (cb)->
   setEnv paths.env, NODE_ENV: "development"
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
+gulp.task 'build-heroku-dev', (cb)->
+  setEnv paths.env, NODE_ENV: "development"
+  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
+
 gulp.task 'build-prod', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
