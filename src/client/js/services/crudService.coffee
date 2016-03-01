@@ -1,11 +1,11 @@
 url = "/api/users"
-crudHelper = require "../helpers/crudHelper"
-{crudCreate, crudRead} = crudHelper
-
 
 new class CrudService
   constructor: ($http, $q)->
-
+    ##### CRUD CREATE #####
+    # CRUD Helper method to ADD to API
+    # @params: string, obj
+    # @returns: obj
     @crudCreate = (url, obj) ->
       dfd = $q.defer()
       $http
@@ -17,6 +17,10 @@ new class CrudService
           console.log "CRUD DELETE ERROR >>>> ", err
       dfd.promise
 
+    ##### CRUD READ #####
+    # CRUD Helper method to GATHER from API
+    # @params: string, obj
+    # @returns: objc
     @crudRead = (url, obj) ->
       dfd = $q.defer()
       $http
@@ -28,7 +32,11 @@ new class CrudService
           console.log "CRUD DELETE ERROR >>>> ", err
       dfd.promise
 
-    @crudUpdate = (obj) ->
+    ##### CRUD UPDATE #####
+    # CRUD Helper method to UPDATE collection in API
+    # @params: string, obj
+    # @returns: obj
+    @crudUpdate = (url, obj) ->
       dfd = $q.defer()
       $http
         .put url, obj
@@ -39,6 +47,10 @@ new class CrudService
           console.log "CRUD DELETE ERROR >>>> ", err
       dfd.promise
 
+    ##### CRUD DELETE #####
+    # CRUD Helper method to DELETE collection from API
+    # @params: string, obj
+    # @returns: null
     @crudDelete = (url, obj) ->
       dfd = $q.defer()
       $http
