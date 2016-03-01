@@ -6,6 +6,7 @@ crudHelper = require "#{__dirname}/../helpers/crudHelper"
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
 {crudCreate, crudRead, crudUpdate, crudDelete} = crudHelper
+
 module.exports =
   ##### createUser #####
   # Creates new user
@@ -40,6 +41,7 @@ module.exports =
       if filter != 'all'
         query = query.filter username: filter
     crudRead query
+
   ##### updateUser #####
   # Updates specific users
   # @params: string, object
