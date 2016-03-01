@@ -28,7 +28,7 @@ Use your own fork to get familiar with the code in a local environment. Once you
 
 ## Work Flow
 
-I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. If you're on the latest OSX you can split your window like this ![El Capitan Panels](./config/iterm_and_atom.png)
+I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. If you're on the latest OSX you can split your window like this ![El Capitan Panels](/config/images/iterm_and_atom.png)
 
 ## Snippets in [Atom](https://atom.io/)
 
