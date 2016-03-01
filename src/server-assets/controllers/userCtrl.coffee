@@ -31,15 +31,14 @@ module.exports =
     #     handleErr "GETTING USER >>>> ", err.message, dfd
 
   ##### getAllUsers #####
-  # Gathers information for ALL users
-  # @params: string
+  # Gather Information about User or Users
+  # @params: obj
   # @returns: promise
-  getAllUsers: (filter) ->
+  getUsers: (filter) ->
     query = User
       .orderBy index: r.desc 'username'
-    if filter != 'all'
-      query = query.filter id: filter
-    # crudRead not returning promise
+      if filter != 'all'
+        query = query.filter username: filter
     crudRead query
   ##### updateUser #####
   # Updates specific users

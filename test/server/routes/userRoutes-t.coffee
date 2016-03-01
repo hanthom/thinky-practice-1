@@ -1,26 +1,41 @@
 should = require('chai').should()
 expect = require('chai').expect()
+
 {pristineUser} = require "../../util"
-host = 'http://localhost:9999'
+
+host = "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
 api = require('supertest') host
 userUrl = '/api/users'
 
 describe 'userRoutes', ()->
   describe 'post', ()->
     res = {}
-    before (done) ->
+    newUser = {}
+    before (done)->
       api
         .post userUrl
         .send pristineUser()
-        .end (err, r)->
-          if err then console.log "userRoutesTEST ERROR >>>> ", err
-          else console.log "userRoutesTEST STATUS >>>> " , r.status
-          res = r
-          console.log "REST BEFORE DONE >>>> ", res.status
-      done()
+        .end (err, response)->
+          if err then console.log "userRoutes TEST ERROR >>>> ", err
+          else
+            newUser = response.body
+            console.log 'NEW USER >>>>', newUser
+            res = response
+          done()
 
-    console.log "RES BEFORE IT >>>> ", res.status
-    it 'should return a 201', (done)->
-      console.log "IT RES >>>> ", res.status
+    after (done)->
+      {db} = require "#{__dirname}/../../../src/server-assets/config/dbConfig"
+      {r} = db
+      r.table 'User'
+        .get newUser.id
+        .delete()
+        .then (res)->
+          console.log 'CLEANUP >>>>', res
+          done()
+
+    it 'should return 201', (done)->
       res.status.should.equal 201
       done()
+
+    it 'should not return the password', (done)->
+      newUser.should.not.have.property 'password'

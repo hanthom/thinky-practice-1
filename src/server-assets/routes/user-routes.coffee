@@ -1,5 +1,5 @@
 userCtrl = require "#{__dirname}/../controllers/userCtrl"
-{createUser, getOneUser, getAllUsers, updateUser, deleteUser} = userCtrl
+{createUser, getOneUser, getUsers, updateUser, deleteUser} = userCtrl
 
 handleErr = (e, res)->
   res
@@ -7,8 +7,8 @@ handleErr = (e, res)->
     .send e
 
 module.exports = (app) ->
-  app.get '/api/users/:status', (req, res) ->
-    getAllUsers req.params.status
+  app.get '/api/users/:username', (req, res) ->
+    getUsers req.params.username
       .then (users) ->
         if users.length >= 1
           res
