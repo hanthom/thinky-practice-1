@@ -35,7 +35,7 @@ I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The a
 Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way to customize shortcuts for speedy development. If you add the snippets below you can type the prefix ad hit `tab` to start the snippet. Use `tab` to get to each spot preceded by a $.
 
 ```
-#####
+######
 # Markup Snippets
 '.source.gfm':
   'Link':
@@ -70,6 +70,9 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
 ######
 # CoffeeScript Snippets
 '.source.coffee':
+  'Require':
+    'prefix': 'req'
+    'body': 'require "#{__dirname}/${1:pathToFile}"'
 
   'Process Variable':
     'prefix': 'penv'
@@ -101,11 +104,15 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
     'body': '# @params: $1 -> $2'
 
 
-  'Comment':
-    'prefix': 'com'
+  'Comment1':
+    'prefix': 'com1'
     'body': """
     ######
     # $1
     ######
     """
+
+  'Comment2':
+    'prefix': 'com2'
+    'body': '###### $1 ######'
 ```

@@ -27,7 +27,6 @@ paths =
     controllers: 'test/server/controllers/*.coffee'
 
 gulp.task 'default', (cb)->
-  setEnv paths.env
   runSequence 'prompt'
     , ['tunnel', 'build', 'test']
     , ['watchify', 'nodemon', 'watch']
@@ -61,7 +60,9 @@ gulp.task 'prompt', (done)->
     message:  'Do you want the tests to run on file saves?'
     default: 'true'
   prompt question, (answers)->
-    process.env.RUN_TESTS = answers.runTests
+    console.log answers
+    setEnv paths.env,
+      RUN_TESTS: answers.runTests
     done()
 
 gulp.task 'stylus', () ->
@@ -76,10 +77,10 @@ gulp.task 'tunnel', ()->
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee'
+    runSequence 'coffeelint', 'coffee', 'test'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
-  # watch paths.test.src, ['test']
+  watch paths.test.src, ['test']
 
 gulp.task 'watchify', () ->
   watchify './build/client/js/app.js', './build/client/'

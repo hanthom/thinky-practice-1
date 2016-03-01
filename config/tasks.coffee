@@ -152,7 +152,8 @@ module.exports =
         .on 'error', (err) ->
           console.log "MOCHA ERROR >>>> ", err.message
           @emit 'end'
-
+    else
+      console.log 'MOCHA >>>> TESTS TURNED OFF'
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
