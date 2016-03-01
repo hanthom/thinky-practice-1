@@ -28,8 +28,8 @@ paths =
 
 gulp.task 'default', (cb)->
   setEnv paths.env
-  runSequence 'tunnel', 'build'
-    , 'test'
+  runSequence 'prompt'
+    , ['tunnel', 'build', 'test']
     , ['watchify', 'nodemon', 'watch']
     , cb
 
@@ -54,8 +54,15 @@ gulp.task 'jade', () ->
 gulp.task 'nodemon', ()->
   nodemon paths.server
 
-gulp.task 'prompt', ()->
-  prompt()
+gulp.task 'prompt', (done)->
+  question =
+    type: 'confirm'
+    name: 'runTests'
+    message:  'Do you want the tests to run on file saves?'
+    default: 'true'
+  prompt question, (answers)->
+    process.env.RUN_TESTS = answers.runTests
+    done()
 
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'

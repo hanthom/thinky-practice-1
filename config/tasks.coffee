@@ -135,28 +135,23 @@ module.exports =
   # Creates a command line prompt with given args
   # @params: questions -> object
   # @params: cb -> function
-  prompt: (questions, cb)->
+  prompt: (question, cb)->
     inquirer = require 'inquirer'
-    question =
-      type: 'confirm'
-      name: 'test'
-      message: 'This is a test prompt. Please confirm'
-      default: 'true'
-    inquirer.prompt question, (answers)->
-      console.log 'ANSWERS >>>>', answers
+    inquirer.prompt question, cb
 
   ##### test #####
   # Runs mocha tests with the options given
   # @params: opts -> object
   test: (src, reporter) ->
-    mocha = require 'gulp-mocha'
-    opts =
-      reporter: reporter
-    gulp.src src
-      .pipe mocha opts
-      .on 'error', (err) ->
-        console.log "MOCHA ERROR >>>> ", err.message
-        @emit 'end'
+    if process.env.RUN_TESTS is true
+      mocha = require 'gulp-mocha'
+      opts =
+        reporter: reporter
+      gulp.src src
+        .pipe mocha opts
+        .on 'error', (err) ->
+          console.log "MOCHA ERROR >>>> ", err.message
+          @emit 'end'
 
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
