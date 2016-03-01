@@ -143,7 +143,10 @@ module.exports =
   # Runs mocha tests with the options given
   # @params: opts -> object
   test: (src, reporter) ->
-    if process.env.RUN_TESTS is true
+    ######
+    # Needed to parse the env variable to get expected behavior
+    ######
+    if JSON.parse process.env.RUN_TESTS
       mocha = require 'gulp-mocha'
       opts =
         reporter: reporter
