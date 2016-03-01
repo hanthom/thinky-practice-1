@@ -1,13 +1,8 @@
 url = "/api/users"
+
 new class UserService
-  constructor: ($http, $q)->
+  constructor: ($http, $q, crudService)->
     @addUser =  (user)->
-      dfd = $q.defer()
-      $http
-        .post url, user
-        .then (res)->
-          console.log res
-          dfd.resolve()
-      dfd.promise
+      crudService.crudCreate url, user
 
 module.exports = UserService
