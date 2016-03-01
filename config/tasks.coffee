@@ -2,13 +2,11 @@ gulp = require 'gulp'
 
 ######
 # All @params will be strings unless specified
-# src @params may be arrays passed to fixPath.
-
+######
 
 ##### addBase #####
 # Adds the cwd to the path provided.
 # Handles for the paths that ignore files
-# @params: path -> string
 # @returns: string
 addBase = (path)->
   base = "#{__dirname}/../#{path}"
@@ -31,9 +29,10 @@ bundle = (bundler, dest)->
     .pipe source 'bundle.js'
     .pipe gulp.dest dest
 
-# Accepts srting src and dest
+##### fixPath #####
 # Dynamically calls addBase fn with a src and dest
-# Returns an object with src, dest keys
+# @params: src -> string or array
+# @returns: object
 fixPath = (src, dest)->
   fixedPaths = {}
   if Array.isArray src
@@ -82,6 +81,7 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
 
+
   ##### jade #####
   # Compiles JADE into HTML
   # Uses 'prettify' to make HTML readable
@@ -108,7 +108,6 @@ module.exports =
   nodemon: (script)->
     nodemon = require 'gulp-nodemon'
     script = addBase script
-    console.log "ENV IN GULP >>>> #{process.env.NODE_ENV}"
     nodemon
       script: script
       delay: 500
@@ -121,6 +120,18 @@ module.exports =
     gulp.src src
       .pipe styl()
       .pipe gulp.dest dest
+
+  ##### setEnv #####
+  # Sets the environment with using .env.json
+  # Overwrites or sets any other values given
+  # @params: overWrites -> object
+  setEnv: (path, overWrites)->
+    gEnv = require 'gulp-env'
+    gEnv
+      file: path
+      vars: overWrites
+
+
 
   ##### test #####
   # Runs mocha tests with the options given
@@ -136,12 +147,14 @@ module.exports =
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
-  tunnel: (tunnelEnv)->
+  tunnel: ()->
+    child = require 'child_process'
+    child.exec "python #{__dirname}/tunnel.py"
 
   ##### watch #####
   # Watches the specified files for changes and runs the
   # @params: cb -> function
-  watch: (path, tasks)->
+  watch: (path, cb)->
     {src} = fixPath path
     console.log "Should be watching #{src}"
     gulp.watch src, cb
