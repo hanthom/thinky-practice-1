@@ -28,7 +28,7 @@ Check out [this](https://guides.github.com/introduction/flow/index.html) guide o
 
 ## Work Flow
 
-I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. If you're on the latest OSX you can split your screen using [panels](http://osxdaily.com/2015/10/01/use-split-view-mac-os-x/). It keeps my terminal in view during development so I can see updates in my console easily.  ![El Capitan Panels](/config/images/iterm_and_atom.png)
+I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. I added `alias tunnels="lsof -i tcp | grep ^ssh"` so I can see all ssh tunnels open on my machine. If you're on the latest OSX you can split your screen using [panels](http://osxdaily.com/2015/10/01/use-split-view-mac-os-x/). It keeps my terminal in view during development so I can see updates in my console easily.  ![El Capitan Panels](/config/images/iterm_and_atom.png)
 
 ## Snippets in [Atom](https://atom.io/)
 

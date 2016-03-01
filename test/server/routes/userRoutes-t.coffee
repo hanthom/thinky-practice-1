@@ -26,13 +26,15 @@ describe 'userRoutes', ()->
     after (done)->
       {db} = require "#{__dirname}/../../../src/server-assets/config/dbConfig"
       {r} = db
-      if newUser is !{}
+      if newUser.test
         r.table 'User'
-          .get newUser.id
+          .filter test: true
           .delete()
           .then (res)->
             console.log 'CLEANUP >>>>', res
             done()
+      else
+        done()
 
     it 'should return 201', (done)->
       res.status.should.equal 201
