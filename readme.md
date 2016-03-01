@@ -59,9 +59,9 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) for formatted c
 # CoffeeScript Snippets
 '.source.coffee':
 
-  'Process Variable':
-    'prefix': 'penv'
-    'body': 'process.env.${1:ENV_VARIABLE} = $2'
+'Process Variable':
+  'prefix': 'penv'
+  'body': 'process.env.${1:ENV_VARIABLE}${2: =}'
 
   'Function Creator':
     'prefix': 'fnc'
