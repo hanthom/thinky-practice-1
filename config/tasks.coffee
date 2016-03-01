@@ -141,7 +141,7 @@ module.exports =
   ##### watch #####
   # Watches the specified files for changes and runs the
   # @params: cb -> function
-  watch: (path, tasks)->
+  watch: (path, cb)->
     {src} = fixPath path
     console.log "Should be watching #{src}"
     gulp.watch src, cb
