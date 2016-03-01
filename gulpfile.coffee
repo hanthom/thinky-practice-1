@@ -28,20 +28,15 @@ paths =
 
 gulp.task 'default', (cb)->
   setEnv paths.env
-  runSequence 'tunnel', ['jade', 'stylus', 'coffeelint','coffee']
-    , 'browserify'
-    , ['watchify', 'nodemon', 'test' , 'watch']
+  runSequence 'tunnel', 'build'
+    , 'test'
+    , ['watchify', 'nodemon', 'watch']
     , cb
 
 gulp.task 'build-dev', (cb)->
   setEnv paths.env, NODE_ENV: "development"
-  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
-
-gulp.task 'build-heroku-dev', (cb)->
-  process.env.NODE_ENV = 'development'
-  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
-
-gulp.task 'build-prod', (cb)->
+  
+gulp.task 'build', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'browserify', () ->
@@ -71,10 +66,10 @@ gulp.task 'tunnel', ()->
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee', 'test'
+    runSequence 'coffeelint', 'coffee'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
-  watch paths.test.src, ['test']
+  # watch paths.test.src, ['test']
 
 gulp.task 'watchify', () ->
   watchify './build/client/js/app.js', './build/client/'
