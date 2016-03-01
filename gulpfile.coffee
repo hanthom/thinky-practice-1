@@ -79,7 +79,7 @@ gulp.task 'watch', ()->
     runSequence 'coffeelint', 'coffee'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
-  # watch paths.test.src, ['test']
+  watch paths.test.src, ['test']
 
 gulp.task 'watchify', () ->
   watchify './build/client/js/app.js', './build/client/'
