@@ -1,10 +1,27 @@
-##### handleErr #####
-# Creates a log message and rejects promise with log
-# @params: action -> string
-# @params: message -> string
-# @params: promise -> q.defer object
 module.exports =
+  ##### handleErr #####
+  # Creates a log message and rejects promise with log
+  # @params: action -> string
+  # @params: message -> string
+  # @params: promise -> q.defer object
   handleErr: (action, message, promise)->
     log = "ERROR #{action} >>>> #{message}"
     console.log log
     promise.reject log
+
+  ##### watchModelFeed #####
+  # Watches a model table for changes and handles with cb if provided
+  # @params: model -> Thinky model
+  # @params: cb -> function
+  watchModelFeed: (model, cb)->
+    model
+      .changes()
+      .then (feed)->
+        if !cb
+          feed.each (e, doc)->
+            if e
+              console.log 'ERROR WATCHING CHANGES >>>>', e
+            else
+              console.log 'USERS TABLE CHANGE:', doc
+        else
+          cb feed
