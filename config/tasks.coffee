@@ -131,18 +131,27 @@ module.exports =
       file: path
       vars: overWrites
 
-
+  ##### prompt #####
+  # Creates a command line prompt with given args
+  # @params: questions -> object
+  # @params: cb -> function
+  prompt: (question, cb)->
+    inquirer = require 'inquirer'
+    inquirer.prompt question, cb
 
   ##### test #####
   # Runs mocha tests with the options given
   # @params: opts -> object
-  test: (src, opts) ->
-    mocha = require 'gulp-mocha'
-    gulp.src src
-      .pipe mocha opts
-      .on 'error', (err) ->
-        console.log "MOCHA ERROR >>>> ", err.message
-        @emit 'end'
+  test: (src, reporter) ->
+    if process.env.RUN_TESTS is true
+      mocha = require 'gulp-mocha'
+      opts =
+        reporter: reporter
+      gulp.src src
+        .pipe mocha opts
+        .on 'error', (err) ->
+          console.log "MOCHA ERROR >>>> ", err.message
+          @emit 'end'
 
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance

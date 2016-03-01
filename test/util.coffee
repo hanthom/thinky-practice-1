@@ -1,9 +1,6 @@
 faker = require 'faker'
-
-class Util
-  @pristineUser: ()->
+module.exports =
+  pristineUser: ()->
     newUser =
       password: 'test'
       username: faker.name.firstName()
-
-module.exports = Util

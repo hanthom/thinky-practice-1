@@ -1,8 +1,3 @@
+dbName = process.env.DB_NAME
 module.exports =
-  mochaSetup:
-    reporter: 'nyan'
-  startTest: ()->
-    process.env['DB'] = testDb
-
-  endTest: ()->
-    if process.env['DB'] then delete process.env['DB']
+  dbPath: '../src/server-assets/config/dbConfig'

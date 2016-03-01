@@ -2,7 +2,7 @@ gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
 {browserify, coffee, coffeelint, jade, nodemon} = tasks
-{paths, setEnv, stylus, test, tunnel, watchify, watch} = tasks
+{prompt, setEnv, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -24,20 +24,19 @@ paths =
   test:
     src: 'test/server/**/*.coffee'
     all: 'test/server/*.coffee'
-    config: require('./test/config').mochaSetup
+    controllers: 'test/server/controllers/*.coffee'
 
 gulp.task 'default', (cb)->
   setEnv paths.env
-  runSequence 'tunnel', ['jade', 'stylus', 'coffeelint','coffee']
-    , 'browserify'
-    , ['watchify', 'nodemon', 'test' , 'watch']
+  runSequence 'prompt'
+    , ['tunnel', 'build', 'test']
+    , ['watchify', 'nodemon', 'watch']
     , cb
 
 gulp.task 'build-dev', (cb)->
-  setEnv paths.env
-  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
+  setEnv paths.env, NODE_ENV: "development"
 
-gulp.task 'build-prod', (cb)->
+gulp.task 'build', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'browserify', () ->
@@ -55,21 +54,32 @@ gulp.task 'jade', () ->
 gulp.task 'nodemon', ()->
   nodemon paths.server
 
+gulp.task 'prompt', (done)->
+  question =
+    type: 'confirm'
+    name: 'runTests'
+    message:  'Do you want the tests to run on file saves?'
+    default: 'true'
+  prompt question, (answers)->
+    process.env.RUN_TESTS = answers.runTests
+    done()
+
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
 gulp.task 'test', () ->
-  test paths.test.src, {reporter: paths.test.config.reporter}
+  test paths.test.src, 'nyan'
 
 gulp.task 'tunnel', ()->
+  setEnv paths.env
   tunnel()
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee', 'test'
+    runSequence 'coffeelint', 'coffee'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
-  watch paths.test.src, ['test']
+  # watch paths.test.src, ['test']
 
 gulp.task 'watchify', () ->
   watchify './build/client/js/app.js', './build/client/'
