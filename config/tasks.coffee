@@ -112,14 +112,13 @@ module.exports =
       script: script
       delay: 500
 
-  ##### stylus #####
-  # Compiles Stylus into css
-  stylus: (src, dest) ->
-    styl = require 'gulp-stylus'
-    {src, dest} = fixPath src, dest
-    gulp.src src
-      .pipe styl()
-      .pipe gulp.dest dest
+  ##### prompt #####
+  # Creates a command line prompt with given args
+  # @params: questions -> object
+  # @params: cb -> function
+  prompt: (question, cb)->
+    inquirer = require 'inquirer'
+    inquirer.prompt question, cb
 
   ##### setEnv #####
   # Sets the environment with using .env.json
@@ -131,13 +130,14 @@ module.exports =
       file: path
       vars: overWrites
 
-  ##### prompt #####
-  # Creates a command line prompt with given args
-  # @params: questions -> object
-  # @params: cb -> function
-  prompt: (question, cb)->
-    inquirer = require 'inquirer'
-    inquirer.prompt question, cb
+  ##### stylus #####
+  # Compiles Stylus into css
+  stylus: (src, dest) ->
+    styl = require 'gulp-stylus'
+    {src, dest} = fixPath src, dest
+    gulp.src src
+      .pipe styl()
+      .pipe gulp.dest dest
 
   ##### test #####
   # Runs mocha tests with the options given

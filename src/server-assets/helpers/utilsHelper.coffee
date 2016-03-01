@@ -22,6 +22,6 @@ module.exports =
             if e
               console.log 'ERROR WATCHING CHANGES >>>>', e
             else
-              console.log 'USERS TABLE CHANGE:', doc
+              console.log "#{model} TABLE CHANGE >>>> ", doc
         else
           cb feed
