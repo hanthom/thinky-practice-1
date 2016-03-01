@@ -11,15 +11,14 @@ describe 'userRoutes', ()->
   describe 'post', ()->
     res = {}
     newUser = {}
-    before (done)->
+    beforeEach (done)->
       api
         .post userUrl
         .send pristineUser()
         .end (err, response)->
           if err then console.log "userRoutes TEST ERROR >>>> ", err
           else
-            newUser = response.body
-            console.log 'NEW USER >>>>', newUser
+            console.log 'RESPONSE >>>>', response.body
             res = response
           done()
 
@@ -40,5 +39,13 @@ describe 'userRoutes', ()->
       res.status.should.equal 201
       done()
 
-    it 'should not return the password', (done)->
+    it 'should return username and id', (done)->
+      newUser.should.have.property 'id'
+      newUser.should.have.property 'username'
+      done()
+
+    it 'should not return password, email, nor createAt', (done)->
       newUser.should.not.have.property 'password'
+      newUser.should.not.have.property 'email'
+      newUser.should.not.have.property 'createAt'
+      done()
