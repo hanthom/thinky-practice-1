@@ -7,25 +7,8 @@ handleErr = (e, res)->
     .send e
 
 module.exports = (app) ->
-  app.get '/api/users/:filter/:value', (req, res) ->
-    obj =
-      filterName: req.params.filter
-      filterValue: req.params.value
-    arr = [req.params.filter, req.params.value]
-    getUsers obj
-      .then (users) ->
-        if users.length >= 1
-          res
-            .status 200
-            .send users
-        else
-          res
-            .status 404
-            .send 'NO USERS FOUND'
-      .catch (err) ->
-        handleErr err, res
-  app.get '/api/users/:string', (req, res) ->
-    getUsers req.params.string
+  app.get '/api/users/:username', (req, res) ->
+    getUsers req.params.username
       .then (users) ->
         if users.length >= 1
           res
