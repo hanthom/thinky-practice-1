@@ -10,11 +10,11 @@ Run `brew install rethinkdb`. In your home folder run `rethinkdb`. This will spi
 
 ### With the tunnel.py script running
 
-The gulpfile has a task to run this script. It will only work if you've got the .env.json file for the repo. If you want to just run tunnel.py you can open a terminal window and run `python tunnel.py`. You can check the ssh connections on your machine using `lsof -i -n | egrep '\<ssh\>'`
+The gulpfile has a task to run this script. It will only work if you've got the .env.json file for the repo. If you want to just run tunnel.py you can open a terminal window and run `python tunnel.py`. You can check the ssh connections on your machine using `lsof -i -n | egrep '\<ssh\>'`. You can kill all ssh tunnels using `killall ssh`
 
 ### To check the gui without ssh connection
 
-[aws-us-east-1-portal7.dblayer.com:10583](https://aws-us-east-1-portal7.dblayer.com:10583/)
+You'll need to set up a login for an ssl connection to the DB. After that you can access it at [aws-us-east-1-portal7.dblayer.com:10583](https://aws-us-east-1-portal7.dblayer.com:10583/)
 
 # Spinning up your environment
 
@@ -26,32 +26,44 @@ Use your own fork to get familiar with the code in a local environment. Once you
 
 # Useful Tips
 
+## Work Flow
+
+I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. If you're on the latest OSX you can split your window like this ![El Capitan Panels](./config/iterm_and_atom.png)
+
 ## Snippets in [Atom](https://atom.io/)
 
-Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) for formatted comments and function creations<br>Add these to your snippets.cson<br>Use tab to get to each spot preceded by a $
+Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way to customize shortcuts for speedy development. If you add the snippets below you can type the prefix ad hit `tab` to start the snippet. Use `tab` to get to each spot preceded by a $.
 
 ```
-######
+#####
 # Markup Snippets
 '.source.gfm':
+  'Link':
+    'prefix': 'ml',
+    'body': '[${1:LinkText}](${2:http://})'
+
+  'Image':
+    'prefix': 'img'
+    'body': '![${1:imageTitle}](${2:pathToImage})'
+
   'Header 1':
-    'prefix': 'mdh1'
+    'prefix': 'h1'
     'body': '# $1'
 
   'Header 2':
-    'prefix': 'mdh2'
+    'prefix': 'h2'
     'body': '## $1'
 
   'Header 3':
-    'prefix': 'mdh3'
+    'prefix': 'h3'
     'body': '### $1'
 
   'Header 4':
-    'prefix': 'mdh4'
+    'prefix': 'h4'
     'body': '#### $1'
 
   'Header 5':
-    'prefix': 'mdh5'
+    'prefix': 'h5'
     'body': '##### $1'
 
 
@@ -59,9 +71,9 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) for formatted c
 # CoffeeScript Snippets
 '.source.coffee':
 
-'Process Variable':
-  'prefix': 'penv'
-  'body': 'process.env.${1:ENV_VARIABLE}${2: =}'
+  'Process Variable':
+    'prefix': 'penv'
+    'body': 'process.env.${1:ENV_VARIABLE}${2: =}'
 
   'Function Creator':
     'prefix': 'fnc'
