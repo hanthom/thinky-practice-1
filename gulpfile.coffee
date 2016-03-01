@@ -28,8 +28,9 @@ paths =
 
 gulp.task 'default', (cb)->
   runSequence 'prompt'
-    , ['tunnel', 'build', 'test']
+    , ['tunnel', 'build',]
     , ['watchify', 'nodemon', 'watch']
+    , 'test'
     , cb
 
 gulp.task 'build-dev', (cb)->

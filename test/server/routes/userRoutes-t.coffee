@@ -6,6 +6,7 @@ expect = require('chai').expect()
 host = "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
 api = require('supertest') host
 userUrl = '/api/users'
+src = "#{__dirname}/../../../src/"
 
 describe 'userRoutes', ()->
   describe 'post', ()->
@@ -18,13 +19,12 @@ describe 'userRoutes', ()->
         .end (err, response)->
           if err then console.log "userRoutes TEST ERROR >>>> ", err
           else
-            newUser = response.body
-            console.log 'NEW USER >>>>', newUser
+            console.log 'RESPONSE >>>>', response.body
             res = response
           done()
 
     after (done)->
-      {db} = require "#{__dirname}/../../../src/server-assets/config/dbConfig"
+      {db} = require "#{src}/server-assets/config/dbConfig"
       {r} = db
       if newUser.test
         r.table 'User'
@@ -40,5 +40,13 @@ describe 'userRoutes', ()->
       res.status.should.equal 201
       done()
 
-    it 'should not return the password', (done)->
+    it 'should return username and id', (done)->
+      newUser.should.have.property 'id'
+      newUser.should.have.property 'username'
+      done()
+
+    it 'should not return password, email, nor createAt', (done)->
       newUser.should.not.have.property 'password'
+      newUser.should.not.have.property 'email'
+      newUser.should.not.have.property 'createAt'
+      done()
