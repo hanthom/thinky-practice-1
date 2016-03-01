@@ -24,7 +24,7 @@ paths =
   test:
     src: 'test/server/**/*.coffee'
     all: 'test/server/*.coffee'
-    config: require('./test/config').mochaSetup
+    controllers: 'test/server/controllers/*.coffee'
 
 gulp.task 'default', (cb)->
   setEnv paths.env
@@ -63,10 +63,10 @@ gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
 gulp.task 'test', () ->
-  test paths.test.src, {reporter: paths.test.config.reporter}
+  test paths.test.src, 'nyan'
 
 gulp.task 'tunnel', ()->
-  setEnv paths.env, DB_NAME: "todo_app_LOCAL"
+  setEnv paths.env
   tunnel()
 
 gulp.task 'watch', ()->

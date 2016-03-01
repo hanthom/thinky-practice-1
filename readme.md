@@ -73,7 +73,7 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
 
   'Process Variable':
     'prefix': 'penv'
-    'body': 'process.env.${1:ENV_VARIABLE}${2: =}'
+    'body': 'process.env.${1:ENV_VARIABLE}'
 
   'Function Creator':
     'prefix': 'fnc'

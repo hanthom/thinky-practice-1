@@ -136,8 +136,10 @@ module.exports =
   ##### test #####
   # Runs mocha tests with the options given
   # @params: opts -> object
-  test: (src, opts) ->
+  test: (src, reporter) ->
     mocha = require 'gulp-mocha'
+    opts =
+      reporter: reporter
     gulp.src src
       .pipe mocha opts
       .on 'error', (err) ->
