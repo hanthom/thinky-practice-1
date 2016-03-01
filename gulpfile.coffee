@@ -2,7 +2,7 @@ gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
 {browserify, coffee, coffeelint, jade, nodemon} = tasks
-{paths, setEnv, stylus, test, tunnel, watchify, watch} = tasks
+{prompt, setEnv, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -35,7 +35,7 @@ gulp.task 'default', (cb)->
 
 gulp.task 'build-dev', (cb)->
   setEnv paths.env, NODE_ENV: "development"
-  
+
 gulp.task 'build', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
@@ -53,6 +53,9 @@ gulp.task 'jade', () ->
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
+
+gulp.task 'prompt', ()->
+  prompt()
 
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'

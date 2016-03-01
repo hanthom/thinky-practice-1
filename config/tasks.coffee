@@ -131,7 +131,19 @@ module.exports =
       file: path
       vars: overWrites
 
-
+  ##### prompt #####
+  # Creates a command line prompt with given args
+  # @params: questions -> object
+  # @params: cb -> function
+  prompt: (questions, cb)->
+    inquirer = require 'inquirer'
+    question =
+      type: 'confirm'
+      name: 'test'
+      message: 'This is a test prompt. Please confirm'
+      default: 'true'
+    inquirer.prompt question, (answers)->
+      console.log 'ANSWERS >>>>', answers
 
   ##### test #####
   # Runs mocha tests with the options given
