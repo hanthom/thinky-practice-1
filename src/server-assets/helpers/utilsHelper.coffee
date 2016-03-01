@@ -9,6 +9,15 @@ module.exports =
     console.log log
     promise.reject log
 
+  ##### sendErr #####
+  # Description
+  # @params: repsonse -> Express response object
+  # @params: error -> object
+  sendErr: (repsonse, error)->
+    response
+      .status 500
+      .send error
+      
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
   # @params: model -> Thinky model

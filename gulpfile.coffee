@@ -70,7 +70,7 @@ gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
 gulp.task 'test', () ->
-  test paths.test.src, 'nyan'
+  test paths.test.src
 
 gulp.task 'tunnel', ()->
   setEnv paths.env
