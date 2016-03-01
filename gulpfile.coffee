@@ -34,7 +34,7 @@ gulp.task 'default', (cb)->
     , cb
 
 gulp.task 'build-dev', (cb)->
-  setEnv paths.env
+  setEnv paths.env, NODE_ENV: "development"
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'build-prod', (cb)->
@@ -62,6 +62,7 @@ gulp.task 'test', () ->
   test paths.test.src, {reporter: paths.test.config.reporter}
 
 gulp.task 'tunnel', ()->
+  setEnv paths.env, DB_NAME: "todo_app_LOCAL"
   tunnel()
 
 gulp.task 'watch', ()->
