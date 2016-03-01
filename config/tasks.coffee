@@ -5,7 +5,11 @@ gulp = require 'gulp'
 # src @params may be arrays passed to fixPath.
 
 
-
+##### addBase #####
+# Adds the cwd to the path provided.
+# Handles for the paths that ignore files
+# @params: path -> string
+# @returns: string
 addBase = (path)->
   base = "#{__dirname}/../#{path}"
   if path[0] is '!'
@@ -13,11 +17,10 @@ addBase = (path)->
     "!#{base}"
   else
     base
+
 ##### bundle #####
 # Bundles using provided package and handles errs
-# @params: bundle ->
-# @returns:
-# Writes a 'bundle.js' file to dest
+# @params: bundler -> Browserify or Watchify package
 bundle = (bundler, dest)->
   source = require 'vinyl-source-stream'
   dest = addBase dest
@@ -52,15 +55,12 @@ module.exports =
   ##### browserify #####
   # Creates initial bundle with browserify
   # Calls bundle with browserify as bundler
-  # @params: root -> string
-  # @params: dest -> string
   browserify: (root, dest)->
     browserify = require 'browserify'
     bundle browserify(root), dest
 
   ##### coffee #####
   # Compiles coffeescript files to js
-  # @returns:
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
@@ -71,9 +71,9 @@ module.exports =
         this.emit 'end'
       .pipe gulp.dest dest
 
-  # Accepts string src
-  # Lints coffee files
-  # Logs reports with stylish coffee package
+  ##### coffeelint #####
+  # Lints the coffeescript files specified
+  # Prints the report in the console using 'stylish' reporter
   coffeelint: (src)->
     coffeelint = require 'gulp-coffeelint'
     stylishCoffee = require 'coffeelint-stylish'
@@ -82,9 +82,9 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
 
+  ##### jade #####
   # Compiles JADE into HTML
-  # @param string
-  # @param string
+  # Uses 'prettify' to make HTML readable
   jade: (src, dest) ->
     prettify = require 'gulp-prettify'
     jade = require 'gulp-jade'
@@ -95,16 +95,16 @@ module.exports =
       .pipe jade()
       .pipe gulp.dest dest
 
-  # Accepts string src and dest
+  ##### move #####
   # Moves src files to dest path
   move: (src, dest)->
     {src, dest} = fixPath src, dest
     gulp.src src
       .pipe gulp.dest dest
 
-  # Accepts string script
+  ##### nodemon #####
   # Runs nodemon with provided script
-  # Delays restart by hald second to handle for async tasks
+  # Delays restart by half second to handle for async tasks
   nodemon: (script)->
     nodemon = require 'gulp-nodemon'
     script = addBase script
@@ -113,19 +113,18 @@ module.exports =
       script: script
       delay: 500
 
+  ##### stylus #####
   # Compiles Stylus into css
-  # @param string
-  # @param string
   stylus: (src, dest) ->
     styl = require 'gulp-stylus'
-
     {src, dest} = fixPath src, dest
     gulp.src src
       .pipe styl()
       .pipe gulp.dest dest
 
-  # Mocha Task
-  # @params: string, string
+  ##### test #####
+  # Runs mocha tests with the options given
+  # @params: opts -> object
   test: (src, opts) ->
     mocha = require 'gulp-mocha'
     gulp.src src
@@ -134,17 +133,21 @@ module.exports =
         console.log "MOCHA ERROR >>>> ", err.message
         @emit 'end'
 
+  ##### tunnel #####
+  # Digs an SSH tunnel to Compose.io DB instance
+  # @params: tunnelEnv -> object
+  tunnel: (tunnelEnv)->
 
-  # Accepts string path
-  # Tasks is an array of string task names
-  # Watches for changes in files and runs tasks on save
+  ##### watch #####
+  # Watches the specified files for changes and runs the
+  # @params: cb -> function
   watch: (path, tasks)->
     {src} = fixPath path
     console.log "Should be watching #{src}"
-    gulp.watch src, tasks
+    gulp.watch src, cb
 
-  # Accepts string dest to write updated bundle.js
-  # Accepts string path to file to be sent to browserify
+  ##### watchify #####
+  # Description
   # Creates watcher to update after changes in bundled js files
   # Calls bundle with watchify as bundler
   watchify: (root, dest)->
