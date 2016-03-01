@@ -14,6 +14,9 @@ module.exports =
   # @returns: promise
   createUser: (user) ->
     crudCreate User, user
+      .then (user)->
+        console.log "GETTING #{user.id}"
+        module.exports.getOneUser user.id
 
   ##### getOneUser #####
   # Gathers information for unique user
