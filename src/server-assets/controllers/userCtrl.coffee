@@ -37,13 +37,6 @@ module.exports =
   getUsers: (filter) ->
     query = User
       .orderBy index: r.desc 'username'
-    if typeof filter is 'object'
-      console.log "GET USER OBJECT FILTER >>>>> ", filter
-      filterName = filter.filterName
-      filterValue = filter.filterValue
-      query = query.filter filterName: filterValue
-      console.log "GET USER QUERY FROM OBJ >>>> ", query.filter
-    else if typeof filter is 'string'
       if filter != 'all'
         query = query.filter username: filter
     crudRead query
