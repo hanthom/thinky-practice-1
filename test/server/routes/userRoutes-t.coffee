@@ -6,12 +6,13 @@ expect = require('chai').expect()
 host = "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
 api = require('supertest') host
 userUrl = '/api/users'
+src = "#{__dirname}/../../../src/"
 
 describe 'userRoutes', ()->
   describe 'post', ()->
     res = {}
     newUser = {}
-    beforeEach (done)->
+    before (done)->
       api
         .post userUrl
         .send pristineUser()
@@ -23,7 +24,7 @@ describe 'userRoutes', ()->
           done()
 
     after (done)->
-      {db} = require "#{__dirname}/../../../src/server-assets/config/dbConfig"
+      {db} = require "#{src}/server-assets/config/dbConfig"
       {r} = db
       if newUser.test
         r.table 'User'
