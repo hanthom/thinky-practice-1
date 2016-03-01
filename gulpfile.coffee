@@ -1,7 +1,8 @@
 gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
-{browserify, coffee, coffeelint, jade, nodemon, paths, stylus, test, watchify, watch} = tasks
+{browserify, coffee, coffeelint, jade, nodemon} = tasks
+{paths, setEnv, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -9,6 +10,7 @@ paths =
   bundle:
     root: 'build/client/js/app.js'
     dest: 'build/client'
+  env: '.env.json'
   jade:
     compile: 'src/**/*.jade'
     all: ['src/**/*.jade']
@@ -25,15 +27,17 @@ paths =
     config: require('./test/config').mochaSetup
 
 gulp.task 'default', (cb)->
-  # Sets env and ensures proper sequence of tasks
-
-  process.env.NODE_ENV = 'development'
-  runSequence ['jade', 'stylus', 'coffeelint','coffee']
+  setEnv paths.env
+  runSequence 'tunnel', ['jade', 'stylus', 'coffeelint','coffee']
     , 'browserify'
     , ['watchify', 'nodemon', 'test' , 'watch']
     , cb
 
-gulp.task 'build', (cb)->
+gulp.task 'build-dev', (cb)->
+  setEnv paths.env
+  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
+
+gulp.task 'build-prod', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'browserify', () ->
@@ -56,6 +60,9 @@ gulp.task 'stylus', () ->
 
 gulp.task 'test', () ->
   test paths.test.src, {reporter: paths.test.config.reporter}
+
+gulp.task 'tunnel', ()->
+  tunnel()
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ()->
