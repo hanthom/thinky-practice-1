@@ -15,35 +15,56 @@ module.exports =
   createUser: (user) ->
     crudCreate User, user
       .then (user)->
-        console.log "GETTING #{user.id}"
-        module.exports.getOneUser user.id
+        module.exports.getOneUser user.username
 
   ##### getOneUser #####
   # Gathers information for unique user
   # @params: string
   # @returns: promise
-  getOneUser: (id) ->
-    crudRead User.get id
+  getOneUser: (username) ->
+    dfd = q.defer()
+    query = User.filter username: username
+    crudRead query
+      .then (userArr)->
+        console.log 'USERS RETURNED >>>>', userArr
+        dfd.resolve userArr[0]
+      .catch (e)->
+        dfd.reject e
+    dfd.promise
+    # dfd = q.defer()
+    # User
+    #   .get id
+    #   .run()
+    #   .then (user) ->
+    #     console.log "USER >>>> ", user
+    #     dfd.resolve user
+    #   .catch (err) ->
+    #     handleErr "GETTING USER >>>> ", err.message, dfd
 
   ##### getAllUsers #####
   # Gather Information about User or Users
   # @params: obj
   # @returns: promise
-  getUsers: (filter) ->
-    query = User
-      .orderBy index: r.desc 'username'
-      if filter != 'all'
-        query = query.filter username: filter
-    crudRead query.trimUser()
-
+  getUsers: () ->
+    dfd = q.defer()
+    query = User.orderBy index: r.desc 'username'
+    crudRead query
+      .then (users)->
+        if users.length >= 1
+          dfd.resolve users
+        else
+          dfd.resolve()
+      .catch (e)->
+        dfd.reject e
+    dfd.promise
 
   ##### updateUser #####
   # Updates specific users
   # @params: string, object
   # @returns:
-  updateUser : (id, changes)->
+  updateUser: (id, changes)->
     query = User.get id
-    crudUpdate query, chages
+    crudUpdate query, changes
 
   ##### deleteUser #####
   # Deletes user permanently
