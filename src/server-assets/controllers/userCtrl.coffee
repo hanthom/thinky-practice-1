@@ -33,9 +33,9 @@ module.exports =
     query = User
       .orderBy index: r.desc 'username'
       if filter != 'all'
-        query = query.filter( username: filter )
-          .without('password', 'id', 'createdAt')
-    crudRead query
+        query = query.filter username: filter
+    crudRead query.trimUser()
+
 
   ##### updateUser #####
   # Updates specific users
