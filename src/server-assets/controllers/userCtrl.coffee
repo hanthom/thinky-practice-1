@@ -40,14 +40,17 @@ module.exports =
   ##### getAllUsers #####
   # Gather Information about User or Users
   # @params: obj
-  # @returns: promise
+  # @resolves: array
   getUsers: () ->
     dfd = q.defer()
     query = User.orderBy index: r.desc 'username'
     crudRead query
       .then (users)->
         if users.length >= 1
-          dfd.resolve users
+          trimmedUsers = []
+          for user in users
+            trimmedUsers.push trimResponse user, ['password', 'id']
+          dfd.resolve trimmedUsers
         else
           dfd.reject msg: 'NO USERS FOUND', status: 404
       .catch (e)->

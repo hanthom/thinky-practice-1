@@ -41,8 +41,7 @@ module.exports =
   # @params: arr -> array
   # @returns: obj
   trimResponse: (obj, arr) ->
-    trimmed = {}
     for key of obj
-      if arr.indexOf(key) >= 0
-        trimmed[key] = obj[key]
-    trimmed
+      if arr.indexOf(key) != -1
+        delete obj[key]
+    obj
