@@ -32,15 +32,6 @@ module.exports =
       .catch (e)->
         dfd.reject e
     dfd.promise
-    # dfd = q.defer()
-    # User
-    #   .get id
-    #   .run()
-    #   .then (user) ->
-    #     console.log "USER >>>> ", user
-    #     dfd.resolve user
-    #   .catch (err) ->
-    #     handleErr "GETTING USER >>>> ", err.message, dfd
 
   ##### getAllUsers #####
   # Gather Information about User or Users
