@@ -8,16 +8,11 @@ module.exports = (app) ->
     .get (req, res)->
       getOneUser req.params.username
         .then (user) ->
-          if user
-            res
-              .status 200
-              .send user
-          else
-            res
-              .status 404
-              .send 'NO USERS FOUND'
+          res
+            .status 200
+            .send user
         .catch (err) ->
-          sendErr err, res
+          sendErr res, err
 
   app.route '/api/users'
     .post (req, res) ->
@@ -27,7 +22,7 @@ module.exports = (app) ->
             .status 201
             .json user
         .catch (err) ->
-          sendErr err, res
+          sendErr res, err
 
     .get (req, res)->
       getUsers()

@@ -14,9 +14,14 @@ module.exports =
   # @params: repsonse -> Express response object
   # @params: error -> object
   sendErr: (repsonse, error)->
+    console.log 'CALLED'
+    status = error.status || 500
+    err = error.msg || error
+    console.log 'err', err
+    console.log 'status', status
     response
-      .status 500
-      .send error
+      .status status
+      .send err
 
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided

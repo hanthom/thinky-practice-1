@@ -23,23 +23,19 @@ module.exports =
   # @returns: promise
   getOneUser: (username) ->
     dfd = q.defer()
-    query = User.filter username: username
+    query = User
+      .filter username: username
     crudRead query
-      .then (userArr)->
-        console.log 'USERS RETURNED >>>>', userArr
-        dfd.resolve userArr[0]
+      .then (user)->
+        user = user[0]
+        if user
+          dfd.resolve user
+        else
+          dfd.reject msg: 'NO USER FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise
-    # dfd = q.defer()
-    # User
-    #   .get id
-    #   .run()
-    #   .then (user) ->
-    #     console.log "USER >>>> ", user
-    #     dfd.resolve user
-    #   .catch (err) ->
-    #     handleErr "GETTING USER >>>> ", err.message, dfd
+
 
   ##### getAllUsers #####
   # Gather Information about User or Users
@@ -53,7 +49,7 @@ module.exports =
         if users.length >= 1
           dfd.resolve users
         else
-          dfd.resolve()
+          dfd.reject msg: 'NO USERS FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise
