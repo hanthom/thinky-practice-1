@@ -110,7 +110,7 @@ module.exports =
     script = addBase script
     nodemon
       script: script
-      delay: 500
+      delay: 250
 
   ##### prompt #####
   # Creates a command line prompt with given args
