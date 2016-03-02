@@ -23,13 +23,4 @@ User.pre 'save', (next) ->
   @password = bcrypt.hashSync @password, 12
   next()
 
-##### Trim User Information #####
-# Calls utilsHelper.trimResponse to trim unwanted information from being
-# sent to the FED
-# @params: obj
-# @returns: obj
-User.defineStatic 'trimUser', (user) ->
-  trimResponse user, ['password', 'id', 'createdAt']
-
-##### Exports User #####
 module.exports = User

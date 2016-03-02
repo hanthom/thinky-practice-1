@@ -1,7 +1,7 @@
 q = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
-{handleErr} = require "#{__dirname}/../helpers/utilsHelper"
+{handleErr, trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
 {User} = require '../models/models'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
@@ -23,10 +23,11 @@ module.exports =
   # @returns: promise
   getOneUser: (username) ->
     dfd = q.defer()
-    query = User.filter username: username
+    query = User
+      .filter username: username
     crudRead query
       .then (userArr)->
-        console.log 'USERS RETURNED >>>>', userArr
+        trimResponse userArr[0], ['password', 'id']
         dfd.resolve userArr[0]
       .catch (e)->
         dfd.reject e

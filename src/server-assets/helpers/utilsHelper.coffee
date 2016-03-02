@@ -40,10 +40,8 @@ module.exports =
   # @params: res -> obj
   # @params: arr -> array
   # @returns: obj
-  trimResponse: (res, arr)->
-    if !res then return console.log "NO RESPONSE PASSED TO trimResponse"
-    if !arr then return console.log "NO ARRAY PASSED TO trimResponse"
-    for key in res
-      for val in arr
-        if res[key][val] then delete res[key][val]
-    res
+  trimResponse: (obj, arr) ->
+    for key of obj
+      if arr.indexOf(key) != -1
+        delete obj[key]
+    obj
