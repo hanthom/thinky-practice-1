@@ -37,9 +37,9 @@ module.exports =
 
   ##### trimResponse #####
   # Trims passed keys from response object
-  # @params: res -> obj
-  # @params: arr -> array
-  # @returns: obj
+  # @params: object
+  # @params: array
+  # @returns: object
   trimResponse: (obj, arr) ->
     for key of obj
       if arr.indexOf(key) != -1
