@@ -38,6 +38,7 @@
     "gulp-jade": "^1.1.0",
     "gulp-prettify": "^0.4.0",
     "gulp-stylus": "^2.3.0",
+    "http": "0.0.0",
     "q": "^1.4.1",
     "rethinkdb": "^2.2.1",
     "run-sequence": "^1.1.5",

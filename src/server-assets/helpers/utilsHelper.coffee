@@ -17,7 +17,7 @@ module.exports =
     response
       .status 500
       .send error
-      
+
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
   # @params: model -> Thinky model
@@ -34,3 +34,16 @@ module.exports =
               console.log "#{model} TABLE CHANGE >>>> ", doc
         else
           cb feed
+
+  ##### trimResponse #####
+  # Trims passed keys from response object
+  # @params: res -> obj
+  # @params: arr -> array
+  # @returns: obj
+  trimResponse: (res, arr)->
+    if !res then return console.log "NO RESPONSE PASSED TO trimResponse"
+    if !arr then return console.log "NO ARRAY PASSED TO trimResponse"
+    for key in res
+      for val in arr
+        if res[key][val] then delete res[key][val]
+    res
