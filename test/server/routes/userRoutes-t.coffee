@@ -1,11 +1,14 @@
+supertest = require 'supertest'
 should = require('chai').should()
 expect = require('chai').expect()
 
-{pristineUser} = require "../../util"
+{dbClean, pristineUser} = require "../../util"
+{db} = require "#{src}/server-assets/config/dbConfig"
 
+{r} = db
 host = "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
-api = require('supertest') host
-userUrl = '/api/users/'
+api = supertest host
+userUrl = '/api/users'
 src = "#{__dirname}/../../../src/"
 
 describe 'userRoutes', ()->
@@ -24,15 +27,8 @@ describe 'userRoutes', ()->
           done()
 
     after (done)->
-      {db} = require "#{src}/server-assets/config/dbConfig"
-      {r} = db
       if newUser.test
-        r.table 'User'
-          .filter test: true
-          .delete()
-          .then (res)->
-            console.log 'DB cleaned'
-            done()
+        dbClean 'User', done
       else
         done()
 
@@ -41,14 +37,12 @@ describe 'userRoutes', ()->
       done()
 
     it 'should return username and id', (done)->
-      newUser.should.have.property 'id'
       newUser.should.have.property 'username'
       done()
 
     it 'should not return password, email, nor createdAt', (done)->
       newUser.should.not.have.property 'password'
       newUser.should.not.have.property 'email'
-      newUser.should.not.have.property 'createdAt'
       done()
 
     describe 'errors', ()->
@@ -67,7 +61,7 @@ describe 'userRoutes', ()->
       users = null
       before (done)->
         api
-          .get "#{userUrl}all"
+          .get userUrl
           .end (err, response)->
             users = response.body
             done()
@@ -80,5 +74,13 @@ describe 'userRoutes', ()->
         for user in users
           user.should.not.have.property 'password'
           user.should.not.have.property 'email'
-          user.should.not.have.property 'createdAt'
+          user.should.not.have.property 'id'
         done()
+
+    describe 'one', ()->
+      before (done)->
+        newUser = new User pristineUser()
+        r.table 'User'
+          .insert newUser
+          .run()
+          .then

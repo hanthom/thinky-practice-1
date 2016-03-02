@@ -29,8 +29,8 @@ module.exports =
       .then (user)->
         user = user[0]
         if user
-          trimmedUser = trimResponse user, ['password', 'id']
-          dfd.resolve trimmedUser
+          trimResponse user, ['password', 'id']
+          dfd.resolve user
         else
           dfd.reject msg: 'NO USER FOUND', status: 404
       .catch (e)->
