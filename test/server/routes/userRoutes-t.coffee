@@ -5,7 +5,7 @@ expect = require('chai').expect()
 
 host = "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
 api = require('supertest') host
-userUrl = '/api/users'
+userUrl = '/api/users/'
 src = "#{__dirname}/../../../src/"
 
 describe 'userRoutes', ()->
@@ -19,7 +19,7 @@ describe 'userRoutes', ()->
         .end (err, response)->
           if err then console.log "userRoutes TEST ERROR >>>> ", err
           else
-            console.log 'RESPONSE >>>>', response.body
+            newUser = response.body
             res = response
           done()
 
@@ -31,7 +31,7 @@ describe 'userRoutes', ()->
           .filter test: true
           .delete()
           .then (res)->
-            console.log 'CLEANUP >>>>', res
+            console.log 'DB cleaned'
             done()
       else
         done()
@@ -45,8 +45,40 @@ describe 'userRoutes', ()->
       newUser.should.have.property 'username'
       done()
 
-    it 'should not return password, email, nor createAt', (done)->
+    it 'should not return password, email, nor createdAt', (done)->
       newUser.should.not.have.property 'password'
       newUser.should.not.have.property 'email'
-      newUser.should.not.have.property 'createAt'
+      newUser.should.not.have.property 'createdAt'
       done()
+
+    describe 'errors', ()->
+      it 'should reject misformatted users', (done)->
+        user = pristineUser()
+        delete user.username
+        api
+          .post userUrl
+          .send user
+          .end (err, res)->
+            console.log 'TEST ERROR >>>> ', err
+            done()
+
+  describe 'get', ()->
+    describe 'all', ()->
+      users = null
+      before (done)->
+        api
+          .get "#{userUrl}all"
+          .end (err, response)->
+            users = response.body
+            done()
+
+      it 'should return an array of users', (done)->
+        users.should.be.a 'array'
+        done()
+
+      it 'should not return password, email, nor createdAt', (done)->
+        for user in users
+          user.should.not.have.property 'password'
+          user.should.not.have.property 'email'
+          user.should.not.have.property 'createdAt'
+        done()

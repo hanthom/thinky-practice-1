@@ -1,10 +1,6 @@
 userCtrl = require "#{__dirname}/../controllers/userCtrl"
 {createUser, getOneUser, getUsers, updateUser, deleteUser} = userCtrl
-
-handleErr = (e, res)->
-  res
-    .status 500
-    .send e
+{sendErr} = require "#{__dirname}/../helpers/utilsHelper"
 
 module.exports = (app) ->
   app.get '/api/users/:username', (req, res) ->
@@ -19,7 +15,8 @@ module.exports = (app) ->
             .status 404
             .send 'NO USERS FOUND'
       .catch (err) ->
-        handleErr err, res
+        sendErr err, res
+        
   app.post '/api/users', (req, res) ->
     createUser req.body
       .then (user) ->
@@ -27,4 +24,4 @@ module.exports = (app) ->
           .status 201
           .json user
       .catch (err) ->
-        handleErr err, res
+        sendErr err, res
