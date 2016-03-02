@@ -1,7 +1,7 @@
 q = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
-{handleErr} = require "#{__dirname}/../helpers/utilsHelper"
+{handleErr, trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
 {User} = require '../models/models'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
@@ -32,10 +32,12 @@ module.exports =
           dfd.resolve user
         else
           dfd.reject msg: 'NO USER FOUND', status: 404
+      .then (userArr)->
+        trimResponse userArr[0], ['password', 'id']
+        dfd.resolve userArr[0]
       .catch (e)->
         dfd.reject e
     dfd.promise
-
 
   ##### getAllUsers #####
   # Gather Information about User or Users
