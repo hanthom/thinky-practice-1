@@ -13,15 +13,10 @@ module.exports =
   # Description
   # @params: repsonse -> Express response object
   # @params: error -> object
-  sendErr: (repsonse, error)->
-    console.log 'CALLED'
-    status = error.status || 500
-    err = error.msg || error
-    console.log 'err', err
-    console.log 'status', status
+  sendErr: (error, response)->
     response
-      .status status
-      .send err
+      .status error.status || 500
+      .send error.msg || error
 
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
@@ -46,7 +41,8 @@ module.exports =
   # @params: arr -> array
   # @returns: obj
   trimResponse: (obj, arr) ->
+    trimmed = {}
     for key of obj
-      if arr.indexOf(key) != -1
-        delete obj[key]
-    obj
+      if arr.indexOf(key) >= 0
+        trimmed[key] = obj[key]
+    trimmed

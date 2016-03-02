@@ -12,7 +12,7 @@ module.exports = (app) ->
             .status 200
             .send user
         .catch (err) ->
-          sendErr res, err
+          sendErr err, res
 
   app.route '/api/users'
     .post (req, res) ->
@@ -30,5 +30,5 @@ module.exports = (app) ->
           res
             .status 200
             .send users
-        .catch (e)->
-          sendErr e, res
+        .catch (err)->
+          sendErr res, err
