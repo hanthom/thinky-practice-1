@@ -9,6 +9,9 @@ User = db.createModel 'User',
   username: type.string()
   password: type.string()
   createdAt: type.date().default r.now
+  # validation:
+  #   validated: type.boolean()
+  #   valdiationKey: type.string()
 
 ##### Ensures Username for User #####
 User.ensureIndex 'username'
@@ -21,6 +24,8 @@ User.pre 'save', (next) ->
   bcrypt = require 'bcrypt'
   @username = @username.toLowerCase()
   @password = bcrypt.hashSync @password, 12
+  # @validation.validated = false
+  # @validation.validationKey = bcrypt.genSaltSync(20)
   next()
 
 module.exports = User

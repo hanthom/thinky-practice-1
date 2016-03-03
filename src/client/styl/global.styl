@@ -5,6 +5,8 @@ html, body
   margin 0
   box-sizing border-box
   font-family sans-serif
+a
+  text-decoration none
 ul
   list-style none
   li
@@ -16,8 +18,9 @@ button, input
   &:focus
     outline none
   &:hover:not(input)
-    color cadetblue
+    color white
     cursor pointer
+    background-color cadetblue
   &.alter
     color white
     background  cadetblue
@@ -28,6 +31,13 @@ button, input
   max-width 980px
   width: 100%
   margin 0 auto
+
+.linkBtn
+  border 0
+  background transparent
+  &:hover
+    text-decoration underline
+    background inherit
 
 .flex
   display flex

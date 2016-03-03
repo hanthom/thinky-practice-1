@@ -1,4 +1,5 @@
 module.exports = ($scope, authService)->
+  $scope.visible = true
   $scope.login = (credentials)->
     authService.login credentials
       .then (res)->
@@ -7,3 +8,5 @@ module.exports = ($scope, authService)->
       .catch (e)->
         console.log 'Err', e
         credentials = {}
+  $scope.showRegister = () ->
+    $scope.visible = ! $scope.visible
