@@ -24,7 +24,6 @@ module.exports =
       dfd.promise
 
     r: r
-
   pristineUser: ()->
     newUser =
       password: 'test'

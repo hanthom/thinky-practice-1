@@ -53,6 +53,8 @@ gulp.task 'jade', () ->
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
+    .on 'start', ()->
+      runSequence 'test'
 
 gulp.task 'prompt', (done)->
   question =
@@ -78,7 +80,7 @@ gulp.task 'tunnel', ()->
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee', 'test'
+    runSequence 'coffeelint', 'coffee'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
   watch paths.test.src, ['test']
