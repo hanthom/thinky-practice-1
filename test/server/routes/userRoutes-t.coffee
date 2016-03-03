@@ -4,7 +4,7 @@ should = require('chai').should()
 {db, pristineUser} = require "../../util"
 {clean, insertDoc, r} = db
 
-api = supertest "#{process.env.EXPRESS_HOST}:#{process.env.TEST_PORT || process.env.EXPRESS_PORT}"
+api = supertest "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
 userUrl = '/api/users'
 
 describe 'userRoutes', ()->
