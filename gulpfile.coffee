@@ -22,7 +22,7 @@ paths =
     compile: 'src/**/*.coffee'
     all: ['src/**/*.coffee']
   test:
-    src: 'test/server/**/*.coffee'
+    src: 'test/**/*.coffee'
     all: 'test/server/*.coffee'
     controllers: 'test/server/controllers/*.coffee'
 
