@@ -9,17 +9,13 @@ module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
   $stateProvider
     .state 'login',
       url:'/'
-      controller: 'loginCtrl'
+      controller: 'userCtrl'
       templateUrl: '../templates/login.html'
     .state 'logout',
       controller: ($state, authService)->
         authService.logout()
           .then ()->
             $state.go 'login'
-    .state 'register',
-      url: '/register'
-      controller: 'registerCtrl'
-      templateUrl: '../templates/register.html'
     .state 'secured',
       abstract: true
       template: '<nav></nav><ui-view/>'
