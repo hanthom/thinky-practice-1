@@ -1,12 +1,11 @@
+supertest = require 'supertest'
 should = require('chai').should()
-expect = require('chai').expect()
 
-{pristineUser} = require "../../util"
+{db, pristineUser} = require "../../util"
+{clean, insertDoc, r} = db
 
-host = "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
-api = require('supertest') host
-userUrl = '/api/users/'
-src = "#{__dirname}/../../../src/"
+api = supertest "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
+userUrl = '/api/users'
 
 describe 'userRoutes', ()->
   describe 'post', ()->
@@ -24,50 +23,40 @@ describe 'userRoutes', ()->
           done()
 
     after (done)->
-      {db} = require "#{src}/server-assets/config/dbConfig"
-      {r} = db
-      if newUser.test
-        r.table 'User'
-          .filter test: true
-          .delete()
-          .then (res)->
-            console.log 'DB cleaned'
-            done()
-      else
-        done()
+      clean 'User'
+        .then ()->
+          done()
 
     it 'should return 201', (done)->
       res.status.should.equal 201
       done()
 
     it 'should return username and id', (done)->
-      newUser.should.have.property 'id'
       newUser.should.have.property 'username'
       done()
 
     it 'should not return password, email, nor createdAt', (done)->
       newUser.should.not.have.property 'password'
       newUser.should.not.have.property 'email'
-      newUser.should.not.have.property 'createdAt'
       done()
 
-    describe 'errors', ()->
-      it 'should reject misformatted users', (done)->
-        user = pristineUser()
-        delete user.username
-        api
-          .post userUrl
-          .send user
-          .end (err, res)->
-            console.log 'TEST ERROR >>>> ', err
-            done()
+    # describe 'errors', ()->
+    #   it 'should reject misformatted users', (done)->
+    #     user = pristineUser()
+    #     delete user.username
+    #     api
+    #       .post userUrl
+    #       .send user
+    #       .end (err, res)->
+    #         console.log 'TEST ERROR >>>> ', err
+    #         done()
 
   describe 'get', ()->
     describe 'all', ()->
       users = null
       before (done)->
         api
-          .get "#{userUrl}all"
+          .get userUrl
           .end (err, response)->
             users = response.body
             done()
@@ -80,5 +69,41 @@ describe 'userRoutes', ()->
         for user in users
           user.should.not.have.property 'password'
           user.should.not.have.property 'email'
-          user.should.not.have.property 'createdAt'
+          user.should.not.have.property 'id'
+        done()
+
+    describe 'one', ()->
+      {User} = require "#{__dirname}/../../../src/server-assets/models/models"
+      fetchedUser = null
+      res = null
+      newUser = pristineUser()
+      before 'insert doc', (done)->
+        insertDoc User, newUser
+          .then ()->
+            done()
+
+      after (done)->
+        clean 'User'
+          .then ()->
+            done()
+
+      beforeEach (done)->
+        api
+          .get "#{userUrl}/#{newUser.username}"
+          .end (err, response)->
+            res = response
+            console.log 'res.body', res.body
+            fetchedUser = res.body
+            done()
+
+      it 'should have a 200 status', (done)->
+        res.status.should.equal 200
+        done()
+
+      it 'should return an object', (done)->
+        fetchedUser.should.be.a 'object'
+        done()
+
+      it 'should fetch the right user', (done)->
+        fetchedUser.username.should.equal newUser.username
         done()
