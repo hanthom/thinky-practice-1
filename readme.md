@@ -32,7 +32,7 @@ I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The a
 
 ## Snippets in [Atom](https://atom.io/)
 
-Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way to customize shortcuts for speedy development. If you add the snippets below you can type the prefix ad hit `tab` to start the snippet. Use `tab` to get to each spot preceded by a $.
+Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way to customize shortcuts for speedy development. If you add the snippets below you can type the prefix and hit `tab` to start the snippet. Use `tab` to get to each spot preceded by a $.
 
 ```
 ######
