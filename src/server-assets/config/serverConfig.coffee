@@ -1,9 +1,10 @@
+_ = require 'lodash'
 module.exports =
   logger: (req, res, next)->
     console.log "#{req.method} request to >>>> #{req.originalUrl}"
-    if req.body
-      console.log 'REQUEST BODY >>>>', req.body
-    if req.params is !{}
-      console.log 'REQUEST PARAMETERS >>>>', req.params
+    if !_.isEmpty req.body
+      console.log 'REQ BODY >>>>', req.body
+    if !_.isEmpty req.params
+      console.log 'REQ PARAMETERS >>>>', req.params
     next()
   port: process.env.PORT || process.env.EXPRESS_PORT
