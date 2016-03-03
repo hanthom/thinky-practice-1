@@ -5,10 +5,10 @@ module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
         $location.path '/login'
         $q.reject res
       $q.reject()
-  $urlRouterProvider.otherwise '/login'
+  $urlRouterProvider.otherwise '/'
   $stateProvider
     .state 'login',
-      url:'/login'
+      url:'/'
       controller: 'loginCtrl'
       templateUrl: '../templates/login.html'
     .state 'logout',
@@ -42,5 +42,3 @@ module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
       resolve:
         list: (todoService) ->
           todoService.getTodos 'all'
-
-  
