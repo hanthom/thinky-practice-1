@@ -15,15 +15,6 @@ module.exports =
   # @resolves: object
   addTodo: (todo)->
     crudCreate Todo, todo
-    # dfd = q.defer()
-    # new Todo todo
-    #   .save()
-    #   .then (doc)->
-    #     console.log 'TODO SAVED >>>>', doc
-    #     dfd.resolve doc
-    #   .catch (e)->
-    #     handleErr 'SAVING TODO', e.message, dfd
-    # dfd.promise
 
   ##### getOneTodo #####
   # Retrieves one todo from the database
@@ -33,16 +24,6 @@ module.exports =
 
   getOneTodo: (id)->
     crudRead Todo.get id
-    # dfd = q.defer()
-    # Todo
-    #   .get id
-    #   .run()
-    #   .then (todo)->
-    #     console.log 'TODO >>>>', todo
-    #     dfd.resolve todo
-    #   .catch (e)->
-    #     handleErr 'GETTING TODO', e.message, dfd
-    # dfd.promise
 
   ##### getAllTodos #####
   # Gets all todos matching the given status
@@ -57,16 +38,6 @@ module.exports =
       if status != 'all'
         query = query.filter status: status
     crudRead query
-    # dfd = q.defer()
-
-    # query
-    #   .run()
-    #   .then (todos)->
-    #     console.log 'TODOS >>>>', todos
-    #     dfd.resolve todos
-    #   .catch (e)->
-    #     handleErr 'GETTING TODOS', e.message, dfd
-    # dfd.promise
 
   ##### editTodo #####
   # Updates the specified todo with the changes given
@@ -77,17 +48,6 @@ module.exports =
   editTodo: (id, changes)->
     query = Todo.get id
     crudUpdate query, changes
-    # dfd = q.defer()
-    # Todo
-    #   .get id
-    #   .update changes
-    #   .run()
-    #   .then (result)->
-    #     dfd.resolve result
-    #   .catch (e)->
-    #     handleErr 'UPDATING TODO', e.message, dfd
-    # dfd.promise
-
 
   ##### deleteTodo #####
   # Removes the specified todo
@@ -96,14 +56,3 @@ module.exports =
   # @resolves: undefined
   deleteTodo: (id)->
     crudDelete Todo, id
-    # dfd = q.defer()
-    # Todo
-    #   .get id
-    #   .delete()
-    #   .run()
-    #   .then (result)->
-    #     console.log "DELETED TODO #{id}"
-    #     dfd.resolve()
-    #   .catch (e)->
-    #     handleErr 'DELETING TODO', e.message, dfd
-    # dfd.promise

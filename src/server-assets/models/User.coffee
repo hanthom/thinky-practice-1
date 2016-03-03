@@ -1,5 +1,6 @@
 {db} = require "#{__dirname}/../config/dbConfig"
 {type, r} = db
+{trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
 
 ##### User Model #####
 # Schema for User
@@ -22,6 +23,4 @@ User.pre 'save', (next) ->
   @password = bcrypt.hashSync @password, 12
   next()
 
-
-##### Exports User #####
 module.exports = User

@@ -4,10 +4,10 @@
 Todo = require "#{__dirname}/Todo"
 User = require "#{__dirname}/User"
 
-if process.env.NODE_ENV is 'development'
-  {watchModelFeed} = require "#{__dirname}/../helpers/utilsHelper"
-  watchModelFeed User
-  watchModelFeed Todo
+# if process.env.NODE_ENV is 'development'
+#   {watchModelFeed} = require "#{__dirname}/../helpers/utilsHelper"
+#   watchModelFeed User
+#   watchModelFeed Todo
 
 User.hasMany Todo, 'todos', 'id', 'userId'
 Todo.belongsTo User, 'user', 'userId', 'id'

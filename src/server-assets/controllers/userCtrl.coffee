@@ -1,7 +1,7 @@
 q = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
-{handleErr} = require "#{__dirname}/../helpers/utilsHelper"
+{handleErr, trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
 {User} = require '../models/models'
 {db} = require "#{__dirname}/../config/dbConfig"
 {r} = db
@@ -15,43 +15,55 @@ module.exports =
   createUser: (user) ->
     crudCreate User, user
       .then (user)->
-        console.log "GETTING #{user.id}"
-        module.exports.getOneUser user.id
+        module.exports.getOneUser user.username
 
   ##### getOneUser #####
   # Gathers information for unique user
   # @params: string
   # @returns: promise
-  getOneUser: (id) ->
-    crudRead User.get id
-    # dfd = q.defer()
-    # User
-    #   .get id
-    #   .run()
-    #   .then (user) ->
-    #     console.log "USER >>>> ", user
-    #     dfd.resolve user
-    #   .catch (err) ->
-    #     handleErr "GETTING USER >>>> ", err.message, dfd
+  getOneUser: (username) ->
+    dfd = q.defer()
+    query = User
+      .filter username: username
+    crudRead query
+      .then (user)->
+        user = user[0]
+        if user
+          trimResponse user, ['password', 'id']
+          dfd.resolve user
+        else
+          dfd.reject msg: 'NO USER FOUND', status: 404
+      .catch (e)->
+        dfd.reject e
+    dfd.promise
 
   ##### getAllUsers #####
   # Gather Information about User or Users
   # @params: obj
-  # @returns: promise
-  getUsers: (filter) ->
-    query = User
-      .orderBy index: r.desc 'username'
-      if filter != 'all'
-        query = query.filter username: filter
+  # @resolves: array
+  getUsers: () ->
+    dfd = q.defer()
+    query = User.orderBy index: r.desc 'username'
     crudRead query
+      .then (users)->
+        if users.length >= 1
+          trimmedUsers = []
+          for user in users
+            trimmedUsers.push trimResponse user, ['password', 'id']
+          dfd.resolve trimmedUsers
+        else
+          dfd.reject msg: 'NO USERS FOUND', status: 404
+      .catch (e)->
+        dfd.reject e
+    dfd.promise
 
   ##### updateUser #####
   # Updates specific users
   # @params: string, object
   # @returns:
-  updateUser : (id, changes)->
+  updateUser: (id, changes)->
     query = User.get id
-    crudUpdate query, chages
+    crudUpdate query, changes
 
   ##### deleteUser #####
   # Deletes user permanently

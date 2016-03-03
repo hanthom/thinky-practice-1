@@ -9,6 +9,15 @@ module.exports =
     console.log log
     promise.reject log
 
+  ##### sendErr #####
+  # Description
+  # @params: repsonse -> Express response object
+  # @params: error -> object
+  sendErr: (error, response)->
+    response
+      .status error.status || 500
+      .send error.msg || error
+
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
   # @params: model -> Thinky model
@@ -25,3 +34,14 @@ module.exports =
               console.log "#{model} TABLE CHANGE >>>> ", doc
         else
           cb feed
+
+  ##### trimResponse #####
+  # Trims passed keys from response object
+  # @params: res -> obj
+  # @params: arr -> array
+  # @returns: obj
+  trimResponse: (obj, arr) ->
+    for key of obj
+      if arr.indexOf(key) != -1
+        delete obj[key]
+    obj
