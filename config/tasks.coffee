@@ -1,4 +1,5 @@
 gulp = require 'gulp'
+{exec} = require 'child_process'
 
 ######
 # All @params will be strings unless specified
@@ -110,7 +111,7 @@ module.exports =
     script = addBase script
     nodemon
       script: script
-      delay: 250
+      delay: 1000
 
   ##### prompt #####
   # Creates a command line prompt with given args
@@ -161,8 +162,7 @@ module.exports =
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
   tunnel: ()->
-    child = require 'child_process'
-    child.exec "python #{__dirname}/tunnel.py"
+    exec "python #{__dirname}/tunnel.py"
 
   ##### watch #####
   # Watches the specified files for changes and runs the
