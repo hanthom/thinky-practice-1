@@ -57,15 +57,20 @@ gulp.task 'nodemon', ()->
       runSequence 'test'
 
 gulp.task 'prompt', (done)->
-  question =
+  q1 =
     type: 'confirm'
     name: 'runTests'
     message:  'Do you want the tests to run on file saves?'
     default: 'true'
-  prompt question, (answers)->
-    console.log answers
+  q2 =
+    type: 'confirm'
+    name: 'watchDb'
+    message: 'Do you want to watch the db?'
+    default: 'false'
+  prompt [q1, q2], (answerObj)->
     setEnv paths.env,
-      RUN_TESTS: answers.runTests
+      RUN_TESTS: answerObj.runTests
+      WATCH_DB: answerObj.watchDb
     done()
 
 gulp.task 'stylus', () ->
