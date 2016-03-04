@@ -43,6 +43,9 @@ module.exports =
     crudRead query
       .then (users)->
         if users.length >= 1
+          trimmed = []
+          for user in users
+            trimmed.push trimResponse users
           dfd.resolve users
         else
           dfd.resolve()
