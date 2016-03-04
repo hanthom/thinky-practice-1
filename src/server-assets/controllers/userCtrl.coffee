@@ -29,7 +29,7 @@ module.exports =
       .then (user)->
         user = user[0]
         if user
-          trimResponse user, ['password', 'id']
+          trimResponse user, ['password', 'id', 'email']
           dfd.resolve user
         else
           dfd.reject msg: 'NO USER FOUND', status: 404
@@ -49,7 +49,7 @@ module.exports =
         if users.length >= 1
           trimmedUsers = []
           for user in users
-            trimmedUsers.push trimResponse user, ['password', 'id']
+            trimmedUsers.push trimResponse user, ['password', 'id', 'email']
           dfd.resolve trimmedUsers
         else
           dfd.reject msg: 'NO USERS FOUND', status: 404
