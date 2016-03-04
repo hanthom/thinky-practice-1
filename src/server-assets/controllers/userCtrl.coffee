@@ -26,9 +26,13 @@ module.exports =
     query = User
       .filter username: username
     crudRead query
-      .then (userArr)->
-        trimResponse userArr[0], ['password', 'id']
-        dfd.resolve userArr[0]
+      .then (user)->
+        user = user[0]
+        if user
+          trimResponse user, ['password', 'id']
+          dfd.resolve user
+        else
+          dfd.reject msg: 'NO USER FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise
@@ -36,19 +40,19 @@ module.exports =
   ##### getAllUsers #####
   # Gather Information about User or Users
   # @params: obj
-  # @returns: promise
+  # @resolves: array
   getUsers: () ->
     dfd = q.defer()
-    query = User.orderBy index: r.desc 'username'
+    query = User.orderBy index: r.asc 'username'
     crudRead query
       .then (users)->
         if users.length >= 1
-          trimmed = []
+          trimmedUsers = []
           for user in users
-            trimmed.push trimResponse users
-          dfd.resolve users
+            trimmedUsers.push trimResponse user, ['password', 'id']
+          dfd.resolve trimmedUsers
         else
-          dfd.resolve()
+          dfd.reject msg: 'NO USERS FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise

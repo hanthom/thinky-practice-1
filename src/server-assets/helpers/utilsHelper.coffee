@@ -13,10 +13,10 @@ module.exports =
   # Description
   # @params: repsonse -> Express response object
   # @params: error -> object
-  sendErr: (repsonse, error)->
+  sendErr: (error, response)->
     response
-      .status 500
-      .send error
+      .status error.status || 500
+      .send error.msg || error
 
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
@@ -37,9 +37,9 @@ module.exports =
 
   ##### trimResponse #####
   # Trims passed keys from response object
-  # @params: res -> obj
-  # @params: arr -> array
-  # @returns: obj
+  # @params: object
+  # @params: array
+  # @returns: object
   trimResponse: (obj, arr) ->
     for key of obj
       if arr.indexOf(key) != -1

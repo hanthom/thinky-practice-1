@@ -60,6 +60,7 @@ module.exports =
       .delete()
       .run()
       .then (res) ->
+        # console.log "CRUD DELETE"
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD DELETE ERROR >>>> ', err.message

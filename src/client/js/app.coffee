@@ -6,3 +6,4 @@ angular.module 'todoApp', ['ui.router']
 
 require './services/services'
 require './controllers/controllers'
+require './directives/directives'
