@@ -119,7 +119,10 @@ module.exports =
   # @params: cb -> function
   prompt: (question, cb)->
     inquirer = require 'inquirer'
-    inquirer.prompt question, cb
+    inquirer.prompt question, (answerObj)->
+      for answer of answerObj
+        answerObj[answer] = JSON.parse answerObj[answer]
+      cb answerObj
 
   ##### setEnv #####
   # Sets the environment with using .env.json
@@ -147,7 +150,7 @@ module.exports =
     ######
     # Needed to parse the env variable to get expected behavior
     ######
-    if JSON.parse process.env.RUN_TESTS
+    if process.env.RUN_TESTS
       mocha = require 'gulp-mocha'
       opts =
         reporter: reporter

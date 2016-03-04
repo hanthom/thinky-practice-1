@@ -31,13 +31,14 @@ describe 'userRoutes', ()->
       res.status.should.equal 201
       done()
 
-    it 'should return username and id', (done)->
+    it 'should return username', (done)->
       newUser.should.have.property 'username'
       done()
 
-    it 'should not return password, email, nor createdAt', (done)->
+    it 'should not return password, email, nor id', (done)->
       newUser.should.not.have.property 'password'
       newUser.should.not.have.property 'email'
+      newUser.should.not.have.property 'id'
       done()
 
     # describe 'errors', ()->

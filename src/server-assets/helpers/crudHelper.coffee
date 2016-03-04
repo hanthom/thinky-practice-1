@@ -11,7 +11,7 @@ module.exports =
     new modelObj insert
       .save()
       .then (res) ->
-        console.log 'CRUD CREATE >>>> ', res
+        # console.log 'CRUD CREATE >>>> ', res
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD CREATE ERROR >>>> ', err.message
