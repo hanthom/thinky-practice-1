@@ -43,7 +43,7 @@ module.exports =
   # @resolves: array
   getUsers: () ->
     dfd = q.defer()
-    query = User.orderBy index: r.desc 'username'
+    query = User.orderBy index: r.asc 'username'
     crudRead query
       .then (users)->
         if users.length >= 1
