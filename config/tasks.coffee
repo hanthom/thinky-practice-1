@@ -30,6 +30,16 @@ bundle = (bundler, dest)->
     .pipe source 'bundle.js'
     .pipe gulp.dest dest
 
+##### devStream #####
+# Pipes a stream to the gulp-changed package for faster compiles
+# @params: stream -> stream from gulp.src
+# @returns: stream -> stream
+devStream = (stream, dest)->
+  changed = require 'gulp-changed'
+  stream
+    .pipe changed dest
+
+
 ##### fixPath #####
 # Dynamically calls addBase fn with a src and dest
 # @params: src -> string or array
@@ -64,7 +74,10 @@ module.exports =
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
-    gulp.src src
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe coffee()
       .on 'error', (e)->
         console.log "COFFEE ERROR >>>> #{e.message}"
@@ -91,8 +104,10 @@ module.exports =
     jade = require 'gulp-jade'
     {src, dest} = fixPath src, dest
     gulp.src src
-      # prettify tossing error in html
-      # .pipe prettify {indent_size: 2}
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe jade()
       .pipe gulp.dest dest
 
@@ -111,23 +126,41 @@ module.exports =
     script = addBase script
     nodemon
       script: script
-      delay: 1000
+      delay: 500
 
-  ##### prompt #####
-  # Creates a command line prompt with given args
-  # @params: questions -> object
-  # @params: cb -> function
-  prompt: (question, cb)->
+  ##### setup #####
+  # Sets up the env based on user inputs using inquirer
+  setup: (cb)->
     inquirer = require 'inquirer'
-    inquirer.prompt question, (answerObj)->
-      for answer of answerObj
-        answerObj[answer] = JSON.parse answerObj[answer]
-      cb answerObj
+    q1 =
+      type: 'checkbox'
+      name: 'watchers'
+      message: 'Select the resources to watch'
+      choices: [
+        {name: 'DB'},
+        {name: 'Server'}
+      ]
+    q2 =
+      type: 'checkbox'
+      name: 'tests'
+      message: 'Select the files to test'
+      choices: [
+        new inquirer.Separator '== Controller Tests =='
+        {name: 'userCtrl'}
+        {name: 'todoCtrl'}
+        new inquirer.Separator '== API Route Tests =='
+        {name: 'userRoutes'}
+        {name: 'todoRoutes'}
+        {name: 'authRoutes'}
+        new inquirer.Separator '== Helper Tests =='
+        {name: 'crudHelper'}
+      ]
+    inquirer.prompt [q1, q2], cb
+
 
   ##### setEnv #####
   # Sets the environment with using .env.json
   # Overwrites or sets any other values given
-  # @params: overWrites -> object
   setEnv: (path, overWrites)->
     gEnv = require 'gulp-env'
     gEnv
@@ -139,7 +172,10 @@ module.exports =
   stylus: (src, dest) ->
     styl = require 'gulp-stylus'
     {src, dest} = fixPath src, dest
-    gulp.src src
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe styl()
       .pipe gulp.dest dest
 
