@@ -22,9 +22,17 @@ paths =
     compile: 'src/**/*.coffee'
     all: ['src/**/*.coffee']
   test:
-    src: 'test/**/*.coffee'
+    src: []
     all: 'test/server/*.coffee'
-    controllers: 'test/server/controllers/*.coffee'
+    controllers:
+      todo: 'test/server/controllers/todoCtrl-t.coffee'
+      user: 'test/server/controllers/userCtrl-t.coffee'
+    routes:
+      auth: 'test/server/routes/authRoutes-t.coffee'
+      todo: 'test/server/routes/todoRoutes-t.coffee'
+      user: 'test/server/routes/userRoutes-t.coffee'
+    helpers:
+      crud: 'test/server/helpers/crudHelper-t.coffee'
 
 gulp.task 'default', (cb)->
   runSequence 'setup'
@@ -57,13 +65,27 @@ gulp.task 'nodemon', ()->
       runSequence 'test'
 
 gulp.task 'setup', (done)->
+
   setup (answerObj)->
     overwrites = {}
-    for task in answerObj.helpers
-      switch task
-        when 'DB' then overwrites.WATCH_DB = true
-        when 'Server' then overwrites.WATCH_SERVER = true
-        when 'Test' then overwrites.RUN_TESTS = true
+    if answerObj.tests.length
+      for task in answerObj.watchers
+        switch task
+          when 'DB' then overwrites.WATCH_DB = true
+          when 'Server' then overwrites.WATCH_SERVER = true
+          when 'Test' then overwrites.RUN_TESTS = true
+    if answerObj.tests.length
+      overwrites.RUN_TESTS = true
+      tests = paths.test.src
+      for file in answerObj.tests
+        switch file
+          when 'userCtrl' then tests.push paths.test.controllers.user
+          when 'todoCtrl' then tests.push paths.test.controllers.todo
+          when 'userRoutes' then tests.push paths.test.routes.user
+          when 'todoRoutes' then tests.push paths.test.routes.todo
+          when 'authRoutes' then tests.push paths.test.routes.auth
+          when 'crudHelper' then tests.push paths.test.helpers.crud
+    console.log paths.test.src
     setEnv paths.env, overwrites
     done()
 

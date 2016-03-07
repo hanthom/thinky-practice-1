@@ -30,6 +30,16 @@ bundle = (bundler, dest)->
     .pipe source 'bundle.js'
     .pipe gulp.dest dest
 
+##### devStream #####
+# Pipes a stream to the gulp-changed package for faster compiles
+# @params: stream -> stream from gulp.src
+# @returns: stream -> stream
+devStream = (stream, dest)->
+  changed = require 'gulp-changed'
+  stream
+    .pipe changed dest
+
+
 ##### fixPath #####
 # Dynamically calls addBase fn with a src and dest
 # @params: src -> string or array
@@ -64,7 +74,10 @@ module.exports =
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
-    gulp.src src
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe coffee()
       .on 'error', (e)->
         console.log "COFFEE ERROR >>>> #{e.message}"
@@ -91,8 +104,10 @@ module.exports =
     jade = require 'gulp-jade'
     {src, dest} = fixPath src, dest
     gulp.src src
-      # prettify tossing error in html
-      # .pipe prettify {indent_size: 2}
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe jade()
       .pipe gulp.dest dest
 
@@ -119,16 +134,25 @@ module.exports =
     inquirer = require 'inquirer'
     q1 =
       type: 'checkbox'
-      name: 'helpers'
-      message: 'Configure your environment'
+      name: 'watchers'
+      message: 'Select the resources to watch'
       choices: [
-        new inquirer.Separator '<<< Resources to watch >>>'
         {name: 'DB'},
-        {name: 'Server'},
-        new inquirer.Separator '<<< Tests to run >>>'
-        {name: 'Test'}
+        {name: 'Server'}
       ]
-    inquirer.prompt q1, cb
+    q2 =
+      type: 'checkbox'
+      name: 'tests'
+      message: 'Select the files to test'
+      choices: [
+        {name: 'userCtrl'}
+        {name: 'todoCtrl'}
+        {name: 'userRoutes'}
+        {name: 'todoRoutes'}
+        {name: 'authRoutes'}
+        {name: 'crudHelper'}
+      ]
+    inquirer.prompt [q1, q2], cb
 
 
   ##### setEnv #####
@@ -145,7 +169,10 @@ module.exports =
   stylus: (src, dest) ->
     styl = require 'gulp-stylus'
     {src, dest} = fixPath src, dest
-    gulp.src src
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe styl()
       .pipe gulp.dest dest
 
