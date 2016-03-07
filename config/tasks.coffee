@@ -126,7 +126,7 @@ module.exports =
     script = addBase script
     nodemon
       script: script
-      delay: 1000
+      delay: 500
 
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
@@ -145,11 +145,14 @@ module.exports =
       name: 'tests'
       message: 'Select the files to test'
       choices: [
+        new inquirer.Separator '== Controller Tests =='
         {name: 'userCtrl'}
         {name: 'todoCtrl'}
+        new inquirer.Separator '== API Route Tests =='
         {name: 'userRoutes'}
         {name: 'todoRoutes'}
         {name: 'authRoutes'}
+        new inquirer.Separator '== Helper Tests =='
         {name: 'crudHelper'}
       ]
     inquirer.prompt [q1, q2], cb
@@ -183,7 +186,7 @@ module.exports =
     ######
     # Needed to parse the env variable to get expected behavior
     ######
-    if JSON.parse process.env.RUN_TESTS
+    if process.env.RUN_TESTS
       mocha = require 'gulp-mocha'
       opts =
         reporter: reporter

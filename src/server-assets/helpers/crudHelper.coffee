@@ -5,7 +5,7 @@ module.exports =
   # Creates an item on the DB
   # @params: modelObj -> Thinky Model
   # @params: insert -> object
-  # @returns:
+  # @resolves: object
   crudCreate: (modelObj, insert) ->
     dfd = q.defer()
     new modelObj insert

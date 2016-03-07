@@ -85,7 +85,6 @@ gulp.task 'setup', (done)->
           when 'todoRoutes' then tests.push paths.test.routes.todo
           when 'authRoutes' then tests.push paths.test.routes.auth
           when 'crudHelper' then tests.push paths.test.helpers.crud
-    console.log paths.test.src
     setEnv paths.env, overwrites
     done()
 
@@ -93,6 +92,7 @@ gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
 gulp.task 'test', () ->
+  console.log 'TEST SRC >>>>', paths.test.src
   test paths.test.src, 'nyan'
 
 gulp.task 'tunnel', ()->
