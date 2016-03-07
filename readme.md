@@ -18,11 +18,15 @@ You'll need to set up a login for an ssl connection to the DB. After that you ca
 
 ### Commands in the Data Explorer
 
-The gui that RethinkDB provides for [data exploration and manipulation](https://www.rethinkdb.com/docs/reql-data-exploration/) is awesome. You can easily practice and refine queries with a little help from the popovers on the cursor. ![Data Explorer](/config/images/data-explorer.png)
+The gui that RethinkDB provides for [data exploration and manipulation](https://www.rethinkdb.com/docs/reql-data-exploration/) is awesome. You can easily practice and refine queries with a little help from the popovers on the cursor.
+
+![Data Explorer](/config/images/data-explorer.png)
 
 # Spinning up your environment
 
-Once you fork and clone the repo and run `npm install`. Once everything is downloaded you should be able to run `gulp`. Study the [tasks.coffee](config/tasks.coffee) file to understand what tasks are doing.To quit use `ctrl + c` in the terminal twice (once for nodemon and once for the watch task). We're using [inquirer.js](https://github.com/SBoudrias/Inquirer.js/) to handle setup through gulp. Use the space bar and arrow keys to select inputs and hit enter to submit your selections. 
+Once you fork and clone the repo and run `npm install`. Once everything is downloaded you should be able to run `gulp`. Study the [tasks.coffee](config/tasks.coffee) file to understand what tasks are doing.To quit use `ctrl + c` in the terminal twice (once for nodemon and once for the watch task). We're using [inquirer.js](https://github.com/SBoudrias/Inquirer.js/) to handle setup through gulp. Use the space bar and arrow keys to select inputs and hit enter to submit your selections.
+
+![Inquirer Setup](/config/images/inquirer-setup.png)
 
 # Making changes to the repo
 
@@ -89,9 +93,9 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
     # ${3:Description}
     # @params: ${4:param1} -> $5
     # @params: ${6:param2} -> $7
-    # @returns: $7
+    # @returns: $8
     ${1:functionName}${2: =}(${4:param1}, ${6:param2})->
-      $8
+      $9
     """
 
   'Function Commentor':
