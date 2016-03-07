@@ -2,7 +2,7 @@ gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
 {browserify, coffee, coffeelint, jade, nodemon} = tasks
-{prompt, setEnv, stylus, test, tunnel, watchify, watch} = tasks
+{setEnv, setup, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -27,7 +27,7 @@ paths =
     controllers: 'test/server/controllers/*.coffee'
 
 gulp.task 'default', (cb)->
-  runSequence 'prompt'
+  runSequence 'setup'
     , ['tunnel', 'build',]
     , ['watchify', 'nodemon', 'watch']
     , 'test'
@@ -56,27 +56,15 @@ gulp.task 'nodemon', ()->
     .on 'start', ()->
       runSequence 'test'
 
-gulp.task 'prompt', (done)->
-  q1 =
-    type: 'confirm'
-    name: 'runTests'
-    message:  'Do you want the tests to run on file saves?'
-    default: 'false'
-  q2 =
-    type: 'confirm'
-    name: 'watchDb'
-    message: 'Do you want to watch the db?'
-    default: 'false'
-  q3 =
-    type: 'confirm'
-    name: 'watchServer'
-    message: 'Do you want to watch the server?'
-    default: 'false'
-  prompt [q1, q2, q3], (answerObj)->
-    setEnv paths.env,
-      RUN_TESTS: answerObj.runTests
-      WATCH_DB: answerObj.watchDb
-      WATCH_SERVER: answerObj.watchServer
+gulp.task 'setup', (done)->
+  setup (answerObj)->
+    overwrites = {}
+    for task in answerObj.helpers
+      switch task
+        when 'DB' then overwrites.WATCH_DB = true
+        when 'Server' then overwrites.WATCH_SERVER = true
+        when 'Test' then overwrites.RUN_TESTS = true
+    setEnv paths.env, overwrites
     done()
 
 gulp.task 'stylus', () ->

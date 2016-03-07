@@ -113,21 +113,27 @@ module.exports =
       script: script
       delay: 1000
 
-  ##### prompt #####
-  # Creates a command line prompt with given args
-  # @params: questions -> object
-  # @params: cb -> function
-  prompt: (question, cb)->
+  ##### setup #####
+  # Sets up the env based on user inputs using inquirer
+  setup: (cb)->
     inquirer = require 'inquirer'
-    inquirer.prompt question, (answerObj)->
-      for answer of answerObj
-        answerObj[answer] = JSON.parse answerObj[answer]
-      cb answerObj
+    q1 =
+      type: 'checkbox'
+      name: 'helpers'
+      message: 'Configure your environment'
+      choices: [
+        new inquirer.Separator '<<< Resources to watch >>>'
+        {name: 'DB'},
+        {name: 'Server'},
+        new inquirer.Separator '<<< Tests to run >>>'
+        {name: 'Test'}
+      ]
+    inquirer.prompt q1, cb
+
 
   ##### setEnv #####
   # Sets the environment with using .env.json
   # Overwrites or sets any other values given
-  # @params: overWrites -> object
   setEnv: (path, overWrites)->
     gEnv = require 'gulp-env'
     gEnv
