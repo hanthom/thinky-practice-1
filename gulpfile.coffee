@@ -61,16 +61,22 @@ gulp.task 'prompt', (done)->
     type: 'confirm'
     name: 'runTests'
     message:  'Do you want the tests to run on file saves?'
-    default: 'true'
+    default: 'false'
   q2 =
     type: 'confirm'
     name: 'watchDb'
     message: 'Do you want to watch the db?'
     default: 'false'
-  prompt [q1, q2], (answerObj)->
+  q3 =
+    type: 'confirm'
+    name: 'watchServer'
+    message: 'Do you want to watch the server?'
+    default: 'false'
+  prompt [q1, q2, q3], (answerObj)->
     setEnv paths.env,
       RUN_TESTS: answerObj.runTests
       WATCH_DB: answerObj.watchDb
+      WATCH_SERVER: answerObj.watchServer
     done()
 
 gulp.task 'stylus', () ->

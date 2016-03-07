@@ -150,7 +150,7 @@ module.exports =
     ######
     # Needed to parse the env variable to get expected behavior
     ######
-    if process.env.RUN_TESTS
+    if JSON.parse process.env.RUN_TESTS
       mocha = require 'gulp-mocha'
       opts =
         reporter: reporter

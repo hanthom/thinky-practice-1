@@ -4,7 +4,7 @@
 Todo = require "#{__dirname}/Todo"
 User = require "#{__dirname}/User"
 
-if process.env.WATCH_DB
+if JSON.parse process.env.WATCH_DB
   {watchModelFeed} = require "#{__dirname}/../helpers/utilsHelper"
   watchModelFeed User
   watchModelFeed Todo
