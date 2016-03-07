@@ -2,7 +2,7 @@ gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
 {browserify, coffee, coffeelint, jade, nodemon} = tasks
-{paths, setEnv, stylus, test, tunnel, watchify, watch} = tasks
+{setEnv, setup, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -22,26 +22,29 @@ paths =
     compile: 'src/**/*.coffee'
     all: ['src/**/*.coffee']
   test:
-    src: 'test/server/**/*.coffee'
+    src: []
     all: 'test/server/*.coffee'
-    controllers: 'test/server/controllers/*.coffee'
+    controllers:
+      todo: 'test/server/controllers/todoCtrl-t.coffee'
+      user: 'test/server/controllers/userCtrl-t.coffee'
+    routes:
+      auth: 'test/server/routes/authRoutes-t.coffee'
+      todo: 'test/server/routes/todoRoutes-t.coffee'
+      user: 'test/server/routes/userRoutes-t.coffee'
+    helpers:
+      crud: 'test/server/helpers/crudHelper-t.coffee'
 
 gulp.task 'default', (cb)->
-  setEnv paths.env
-  runSequence 'tunnel', ['jade', 'stylus', 'coffeelint','coffee']
-    , 'browserify'
-    , ['watchify', 'nodemon', 'test' , 'watch']
+  runSequence 'setup'
+    , ['tunnel', 'build',]
+    , ['watchify', 'nodemon', 'watch']
+    , 'test'
     , cb
 
 gulp.task 'build-dev', (cb)->
   setEnv paths.env, NODE_ENV: "development"
-  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
-gulp.task 'build-heroku-dev', (cb)->
-  process.env.NODE_ENV = 'development'
-  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
-
-gulp.task 'build-prod', (cb)->
+gulp.task 'build', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'browserify', () ->
@@ -58,6 +61,38 @@ gulp.task 'jade', () ->
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
+    .on 'start', ()->
+      runSequence 'test'
+
+gulp.task 'setup', (done)->
+
+  setup (answerObj)->
+    overwrites = {}
+    if answerObj.tests.length
+      for task in answerObj.watchers
+        switch task
+          when 'DB' then overwrites.WATCH_DB = true
+          when 'Server' then overwrites.WATCH_SERVER = true
+          when 'Test' then overwrites.RUN_TESTS = true
+    if answerObj.tests.length
+      ######
+      # Only turn tests on if files are selected
+      ######
+      overwrites.RUN_TESTS = true
+      tests = paths.test.src
+      ######
+      # Add only the files we want to test to the test src array
+      ######
+      for file in answerObj.tests
+        switch file
+          when 'userCtrl' then tests.push paths.test.controllers.user
+          when 'todoCtrl' then tests.push paths.test.controllers.todo
+          when 'userRoutes' then tests.push paths.test.routes.user
+          when 'todoRoutes' then tests.push paths.test.routes.todo
+          when 'authRoutes' then tests.push paths.test.routes.auth
+          when 'crudHelper' then tests.push paths.test.helpers.crud
+    setEnv paths.env, overwrites
+    done()
 
 gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
@@ -71,7 +106,7 @@ gulp.task 'tunnel', ()->
 
 gulp.task 'watch', ()->
   watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee', 'test'
+    runSequence 'coffeelint', 'coffee'
   watch paths.jade.all, ['jade']
   watch paths.stylus.all, ['stylus']
   watch paths.test.src, ['test']

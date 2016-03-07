@@ -5,21 +5,17 @@ module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
         $location.path '/login'
         $q.reject res
       $q.reject()
-  $urlRouterProvider.otherwise '/login'
+  $urlRouterProvider.otherwise '/'
   $stateProvider
     .state 'login',
-      url:'/login'
-      controller: 'loginCtrl'
+      url:'/'
+      controller: 'userCtrl'
       templateUrl: '../templates/login.html'
     .state 'logout',
       controller: ($state, authService)->
         authService.logout()
           .then ()->
             $state.go 'login'
-    .state 'register',
-      url: '/register'
-      controller: 'registerCtrl'
-      templateUrl: '../templates/register.html'
     .state 'secured',
       abstract: true
       template: '<nav></nav><ui-view/>'
@@ -42,5 +38,3 @@ module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
       resolve:
         list: (todoService) ->
           todoService.getTodos 'all'
-
-  

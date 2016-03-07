@@ -2,7 +2,11 @@
 /build
 .env
 .env.json
-/config/secrets.coffee
-/config/secrets.js
-npm-log.log
-npm-debug.log
+<<<<<<< HEAD
+npm-*.***
+*.log
+
+
+
+
+

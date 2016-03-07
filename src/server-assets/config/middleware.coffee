@@ -7,4 +7,5 @@ module.exports = (app)->
   # Sets up the initial get request
   app.use express.static "#{__dirname}/../../client"
   app.use bodyParser.json()
-  app.use logger
+  if process.env.WATCH_SERVER
+    app.use logger

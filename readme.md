@@ -22,20 +22,20 @@ Once you fork and clone the repo and run `npm install`. Once everything is downl
 
 # Making changes to the repo
 
-Use your own fork to get familiar with the code in a local environment. Once you're ready to make changes you can create pull requests on/ push to the dev branch first and Heroku will deploy the updates to: [chip-thinky-practice-dev.herokuapp.com/](https://ph-todo-app-dev.herokuapp.com/). Pull requests to master will generate [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). If you're in the on the Pink Hippos slack team you'll see updates in the thinky-practice channel.
+Check out [this](https://guides.github.com/introduction/flow/index.html) guide on the git flow I use. Use your own fork to get familiar with the code in a local environment. Once you're ready to make changes you can create pull requests on/ push to the dev branch first and Heroku will deploy the updates to: [ph-todo-app-dev.herokuapp.com/](https://ph-todo-app-dev.herokuapp.com/). Pull requests to master will generate [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps). If you're in the on the Pink Hippos slack team you'll see updates in the thinky-practice channel.
 
 # Useful Tips
 
 ## Work Flow
 
-I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. If you're on the latest OSX you can split your screen using [panels](http://osxdaily.com/2015/10/01/use-split-view-mac-os-x/). It keeps my terminal in view during development so I can see updates in my console easily.  ![El Capitan Panels](/config/images/iterm_and_atom.png)
+I use [iTerm](https://www.iterm2.com/) with [Oh My ZSH](http://ohmyz.sh/). The aliases, customization, and theme in zsh are pretty slick. I added `alias tunnels="lsof -i tcp | grep ^ssh"` so I can see all ssh tunnels open on my machine. If you're on the latest OSX you can split your screen using [panels](http://osxdaily.com/2015/10/01/use-split-view-mac-os-x/). It keeps my terminal in view during development so I can see updates in my console easily.  ![El Capitan Panels](/config/images/iterm_and_atom.png)
 
 ## Snippets in [Atom](https://atom.io/)
 
-Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way to customize shortcuts for speedy development. If you add the snippets below you can type the prefix ad hit `tab` to start the snippet. Use `tab` to get to each spot preceded by a $.
+Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way to customize shortcuts for speedy development. If you add the snippets below you can type the prefix and hit `tab` to start the snippet. Use `tab` to get to each spot preceded by a $.
 
 ```
-#####
+######
 # Markup Snippets
 '.source.gfm':
   'Link':
@@ -70,6 +70,9 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
 ######
 # CoffeeScript Snippets
 '.source.coffee':
+  'Require':
+    'prefix': 'req'
+    'body': 'require "#{__dirname}/${1:pathToFile}"'
 
   'Process Variable':
     'prefix': 'penv'
@@ -101,11 +104,15 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
     'body': '# @params: $1 -> $2'
 
 
-  'Comment':
-    'prefix': 'com'
+  'Comment1':
+    'prefix': 'com1'
     'body': """
     ######
     # $1
     ######
     """
+
+  'Comment2':
+    'prefix': 'com2'
+    'body': '###### $1 ######'
 ```

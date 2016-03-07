@@ -1,4 +1,5 @@
 gulp = require 'gulp'
+{exec} = require 'child_process'
 
 ######
 # All @params will be strings unless specified
@@ -28,6 +29,16 @@ bundle = (bundler, dest)->
       console.log "ERROR WITH BUNDLING >>>> #{e.message}"
     .pipe source 'bundle.js'
     .pipe gulp.dest dest
+
+##### devStream #####
+# Pipes a stream to the gulp-changed package for faster compiles
+# @params: stream -> stream from gulp.src
+# @returns: stream -> stream
+devStream = (stream, dest)->
+  changed = require 'gulp-changed'
+  stream
+    .pipe changed dest
+
 
 ##### fixPath #####
 # Dynamically calls addBase fn with a src and dest
@@ -63,7 +74,10 @@ module.exports =
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
     {src, dest} = fixPath src, dest
-    gulp.src src
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe coffee()
       .on 'error', (e)->
         console.log "COFFEE ERROR >>>> #{e.message}"
@@ -90,8 +104,10 @@ module.exports =
     jade = require 'gulp-jade'
     {src, dest} = fixPath src, dest
     gulp.src src
-      # prettify tossing error in html
-      # .pipe prettify {indent_size: 2}
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
       .pipe jade()
       .pipe gulp.dest dest
 
@@ -112,46 +128,80 @@ module.exports =
       script: script
       delay: 500
 
-  ##### stylus #####
-  # Compiles Stylus into css
-  stylus: (src, dest) ->
-    styl = require 'gulp-stylus'
-    {src, dest} = fixPath src, dest
-    gulp.src src
-      .pipe styl()
-      .pipe gulp.dest dest
+  ##### setup #####
+  # Sets up the env based on user inputs using inquirer
+  setup: (cb)->
+    inquirer = require 'inquirer'
+    q1 =
+      type: 'checkbox'
+      name: 'watchers'
+      message: 'Select the resources to watch'
+      choices: [
+        {name: 'DB'},
+        {name: 'Server'}
+      ]
+    q2 =
+      type: 'checkbox'
+      name: 'tests'
+      message: 'Select the files to test'
+      choices: [
+        new inquirer.Separator '== Controller Tests =='
+        {name: 'userCtrl'}
+        {name: 'todoCtrl'}
+        new inquirer.Separator '== API Route Tests =='
+        {name: 'userRoutes'}
+        {name: 'todoRoutes'}
+        {name: 'authRoutes'}
+        new inquirer.Separator '== Helper Tests =='
+        {name: 'crudHelper'}
+      ]
+    inquirer.prompt [q1, q2], cb
+
 
   ##### setEnv #####
   # Sets the environment with using .env.json
   # Overwrites or sets any other values given
-  # @params: overWrites -> object
   setEnv: (path, overWrites)->
     gEnv = require 'gulp-env'
     gEnv
       file: path
       vars: overWrites
 
-
+  ##### stylus #####
+  # Compiles Stylus into css
+  stylus: (src, dest) ->
+    styl = require 'gulp-stylus'
+    {src, dest} = fixPath src, dest
+    stream = gulp.src src
+    if process.env.NODE_ENV is 'development'
+      stream = devStream stream, dest
+    stream
+      .pipe styl()
+      .pipe gulp.dest dest
 
   ##### test #####
   # Runs mocha tests with the options given
   # @params: opts -> object
   test: (src, reporter) ->
-    mocha = require 'gulp-mocha'
-    opts =
-      reporter: reporter
-    gulp.src src
-      .pipe mocha opts
-      .on 'error', (err) ->
-        console.log "MOCHA ERROR >>>> ", err.message
-        @emit 'end'
-
+    ######
+    # Needed to parse the env variable to get expected behavior
+    ######
+    if process.env.RUN_TESTS
+      mocha = require 'gulp-mocha'
+      opts =
+        reporter: reporter
+      gulp.src src
+        .pipe mocha opts
+        .on 'error', (err) ->
+          console.log "MOCHA ERROR >>>> ", err.message
+          @emit 'end'
+    else
+      console.log 'MOCHA >>>> TESTS TURNED OFF'
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
   tunnel: ()->
-    child = require 'child_process'
-    child.exec "python #{__dirname}/tunnel.py"
+    exec "python #{__dirname}/tunnel.py"
 
   ##### watch #####
   # Watches the specified files for changes and runs the

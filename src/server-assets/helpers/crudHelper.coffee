@@ -5,13 +5,13 @@ module.exports =
   # Creates an item on the DB
   # @params: modelObj -> Thinky Model
   # @params: insert -> object
-  # @returns:
+  # @resolves: object
   crudCreate: (modelObj, insert) ->
     dfd = q.defer()
     new modelObj insert
       .save()
       .then (res) ->
-        console.log 'CRUD CREATE >>>> ', res
+        # console.log 'CRUD CREATE >>>> ', res
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD CREATE ERROR >>>> ', err.message
@@ -26,7 +26,7 @@ module.exports =
     query
       .run()
       .then (res) ->
-        console.log 'CRUD READ >>>> ', res
+        # console.log 'CRUD READ >>>> ', res
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD READ ERROR >>> ', err.message
@@ -42,7 +42,7 @@ module.exports =
       .update changes
       .run()
       .then (res) ->
-        console.log 'CRUD EDIT >>>> ', get
+        # console.log 'CRUD EDIT >>>> ', get
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD EDIT ERROR >>>> ', err.message
@@ -60,7 +60,7 @@ module.exports =
       .delete()
       .run()
       .then (res) ->
-        console.log "CRUD DELETE #{get}"
+        # console.log "CRUD DELETE"
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD DELETE ERROR >>>> ', err.message
