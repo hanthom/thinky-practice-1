@@ -100,7 +100,6 @@ module.exports =
   # Compiles JADE into HTML
   # Uses 'prettify' to make HTML readable
   jade: (src, dest) ->
-    prettify = require 'gulp-prettify'
     jade = require 'gulp-jade'
     {src, dest} = fixPath src, dest
     gulp.src src
