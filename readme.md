@@ -6,19 +6,23 @@ For this repo I'm using [RethinkDB](https://www.rethinkdb.com/) with the [thinky
 
 I assume you've got [homebrew](http://brew.sh/). I also assume you're using a OS X system. If not, checkout the [instructions](https://www.rethinkdb.com/docs/install/) for installing to your OS. Don't worry about getting the client driver, that will be installed with npm.
 
-Run `brew install rethinkdb`. In your home folder run `rethinkdb`. This will spin up a rethinkdb server on your machine. After it starts you can access the GUI at [localhost:8080/](http://localhost:8080/).
+Run `brew install rethinkdb`. In your home folder run `rethinkdb`. This will spin up a rethinkdb server on your machine. After it starts you can access the admin GUI at [localhost:8080/](http://localhost:8080/).
 
 ### With the tunnel.py script running
 
-The gulpfile has a task to run this script. It will only work if you've got the .env.json file for the repo. If you want to just run tunnel.py you can open a terminal window and run `python tunnel.py`. You can check the ssh connections on your machine using `lsof -i -n | egrep '\<ssh\>'`. You can kill all ssh tunnels using `killall ssh`
+Use `gulp tunnel` to start the tunnel with the task. It will only work if you've got the .env.json file for the repo or you've manually set the env variables yourself. If you want to just run tunnel.py you can open a terminal window and run `python tunnel.py`. If you're interested check the ssh connections on your machine using `lsof -i -n | egrep '\<ssh\>'`. You can kill all ssh tunnels using `killall ssh`. The script will try to map the hosted rethinkdb server ports (8080 and 28015) to the local ports so make sure these are freed up before trying to start the tunnel.
 
 ### To check the gui without ssh connection
 
 You'll need to set up a login for an ssl connection to the DB. After that you can access it at [aws-us-east-1-portal7.dblayer.com:10583](https://aws-us-east-1-portal7.dblayer.com:10583/)
 
+### Commands in the Data Explorer
+
+The gui that RethinkDB provides for [data exploration and manipulation](https://www.rethinkdb.com/docs/reql-data-exploration/) is awesome. You can easily practice and refine queries with a little help from the popovers on the cursor. ![Data Explorer](/config/images/data-explorer.png)
+
 # Spinning up your environment
 
-Once you fork and clone the repo and run `npm install`. Once everything is downloaded you should be able to run `gulp`. Study the config/tasks.coffee to understand what tasks are doing. The console will log out the activity accordingly. To quit use `ctrl + c` in the terminal twice (once for nodemon and once for the watch task).
+Once you fork and clone the repo and run `npm install`. Once everything is downloaded you should be able to run `gulp`. Study the [tasks.coffee](config/tasks.coffee) file to understand what tasks are doing. The console will log out the activity accordingly. To quit use `ctrl + c` in the terminal twice (once for nodemon and once for the watch task).
 
 # Making changes to the repo
 
