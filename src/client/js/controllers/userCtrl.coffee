@@ -1,6 +1,8 @@
 module.exports = ($scope, authService, userService)->
   $scope.visible = true
-
+  $scope.registerError =
+    visibility: false
+    message: ""
   $scope.showRegister = () ->
     $scope.visible = ! $scope.visible
 
@@ -8,7 +10,7 @@ module.exports = ($scope, authService, userService)->
     authService.login credentials
       .then (res)->
         $scope.credentials = {}
-        $state.go 'secured.home'
+        # $state.go 'secured.home'
       .catch (e)->
         console.log 'Err', e
         credentials = {}
@@ -16,8 +18,13 @@ module.exports = ($scope, authService, userService)->
   $scope.register = (credentials)->
     userService.addUser credentials
       .then (res)->
-        $scope.credentials = {}
-        # $state.go 'secured.home'
+        if typeof res is 'string'
+          $scope.registerError =
+            visibility: true
+            message: res
+        else
+          $scope.credentials = {}
+          # $state.go 'secured.home'
       .catch (e)->
         console.log 'Err', e
         credentials = {}

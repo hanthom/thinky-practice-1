@@ -16,9 +16,14 @@ module.exports =
     module.exports.getOneUser user.username
     .then () ->
       console.log "User Exists"
-      q.reject('exists')
+      "Username Exists"
     , () ->
-      crudCreate User, user
+      module.exports.getUserByEmail user.email
+      .then () ->
+        console.log "Email Exists"
+        "Email Exists"
+      , () ->
+        crudCreate User, user
 
   ##### getOneUser #####
   # Gathers information for unique user

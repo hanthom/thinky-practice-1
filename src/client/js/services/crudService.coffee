@@ -9,7 +9,7 @@ new class CrudService
       $http
         .post url, obj
         .then (res) ->
-          console.log "CRUD CREATE RESPONSE >>>> ", res
+          console.log "CRUD CREATE RESPONSE >>>> ", res.data
           dfd.resolve()
         .catch (err) ->
           console.log "CRUD CREATE ERROR >>>> ", err
