@@ -13,20 +13,15 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    module.exports.getOneUser user.username
-      .then(user) ->
-        if !user
-          crudCreate User, user
-            .then (user)->
-              console.log "Pew"
-              module.exports.getOneUser user.username
+    crudCreate User, user
+      .then (user)->
+        module.exports.getOneUser user.username
 
   ##### getOneUser #####
   # Gathers information for unique user
   # @params: string
   # @returns: promise
   getOneUser: (username) ->
-    console.log "getOneUser Called. Username: #{username}"
     dfd = q.defer()
     query = User
       .filter username: username
@@ -34,17 +29,13 @@ module.exports =
       .then (user)->
         user = user[0]
         if user
-          console.log "User Exists"
           trimResponse user, ['password', 'id', 'email']
-          console.log user
           dfd.resolve user
         else
-          console.log "User Doesn't Exist"
           dfd.reject msg: 'NO USER FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise
-
 
   ##### getUserByEmail #####
   # Gets user by email
@@ -58,16 +49,15 @@ module.exports =
       .then (user)->
         user = user[0]
         if user
-          console.log "User Exists"
-          trimResponse user, ['password', 'id', 'createdAt']
+          trimResponse user, ['password', 'id']
           console.log user
           dfd.resolve user
         else
-          console.log "User Doesn't Exist"
           dfd.reject msg: 'NO USER FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise
+
   ##### getAllUsers #####
   # Gather Information about User or Users
   # @params: obj
