@@ -13,9 +13,12 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    crudCreate User, user
-      .then (user)->
-        module.exports.getOneUser user.username
+    module.exports.getOneUser user.username
+    .then () ->
+      console.log "User Exists"
+      q.reject('exists')
+    , () ->
+      crudCreate User, user
 
   ##### getOneUser #####
   # Gathers information for unique user

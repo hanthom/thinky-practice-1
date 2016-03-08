@@ -19,10 +19,10 @@ new class CrudService
     # CRUD Helper method to GATHER from API
     # @params: string, obj
     # @returns: objc
-    @crudRead = (url, obj) ->
+    @crudRead = (url) ->
       dfd = $q.defer()
       $http
-        .get url, obj
+        .get url
         .then (res) ->
           console.log "CRUD READ RESPONSE >>>> ", res
           dfd.resolve()
