@@ -20,10 +20,13 @@ module.exports = ($scope, $state, authService, userService)->
     if re.test(credentials.email)
       userService.addUser credentials
         .then (res)->
-          
+          $scope.registerError.visibility = false
+          $scope.visible = true
+          $state.go 'thankyou'
         .catch (e)->
-          console.log 'Err', e
-          credentials = {}
+          $scope.registerError =
+            visibility: true
+            message: e
     else
       $scope.registerError =
         visibility: true
