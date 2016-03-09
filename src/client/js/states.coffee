@@ -1,10 +1,14 @@
 module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
   $httpProvider.interceptors.push ($q, $location)->
     responseError: (res)->
+      console.log "HTTP PROVIDER RESPONSE"
       if res.status is 401
         $location.path '/login'
         $q.reject res
       $q.reject()
+      switch res.status
+        when 403 then
+
   $urlRouterProvider.otherwise '/'
   $stateProvider
     .state 'login',
