@@ -13,9 +13,17 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    crudCreate User, user
-      .then (user)->
-        module.exports.getOneUser user.username
+    module.exports.getOneUser user.username
+    .then () ->
+      console.log "User Exists"
+      "Username Exists"
+    , () ->
+      module.exports.getUserByEmail user.email
+      .then () ->
+        console.log "Email Exists"
+        "Email Exists"
+      , () ->
+        crudCreate User, user
 
   ##### getOneUser #####
   # Gathers information for unique user
@@ -29,7 +37,28 @@ module.exports =
       .then (user)->
         user = user[0]
         if user
+          trimResponse user, ['password', 'id', 'email']
+          dfd.resolve user
+        else
+          dfd.reject msg: 'NO USER FOUND', status: 404
+      .catch (e)->
+        dfd.reject e
+    dfd.promise
+
+  ##### getUserByEmail #####
+  # Gets user by email
+  # @params: string
+  # @returns: promise
+  getUserByEmail:(email)->
+    dfd = q.defer()
+    query = User
+      .filter email: email
+    crudRead query
+      .then (user)->
+        user = user[0]
+        if user
           trimResponse user, ['password', 'id']
+          console.log user
           dfd.resolve user
         else
           dfd.reject msg: 'NO USER FOUND', status: 404
@@ -49,7 +78,7 @@ module.exports =
         if users.length >= 1
           trimmedUsers = []
           for user in users
-            trimmedUsers.push trimResponse user, ['password', 'id']
+            trimmedUsers.push trimResponse user, ['password', 'id', 'email']
           dfd.resolve trimmedUsers
         else
           dfd.reject msg: 'NO USERS FOUND', status: 404

@@ -26,7 +26,7 @@ module.exports =
     query
       .run()
       .then (res) ->
-        # console.log 'CRUD READ >>>> ', res
+        console.log 'CRUD READ >>>> ', res
         dfd.resolve res
       .catch (err) ->
         console.log 'CRUD READ ERROR >>> ', err.message

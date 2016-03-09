@@ -1,8 +1,0 @@
-h1 Register
-
-form#register
-  input(type='text' ng-model='credentials.email' placeholder='Email')
-  input(type='text' ng-model='credentials.username' placeholder='Username')
-  input(type='password' ng-model='credentials.password' placeholder='Password')
-  button(type='submit' ng-click='register(credentials)') Register
-  button(class="alter" type='submit' ui-sref='login') Login

@@ -1,5 +1,6 @@
 userCtrl = require "#{__dirname}/../controllers/userCtrl"
-{createUser, getOneUser, getUsers, updateUser, deleteUser} = userCtrl
+{createUser, getOneUser, getUserByEmail} = userCtrl
+{getUsers, updateUser, deleteUser} = userCtrl
 {sendErr} = require "#{__dirname}/../helpers/utilsHelper"
 
 module.exports = (app) ->
@@ -7,6 +8,16 @@ module.exports = (app) ->
   app.route '/api/users/:username'
     .get (req, res)->
       getOneUser req.params.username
+        .then (user) ->
+          res
+            .status 200
+            .send user
+        .catch (err) ->
+          sendErr err, res
+          
+  app.route '/api/users/email/:email'
+    .get (req, res) ->
+      getUserByEmail req.params.email
         .then (user) ->
           res
             .status 200

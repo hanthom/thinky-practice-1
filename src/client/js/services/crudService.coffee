@@ -1,5 +1,3 @@
-url = "/api/users"
-
 new class CrudService
   constructor: ($http, $q)->
     ##### CRUD CREATE #####
@@ -11,25 +9,25 @@ new class CrudService
       $http
         .post url, obj
         .then (res) ->
-          console.log "CRUD CREATE RESPONSE >>>> ", res
+          console.log "CRUD CREATE RESPONSE >>>> ", res.data
           dfd.resolve()
         .catch (err) ->
-          console.log "CRUD DELETE ERROR >>>> ", err
+          console.log "CRUD CREATE ERROR >>>> ", err
       dfd.promise
 
     ##### CRUD READ #####
     # CRUD Helper method to GATHER from API
     # @params: string, obj
     # @returns: objc
-    @crudRead = (url, obj) ->
+    @crudRead = (url) ->
       dfd = $q.defer()
       $http
-        .get url, obj
+        .get url
         .then (res) ->
           console.log "CRUD READ RESPONSE >>>> ", res
           dfd.resolve()
         .catch (err) ->
-          console.log "CRUD DELETE ERROR >>>> ", err
+          console.log "CRUD READ ERROR >>>> ", err
       dfd.promise
 
     ##### CRUD UPDATE #####
@@ -44,7 +42,7 @@ new class CrudService
           console.log "CRUD UPDATE RESPONSE >>>> ", res
           dfd.resolve()
         .catch (err) ->
-          console.log "CRUD DELETE ERROR >>>> ", err
+          console.log "CRUD UPDATE ERROR >>>> ", err
       dfd.promise
 
     ##### CRUD DELETE #####

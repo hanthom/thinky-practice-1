@@ -75,8 +75,14 @@ gulp.task 'setup', (done)->
           when 'Server' then overwrites.WATCH_SERVER = true
           when 'Test' then overwrites.RUN_TESTS = true
     if answerObj.tests.length
+      ######
+      # Only turn tests on if files are selected
+      ######
       overwrites.RUN_TESTS = true
       tests = paths.test.src
+      ######
+      # Add only the files we want to test to the test src array
+      ######
       for file in answerObj.tests
         switch file
           when 'userCtrl' then tests.push paths.test.controllers.user
@@ -92,7 +98,6 @@ gulp.task 'stylus', () ->
   stylus paths.stylus.compile, 'build'
 
 gulp.task 'test', () ->
-  console.log 'TEST SRC >>>>', paths.test.src
   test paths.test.src, 'nyan'
 
 gulp.task 'tunnel', ()->
