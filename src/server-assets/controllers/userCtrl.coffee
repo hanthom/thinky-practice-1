@@ -13,23 +13,30 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    module.exports.getOneUser user.username
-    .then () ->
-      console.log "User Exists"
-      "Username Exists"
-    , () ->
+    dfd = q.defer()
+    module.exports.getUserByUsername user.username
+    .then (res) ->
+      console.log "Should reject username: ", res
+      dfd.reject(msg: "Username Exists", status: 403)
+    .catch (err) ->
+      console.log "ELSE"
       module.exports.getUserByEmail user.email
-      .then () ->
-        console.log "Email Exists"
-        "Email Exists"
-      , () ->
+      .then (res) ->
+        console.log "Should reject email: ", res
+        dfd.reject(msg: "Email Exists", status: 403)
+      .catch (err) ->
         crudCreate User, user
+        .then (res) ->
+          dfd.resolve res
+        .catch (err) ->
+          dfd.reject(msg: "Welp, this is awkward", status: 404)
+    dfd.promise
 
-  ##### getOneUser #####
+  ##### getUserByUsername #####
   # Gathers information for unique user
   # @params: string
   # @returns: promise
-  getOneUser: (username) ->
+  getUserByUsername: (username) ->
     dfd = q.defer()
     query = User
       .filter username: username
@@ -61,7 +68,7 @@ module.exports =
           console.log user
           dfd.resolve user
         else
-          dfd.reject msg: 'NO USER FOUND', status: 404
+          dfd.reject msg: 'NO EMAIL FOUND', status: 404
       .catch (e)->
         dfd.reject e
     dfd.promise
