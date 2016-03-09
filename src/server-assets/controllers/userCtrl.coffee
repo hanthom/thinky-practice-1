@@ -16,20 +16,17 @@ module.exports =
     dfd = q.defer()
     module.exports.getUserByUsername user.username
     .then (res) ->
-      console.log "Should reject username: ", res
       dfd.reject(msg: "Username Exists", status: 403)
     .catch (err) ->
-      console.log "ELSE"
       module.exports.getUserByEmail user.email
       .then (res) ->
-        console.log "Should reject email: ", res
         dfd.reject(msg: "Email Exists", status: 403)
       .catch (err) ->
         crudCreate User, user
         .then (res) ->
           dfd.resolve res
         .catch (err) ->
-          dfd.reject(msg: "Welp, this is awkward", status: 404)
+          dfd.reject(msg: "Welp, this is awkward", status: 418)
     dfd.promise
 
   ##### getUserByUsername #####
