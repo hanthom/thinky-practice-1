@@ -2,11 +2,6 @@
 /build
 .env
 .env.json
-<<<<<<< HEAD
 npm-*.***
 *.log
-
-
-
-
-
+**/secrets.**

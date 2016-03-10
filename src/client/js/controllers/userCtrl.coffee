@@ -1,13 +1,13 @@
-module.exports = ($scope, $state, authService, userService)->
-  $scope.visible = true
+module.exports = ($scope, $state, userService, authService)->
+  $scope.formToggle = true
   $scope.registerError =
     visibility: false
     message: ""
   $scope.showRegister = () ->
-    $scope.visible = ! $scope.visible
+    $scope.formToggle = ! $scope.formToggle
 
   $scope.login = (credentials)->
-    authService.login credentials
+    authService.localLogin credentials
       .then (res)->
         $scope.credentials = {}
         # $state.go 'secured.home'
