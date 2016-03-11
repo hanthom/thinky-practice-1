@@ -7,5 +7,6 @@ authCtrl = require "#{__dirname}/../controllers/authCtrl"
 module.exports = (app) ->
   app.route '/api/auth/local'
     .post passport.authenticate 'localLogin',
-      successRedirect: '/success'
-      failureRedirect: '/fail'
+      successRedirect: '/#/thankyou'
+      failureRedirect: '/'
+      # failureFlash: true

@@ -15,16 +15,12 @@ module.exports =
   localLogin: new LocalStrategy (username, password, done) ->
     getUserByUsername username
     .then (res) ->
-      console.log "LocalStrategy Gets User >>> ", res
-      console.log "getUserPassword >>>>> ", getUserPassword res.username
       getUserPassword res.username
       .then (res) ->
-        console.log "LocalStrategy Gets password", res
         if !bcrypt.compareSync password, res
           console.log "Failed Password"
           done null, false, {message: 'Invalid password'}
         else
-          console.log "Passed Password"
           done null, res
       .catch (err) ->
         done null, false, {message: 'Error getting password'}

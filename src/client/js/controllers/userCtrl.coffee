@@ -10,7 +10,8 @@ module.exports = ($scope, $state, userService, authService)->
     authService.localLogin credentials
       .then (res)->
         $scope.credentials = {}
-        # $state.go 'secured.home'
+        console.log "Res from localLogin", res
+        $state.go 'thankyou'
       .catch (e)->
         console.log 'Err', e
         credentials = {}

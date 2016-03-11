@@ -6,7 +6,7 @@ module.exports = ($urlRouterProvider, $stateProvider, $httpProvider)->
       #   $q.reject res
       # $q.reject()
       switch res.status
-        when 403
+        when 403 or 404
           $q.reject res.data
         when 401
           $location.path '/login'
