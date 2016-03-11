@@ -1,13 +1,15 @@
 bodyParser    = require 'body-parser'
-{logger}      = require "#{__dirname}/serverConfig"
 express       = require 'express'
 cors          = require 'cors'
 passport      = require 'passport'
 session       = require 'express-session'
 sessionSecret = require "#{__dirname}/secrets"
 authCtrl      = require "#{__dirname}/../controllers/authCtrl"
-{User}          = require "#{__dirname}/../models/models"
+
+{User}        = require "#{__dirname}/../models/models"
+{logger}      = require "#{__dirname}/serverConfig"
 {localLogin}  = authCtrl
+
 corsOpts =
   origin: 'http://localhost:9999'
 
