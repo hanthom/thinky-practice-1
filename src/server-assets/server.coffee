@@ -13,5 +13,6 @@ app.listen port, (e)->
 require("#{__dirname}/config/middleware") app
 require("#{__dirname}/routes/todo-routes") app
 require("#{__dirname}/routes/user-routes") app
+require("#{__dirname}/routes/auth-routes") app
 
 module.exports = app

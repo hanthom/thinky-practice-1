@@ -13,23 +13,22 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
+    console.log "USER >>> ", user
     dfd = q.defer()
     module.exports.getUserByUsername user.username
     .then (res) ->
-      console.log "Should reject username: ", res
-      dfd.reject(msg: "Username Exists", status: 403)
+      console.log "RES FROM getUserByUsername >>> ", res
+      dfd.reject msg: "Username Exists", status: 403
     .catch (err) ->
-      console.log "ELSE"
       module.exports.getUserByEmail user.email
       .then (res) ->
-        console.log "Should reject email: ", res
-        dfd.reject(msg: "Email Exists", status: 403)
+        dfd.reject msg: "Email Exists", status: 403
       .catch (err) ->
         crudCreate User, user
         .then (res) ->
           dfd.resolve res
         .catch (err) ->
-          dfd.reject(msg: "Welp, this is awkward", status: 404)
+          dfd.reject msg: "Welp, this is awkward", status: 418
     dfd.promise
 
   ##### getUserByUsername #####
@@ -37,14 +36,15 @@ module.exports =
   # @params: string
   # @returns: promise
   getUserByUsername: (username) ->
+    console.log "USERNAME >>> ", username
     dfd = q.defer()
     query = User
       .filter username: username
     crudRead query
-      .then (user)->
-        user = user[0]
+      .then (res)->
+        user = res[0]
         if user
-          trimResponse user, ['password', 'id', 'email']
+          trimResponse user, ['password', 'id']
           dfd.resolve user
         else
           dfd.reject msg: 'NO USER FOUND', status: 404
@@ -61,8 +61,8 @@ module.exports =
     query = User
       .filter email: email
     crudRead query
-      .then (user)->
-        user = user[0]
+      .then (res)->
+        user = res[0]
         if user
           trimResponse user, ['password', 'id']
           console.log user
@@ -71,6 +71,23 @@ module.exports =
           dfd.reject msg: 'NO EMAIL FOUND', status: 404
       .catch (e)->
         dfd.reject e
+    dfd.promise
+
+  ##### getPassword #####
+  # Get user password
+  # @params: string, string
+  # @returns: promise
+  getUserPassword: (username)->
+    dfd = q.defer()
+    query = User
+      .filter username: username
+    crudRead query
+      .then (res) ->
+        user = res[0]
+        trimResponse user, ['id', 'email', 'createdAt']
+        dfd.resolve user.password
+      .catch (err) ->
+        dfd.reject msg: 'NO USER FOUND', status: 404
     dfd.promise
 
   ##### getAllUsers #####
@@ -82,15 +99,12 @@ module.exports =
     query = User.orderBy index: r.asc 'username'
     crudRead query
       .then (users)->
-        if users.length >= 1
-          trimmedUsers = []
-          for user in users
-            trimmedUsers.push trimResponse user, ['password', 'id', 'email']
-          dfd.resolve trimmedUsers
-        else
-          dfd.reject msg: 'NO USERS FOUND', status: 404
+        trimmedUsers = []
+        for user in users
+          trimmedUsers.push trimResponse user, ['password', 'id', 'email']
+        dfd.resolve trimmedUsers
       .catch (e)->
-        dfd.reject e
+        dfd.reject msg: 'NO USERS FOUND', status: 404
     dfd.promise
 
   ##### updateUser #####

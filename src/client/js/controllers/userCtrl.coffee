@@ -1,16 +1,17 @@
-module.exports = ($scope, authService, userService)->
-  $scope.visible = true
+module.exports = ($scope, $state, userService, authService)->
+  $scope.formToggle = true
   $scope.registerError =
     visibility: false
     message: ""
   $scope.showRegister = () ->
-    $scope.visible = ! $scope.visible
+    $scope.formToggle = ! $scope.formToggle
 
   $scope.login = (credentials)->
-    authService.login credentials
+    authService.localLogin credentials
       .then (res)->
         $scope.credentials = {}
-        # $state.go 'secured.home'
+        console.log "Res from localLogin", res
+        $state.go 'thankyou'
       .catch (e)->
         console.log 'Err', e
         credentials = {}
@@ -20,19 +21,13 @@ module.exports = ($scope, authService, userService)->
     if re.test(credentials.email)
       userService.addUser credentials
         .then (res)->
-          if typeof res is 'string'
-            $scope.registerError =
-              visibility: true
-              message: res
-          else
-            $scope.credentials = {}
-            $scope.registerError =
-              visibility: false
-              message: ""
-            $state.go '/'
+          $scope.registerError.visibility = false
+          $scope.visible = true
+          $state.go 'thankyou'
         .catch (e)->
-          console.log 'Err', e
-          credentials = {}
+          $scope.registerError =
+            visibility: true
+            message: e
     else
       $scope.registerError =
         visibility: true

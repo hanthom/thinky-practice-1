@@ -1,20 +1,34 @@
-bodyParser = require 'body-parser'
-{logger}   = require "#{__dirname}/serverConfig"
-express    = require 'express'
-cors       = require 'cors'
-passport   = require 'passport'
-session    = require 'express-session'
+bodyParser    = require 'body-parser'
+{logger}      = require "#{__dirname}/serverConfig"
+express       = require 'express'
+cors          = require 'cors'
+passport      = require 'passport'
+session       = require 'express-session'
+sessionSecret = require "#{__dirname}/secrets"
+authCtrl      = require "#{__dirname}/../controllers/authCtrl"
+{User}          = require "#{__dirname}/../models/models"
+{localLogin}  = authCtrl
+corsOpts =
+  origin: 'http://localhost:9999'
 
 module.exports = (app)->
-  ######
-  # Sets up the initial get request
+
   app.use express.static "#{__dirname}/../../client"
   app.use bodyParser.json()
-  app.use cors()
-  # app.use session
+  app.use cors corsOpts
+  app.use session sessionSecret
   app.use passport.initialize()
   app.use passport.session()
+  app.use logger
 
+  passport.serializeUser (user, done) ->
+    done null, user
 
-  if process.env.WATCH_SERVER
-    app.use logger
+  passport.deserializeUser (username, done) ->
+    User.filter {username: username}
+      .then (res) ->
+        done null, res
+      .catch (err) ->
+        done err, false
+
+  passport.use 'localLogin', localLogin
