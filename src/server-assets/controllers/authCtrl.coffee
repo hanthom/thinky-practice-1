@@ -1,10 +1,11 @@
-q = require 'q'
-userCtrl = require "#{__dirname}/../controllers/userCtrl"
+q             = require 'q'
+userCtrl      = require "#{__dirname}/../controllers/userCtrl"
 LocalStrategy = require('passport-local').Strategy
-bcrypt = require 'bcrypt'
+bcrypt        = require 'bcrypt'
 
 {handleErr} = require "#{__dirname}/../helpers/utilsHelper"
-{User} = require '../models/models'
+{User}      = require '../models/models'
+
 {getUserByUsername, getUserPassword} = userCtrl
 
 module.exports =

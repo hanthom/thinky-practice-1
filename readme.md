@@ -123,4 +123,12 @@ Atom [snippets](https://atom.io/docs/latest/using-atom-snippets) are an easy way
   'Comment2':
     'prefix': 'com2'
     'body': '###### $1 ######'
+
+  'Comment Header':
+    'prefix' : 'comhead'
+    'body' : """
+    ################################################################################
+    #                                     $1                                       #
+    ################################################################################
+    """
 ```

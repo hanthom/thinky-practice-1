@@ -1,13 +1,20 @@
-q = require 'q'
+q          = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
+{User}                    = require '../models/models'
+{db}                      = require "#{__dirname}/../config/dbConfig"
 {handleErr, trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
-{User} = require '../models/models'
-{db} = require "#{__dirname}/../config/dbConfig"
+
 {r} = db
 {crudCreate, crudRead, crudUpdate, crudDelete} = crudHelper
 
 module.exports =
+
+################################################################################
+#                           USER ENDPOINTS FUNCTIONS                           #
+################################################################################
+
+
   ##### createUser #####
   # Creates new user
   # @params: object
@@ -73,23 +80,6 @@ module.exports =
         dfd.reject e
     dfd.promise
 
-  ##### getPassword #####
-  # Get user password
-  # @params: string, string
-  # @returns: promise
-  getUserPassword: (username)->
-    dfd = q.defer()
-    query = User
-      .filter username: username
-    crudRead query
-      .then (res) ->
-        user = res[0]
-        trimResponse user, ['id', 'email', 'createdAt']
-        dfd.resolve user.password
-      .catch (err) ->
-        dfd.reject msg: 'NO USER FOUND', status: 404
-    dfd.promise
-
   ##### getAllUsers #####
   # Gather Information about User or Users
   # @params: obj
@@ -121,3 +111,24 @@ module.exports =
   # @returns: promise
   deleteUser : (id)->
     crudDelete User, id
+
+################################################################################
+#                            USER SERVER FUNCTIONS                             #
+################################################################################
+
+  ##### getPassword #####
+  # Get user password
+  # @params: string, string
+  # @returns: promise
+  getUserPassword: (username)->
+    dfd = q.defer()
+    query = User
+      .filter username: username
+    crudRead query
+      .then (res) ->
+        user = res[0]
+        trimResponse user, ['id', 'email', 'createdAt']
+        dfd.resolve user.password
+      .catch (err) ->
+        dfd.reject msg: 'NO USER FOUND', status: 404
+    dfd.promise
