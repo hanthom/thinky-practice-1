@@ -1,3 +1,4 @@
+passport = require 'passport'
 userCtrl = require "#{__dirname}/../controllers/userCtrl"
 {createUser, getUserByUsername, getUserByEmail} = userCtrl
 {getUsers, updateUser, deleteUser} = userCtrl
@@ -26,15 +27,9 @@ module.exports = (app) ->
           sendErr err, res
 
   app.route '/api/users'
-    .post (req, res) ->
-      createUser req.body
-        .then (user) ->
-          res
-            .status 201
-            .json user
-        .catch (err) ->
-          sendErr err, res
-
+    .post passport.authenticate 'localSignup',
+      successRedirect: '/'
+      failureRedirect: '/'
     .get (req, res)->
       getUsers()
         .then (users)->

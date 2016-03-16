@@ -1,16 +1,23 @@
 supertest = require 'supertest'
 should = require('chai').should()
 
+{app} = require "#{__dirname}/../../../src/server-assets/server"
 {db, pristineUser} = require "../../util"
+
+api = supertest app
 {clean, insertDoc, r} = db
 
-api = supertest "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
+
 userUrl = '/api/users'
 
 describe 'userRoutes', ()->
   describe 'post', ()->
     res = {}
     newUser = {}
+    ######
+    # Making a post request before all of the 'it' block assertions
+    # Assigning response & response body to vars so assertions can be made
+    ######
     before (done)->
       api
         .post userUrl
@@ -22,6 +29,9 @@ describe 'userRoutes', ()->
             res = response
           done()
 
+    ######
+    # After all the asertions are complete we clean up the db
+    ######
     after (done)->
       clean 'User'
         .then ()->

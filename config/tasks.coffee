@@ -95,7 +95,6 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
 
-
   ##### jade #####
   # Compiles JADE into HTML
   # Uses 'prettify' to make HTML readable
@@ -125,7 +124,6 @@ module.exports =
     script = addBase script
     nodemon
       script: script
-      delay: 500
 
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
@@ -166,6 +164,36 @@ module.exports =
       file: path
       vars: overWrites
 
+  ##### serverRunner #####
+  # Exports fns to start and stop server
+  # @returns: object
+  serverRunner: (script)->
+    script = addBase script
+    {port} = require "#{__dirname}/../src/server-assets/config/serverConfig"
+    app = require "#{script}"
+    {
+      ##### listen #####
+      # Spins up a server with the given port, calls the cb when listening
+      # @params: custPort -> number
+      # @params: cb -> function
+      # @returns: http.Server object
+      listen: (custPort, cb)->
+        serverPort = custPort || port
+        app.listen serverPort, (e)->
+          if e
+            console.log "ERROR LISTENING ON PORT #{serverPort}", e
+          else
+            console.log "SERVER SPUN UP ON PORT #{serverPort}"
+          if cb then cb()
+      ##### close #####
+      # Closes the serverInst
+      # @params: server -> http.Server object
+      # @params: cb -> function
+      close: (server, cb)->
+        if !cb then cb = console.log 'Server closing!'
+        server.close ()->
+          cb()
+    }
   ##### stylus #####
   # Compiles Stylus into css
   stylus: (src, dest) ->
@@ -207,8 +235,10 @@ module.exports =
   # @params: cb -> function
   watch: (path, cb)->
     {src} = fixPath path
-    console.log "Should be watching #{src}"
-    gulp.watch src, cb
+    gulp.watch src, ()->
+      console.log process.argv
+      cb()
+
 
   ##### watchify #####
   # Description

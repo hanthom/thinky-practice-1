@@ -2,7 +2,7 @@ gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
 {browserify, coffee, coffeelint, jade, nodemon} = tasks
-{setEnv, setup, stylus, test, tunnel, watchify, watch} = tasks
+{setEnv, setup, serverRunner, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -36,8 +36,9 @@ paths =
 
 gulp.task 'default', (cb)->
   runSequence 'setup'
-    , ['tunnel', 'build',]
-    , ['watchify', 'nodemon', 'watch']
+    , ['tunnel', 'build']
+    , 'server'
+    , ['watchify', 'watch']
     , 'test'
     , cb
 
@@ -61,8 +62,6 @@ gulp.task 'jade', () ->
 
 gulp.task 'nodemon', ()->
   nodemon paths.server
-    .on 'start', ()->
-      runSequence 'test'
 
 gulp.task 'setup', (done)->
 
@@ -94,17 +93,28 @@ gulp.task 'setup', (done)->
     setEnv paths.env, overwrites
     done()
 
-gulp.task 'stylus', () ->
+
+gulp.task 'server', ->
+  {listen, close} = serverRunner paths.server
+  serv = listen 9229, ->
+    console.log 'fired in gulp'
+
+gulp.task 'stylus', ->
   stylus paths.stylus.compile, 'build'
 
-gulp.task 'test', () ->
+gulp.task 'test', ->
   test paths.test.src, 'nyan'
 
-gulp.task 'tunnel', ()->
+gulp.task 'tunnel', ->
+  ######
+  # This gets called after setup task has run.
+  # Will need to accomodate for potential overwites due to 'setEnv'
+  # getting called twice
+  ######
   setEnv paths.env
   tunnel()
 
-gulp.task 'watch', ()->
+gulp.task 'watch', ->
   watch paths.coffee.all, ()->
     runSequence 'coffeelint', 'coffee'
   watch paths.jade.all, ['jade']
