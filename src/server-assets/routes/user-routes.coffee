@@ -30,6 +30,7 @@ module.exports = (app) ->
     .post passport.authenticate 'localSignup',
       successRedirect: '/'
       failureRedirect: '/'
+      failureFlash: true
     .get (req, res)->
       getUsers()
         .then (users)->
