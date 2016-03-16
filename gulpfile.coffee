@@ -1,7 +1,7 @@
 gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
-{browserify, coffee, coffeelint, jade, nodemon} = tasks
+{browserify, coffee, coffeelint, jade} = tasks
 {setEnv, setup, serverRunner, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
@@ -37,7 +37,7 @@ paths =
 gulp.task 'default', (cb)->
   runSequence 'setup'
     , ['tunnel', 'build']
-    , 'server'
+    , 'server:start'
     , ['watchify', 'watch']
     , 'test'
     , cb
@@ -59,9 +59,6 @@ gulp.task 'coffee', ()->
 
 gulp.task 'jade', () ->
   jade paths.jade.compile, 'build'
-
-gulp.task 'nodemon', ()->
-  nodemon paths.server
 
 gulp.task 'setup', (done)->
 
@@ -93,11 +90,16 @@ gulp.task 'setup', (done)->
     setEnv paths.env, overwrites
     done()
 
+{close, listen} = serverRunner paths.server
+gulp.task 'server:start', ->
+  listen()
 
-gulp.task 'server', ->
-  {listen, close} = serverRunner paths.server
-  serv = listen 9229, ->
-    console.log 'fired in gulp'
+gulp.task 'server:restart', ->
+  close ->
+    listen()
+
+gulp.task 'server:close', ->
+  close()
 
 gulp.task 'stylus', ->
   stylus paths.stylus.compile, 'build'
@@ -116,9 +118,11 @@ gulp.task 'tunnel', ->
 
 gulp.task 'watch', ->
   watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee'
-  watch paths.jade.all, ['jade']
-  watch paths.stylus.all, ['stylus']
+    runSequence 'coffeelint', 'coffee', 'server:restart'
+  watch paths.jade.all, ->
+    runSequence 'jade', 'server:restart'
+  watch paths.stylus.all,
+  runSequence 'stylus', 'server:restart'
   watch paths.test.src, ['test']
 
 gulp.task 'watchify', () ->

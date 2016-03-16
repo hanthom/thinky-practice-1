@@ -169,30 +169,31 @@ module.exports =
   # @returns: object
   serverRunner: (script)->
     script = addBase script
-    {port} = require "#{__dirname}/../src/server-assets/config/serverConfig"
-    app = require "#{script}"
     {
+      ##### close #####
+      # Closes the serverInst
+      # @params: server -> http.Server object
+      # @params: cb -> function
+      close: (cb)->
+        if !cb then cb = console.log 'Server closing!'
+        @server.close ()->
+          @server = undefined
+          cb()
       ##### listen #####
       # Spins up a server with the given port, calls the cb when listening
       # @params: custPort -> number
       # @params: cb -> function
       # @returns: http.Server object
       listen: (custPort, cb)->
-        serverPort = custPort || port
-        app.listen serverPort, (e)->
+        app = require "#{script}"
+        {port} = require "#{__dirname}/../src/server-assets/config/serverConfig"
+        @server = app.listen custPort || port, (e)->
           if e
-            console.log "ERROR LISTENING ON PORT #{serverPort}", e
+            console.log "ERROR LISTENING ON PORT #{port}", e
           else
-            console.log "SERVER SPUN UP ON PORT #{serverPort}"
+            console.log "SERVER SPUN UP ON PORT #{port}"
           if cb then cb()
-      ##### close #####
-      # Closes the serverInst
-      # @params: server -> http.Server object
-      # @params: cb -> function
-      close: (server, cb)->
-        if !cb then cb = console.log 'Server closing!'
-        server.close ()->
-          cb()
+      server: undefined
     }
   ##### stylus #####
   # Compiles Stylus into css
