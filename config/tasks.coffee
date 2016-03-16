@@ -116,15 +116,6 @@ module.exports =
     gulp.src src
       .pipe gulp.dest dest
 
-  ##### nodemon #####
-  # Runs nodemon with provided script
-  # Delays restart by half second to handle for async tasks
-  nodemon: (script)->
-    nodemon = require 'gulp-nodemon'
-    script = addBase script
-    nodemon
-      script: script
-
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
   setup: (cb)->
@@ -175,7 +166,7 @@ module.exports =
       # @params: server -> http.Server object
       # @params: cb -> function
       close: (cb)->
-        if !cb then cb = console.log 'Server closing!'
+        cb = cb || console.log 'Server closing!'
         @server.close ()->
           @server = undefined
           cb()
@@ -236,9 +227,7 @@ module.exports =
   # @params: cb -> function
   watch: (path, cb)->
     {src} = fixPath path
-    gulp.watch src, ()->
-      console.log process.argv
-      cb()
+    gulp.watch src, cb
 
 
   ##### watchify #####

@@ -1,7 +1,6 @@
 bodyParser    = require 'body-parser'
 express       = require 'express'
 cors          = require 'cors'
-flash         = require 'connect-flash'
 passport      = require 'passport'
 session       = require 'express-session'
 sessionSecret = require "#{__dirname}/secrets"
@@ -19,7 +18,6 @@ module.exports = (app)->
   app.use express.static "#{__dirname}/../../client"
   app.use bodyParser.json()
   app.use cors corsOpts
-  app.use flash()
   app.use session sessionSecret
   app.use passport.initialize()
   app.use passport.session()

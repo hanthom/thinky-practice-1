@@ -18,9 +18,6 @@ module.exports =
   localSignup: new LocalStrategy
     passReqToCallback: true,
     (req, username, password, done)->
-      console.log 'PASSPORT SEES ---->'
-      console.log "username: #{username}"
-      console.log "password: #{password}"
       newUser = req.body
       userCtrl.getUserByUsername username
         .then (user)->

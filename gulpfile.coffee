@@ -42,22 +42,19 @@ gulp.task 'default', (cb)->
     , 'test'
     , cb
 
-gulp.task 'build-dev', (cb)->
-  setEnv paths.env, NODE_ENV: "development"
-
 gulp.task 'build', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
-gulp.task 'browserify', () ->
+gulp.task 'browserify', ->
   browserify paths.bundle.root, paths.bundle.dest
 
-gulp.task 'coffeelint', ()->
+gulp.task 'coffeelint', ->
   coffeelint paths.coffee.compile
 
-gulp.task 'coffee', ()->
+gulp.task 'coffee', ->
   coffee paths.coffee.compile, 'build'
 
-gulp.task 'jade', () ->
+gulp.task 'jade', ->
   jade paths.jade.compile, 'build'
 
 gulp.task 'setup', (done)->
@@ -117,13 +114,14 @@ gulp.task 'tunnel', ->
   tunnel()
 
 gulp.task 'watch', ->
-  watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee', 'server:restart'
+  watch paths.coffee.all, ->
+    runSequence 'coffeelint', 'coffee', 'test', 'server:restart'
   watch paths.jade.all, ->
     runSequence 'jade', 'server:restart'
   watch paths.stylus.all,
-  runSequence 'stylus', 'server:restart'
-  watch paths.test.src, ['test']
+    runSequence 'stylus', 'server:restart'
+  watch paths.test.src, ->
+    runSequence 'test'
 
-gulp.task 'watchify', () ->
+gulp.task 'watchify', ->
   watchify './build/client/js/app.js', './build/client/'

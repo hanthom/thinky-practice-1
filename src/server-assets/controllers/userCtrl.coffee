@@ -71,7 +71,6 @@ module.exports =
         user = res[0]
         if user
           trimResponse user, ['password', 'id']
-          console.log user
           dfd.resolve user
         else
           dfd.reject msg: 'NO EMAIL FOUND', status: 404
