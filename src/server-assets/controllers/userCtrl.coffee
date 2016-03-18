@@ -20,17 +20,7 @@ module.exports =
   # @params: object
   # @returns: promise
   createUser: (user) ->
-    console.log "USER >>> ", user
     dfd = q.defer()
-    # module.exports.getUserByUsername user.username
-    # .then (res) ->
-    #   console.log "RES FROM getUserByUsername >>> ", res
-    #   dfd.reject msg: "Username Exists", status: 403
-    # .catch (err) ->
-    #   module.exports.getUserByEmail user.email
-    #   .then (res) ->
-    #     dfd.reject msg: "Email Exists", status: 403
-    #   .catch (err) ->
     crudCreate User, user
     .then (res) ->
       dfd.resolve res
@@ -44,18 +34,21 @@ module.exports =
   # @returns: promise
   getUserByUsername: (username) ->
     dfd = q.defer()
-    query = User
-      .filter username: username
-    crudRead query
-      .then (res)->
-        user = res[0]
-        if user
-          trimResponse user, ['password', 'id']
-          dfd.resolve user
-        else
-          dfd.reject msg: 'NO USER FOUND', status: 404
-      .catch (e)->
-        dfd.reject e
+    if !username
+      dfd.reject msg: 'Provide a username', status: 400
+    else
+      query = User
+        .filter username: username
+      crudRead query
+        .then (res)->
+          user = res[0]
+          if user
+            trimResponse user, ['password', 'id']
+            dfd.resolve user
+          else
+            dfd.reject msg: 'NO USER FOUND', status: 404
+        .catch (e)->
+          dfd.reject e
     dfd.promise
 
   ##### getUserByEmail #####
@@ -64,18 +57,21 @@ module.exports =
   # @resolves: object
   getUserByEmail:(email)->
     dfd = q.defer()
-    query = User
-      .filter email: email
-    crudRead query
-      .then (res)->
-        user = res[0]
-        if user
-          trimResponse user, ['password', 'id']
-          dfd.resolve user
-        else
-          dfd.reject msg: 'NO EMAIL FOUND', status: 404
-      .catch (e)->
-        dfd.reject e
+    if !email
+      dfd.reject msg: 'Provide an email', status: 400
+    else
+      query = User
+        .filter email: email
+      crudRead query
+        .then (res)->
+          user = res[0]
+          if user
+            trimResponse user, ['password', 'id']
+            dfd.resolve user
+          else
+            dfd.reject msg: 'NO EMAIL FOUND', status: 404
+        .catch (e)->
+          dfd.reject e
     dfd.promise
 
   ##### getAllUsers #####

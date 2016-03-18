@@ -3,7 +3,6 @@ should = require('chai').should()
 
 {db, pristineUser, app} = require "../../util"
 
-api = supertest app
 {clean, insertDoc, r} = db
 
 
@@ -18,7 +17,7 @@ describe 'userRoutes', ->
     # Assigning response & response body to vars so assertions can be made
     ######
     before (done)->
-      api
+      supertest app
         .post userUrl
         .send pristineUser()
         .end (err, response)->
@@ -36,11 +35,13 @@ describe 'userRoutes', ->
         .then ()->
           done()
 
-    it 'should return 302 and redirect', (done)->
-      res.status.should.equal 302
-      res.headers.location.should.equal '/'
+    it 'should have a 201 status', (done)->
+      res.status.should.equal 201
       done()
 
+    it 'should return a userObj', (done)->
+      newUser.should.be.a 'object'
+      done()
     # describe 'errors', ()->
     #   it 'should reject misformatted users', (done)->
     #     user = pristineUser()
@@ -56,7 +57,7 @@ describe 'userRoutes', ->
     describe 'all', ->
       users = null
       before (done)->
-        api
+        supertest app
           .get userUrl
           .end (err, response)->
             users = response.body
@@ -89,7 +90,7 @@ describe 'userRoutes', ->
             done()
 
       beforeEach (done)->
-        api
+        supertest app
           .get "#{userUrl}/#{newUser.username}"
           .end (err, response)->
             res = response

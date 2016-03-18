@@ -165,9 +165,10 @@ module.exports =
       # Closes the serverInst
       # @params: server -> http.Server object
       # @params: cb -> function
-      close: (cb)->
-        cb = cb || console.log 'Server closing!'
-        @server.close ()->
+      close: (cb)=>
+        # cb = cb || () -> console.log 'Server closing!'
+        @server.close ()=>
+          # delete require.cache[require.resolve("#{script}")]
           @server = undefined
           cb()
       ##### listen #####
@@ -175,7 +176,7 @@ module.exports =
       # @params: custPort -> number
       # @params: cb -> function
       # @returns: http.Server object
-      listen: (custPort, cb)->
+      listen: (custPort, cb)=>
         app = require "#{script}"
         {port} = require "#{__dirname}/../src/server-assets/config/serverConfig"
         @server = app.listen custPort || port, (e)->
@@ -244,5 +245,4 @@ module.exports =
         console.log 'Watchify Updating...'
         bundle watcher, dest
       .on 'log', (log)->
-        console.log 'Watchify Log:'
-        console.log log
+        console.log "Watchify Log: #{log}"

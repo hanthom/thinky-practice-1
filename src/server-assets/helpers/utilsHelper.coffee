@@ -16,7 +16,7 @@ module.exports =
   sendErr: (error, response)->
     response
       .status error.status || 500
-      .send error.msg || error
+      .send error.msg || error.message || error
 
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
