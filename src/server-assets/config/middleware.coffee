@@ -3,15 +3,19 @@ express       = require 'express'
 cors          = require 'cors'
 passport      = require 'passport'
 session       = require 'express-session'
-sessionSecret = require "#{__dirname}/secrets"
 authCtrl      = require "#{__dirname}/../controllers/authCtrl"
 
 {User}        = require "#{__dirname}/../models/models"
 {logger, port}      = require "#{__dirname}/serverConfig"
 {localLogin, localSignup}  = authCtrl
+sessionSecret = process.env.SESSION_SECRET
+if process.env.NODE_ENV is 'development'
+  sessionSecret = require "#{__dirname}/secrets"
 
 corsOpts =
   origin: "http://localhost:#{port}"
+
+
 
 module.exports = (app)->
 
