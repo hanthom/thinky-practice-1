@@ -7,11 +7,11 @@ sessionSecret = require "#{__dirname}/secrets"
 authCtrl      = require "#{__dirname}/../controllers/authCtrl"
 
 {User}        = require "#{__dirname}/../models/models"
-{logger}      = require "#{__dirname}/serverConfig"
-{localLogin}  = authCtrl
+{logger, port}      = require "#{__dirname}/serverConfig"
+{localLogin, localSignup}  = authCtrl
 
 corsOpts =
-  origin: 'http://localhost:9999'
+  origin: "http://localhost:#{port}"
 
 module.exports = (app)->
 
@@ -34,3 +34,4 @@ module.exports = (app)->
         done err, false
 
   passport.use 'localLogin', localLogin
+  passport.use 'localSignup', localSignup

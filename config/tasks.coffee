@@ -95,7 +95,6 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
 
-
   ##### jade #####
   # Compiles JADE into HTML
   # Uses 'prettify' to make HTML readable
@@ -116,16 +115,6 @@ module.exports =
     {src, dest} = fixPath src, dest
     gulp.src src
       .pipe gulp.dest dest
-
-  ##### nodemon #####
-  # Runs nodemon with provided script
-  # Delays restart by half second to handle for async tasks
-  nodemon: (script)->
-    nodemon = require 'gulp-nodemon'
-    script = addBase script
-    nodemon
-      script: script
-      delay: 500
 
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
@@ -166,6 +155,37 @@ module.exports =
       file: path
       vars: overWrites
 
+  ##### serverRunner #####
+  # Exports fns to start and stop server
+  # @returns: object
+  serverRunner: (script)->
+    script = addBase script
+    {
+      ##### close #####
+      # Closes the serverInst
+      # @params: server -> http.Server object
+      # @params: cb -> function
+      close: (cb)->
+        cb = cb || console.log 'Server closing!'
+        @server.close ()->
+          @server = undefined
+          cb()
+      ##### listen #####
+      # Spins up a server with the given port, calls the cb when listening
+      # @params: custPort -> number
+      # @params: cb -> function
+      # @returns: http.Server object
+      listen: (custPort, cb)->
+        app = require "#{script}"
+        {port} = require "#{__dirname}/../src/server-assets/config/serverConfig"
+        @server = app.listen custPort || port, (e)->
+          if e
+            console.log "ERROR LISTENING ON PORT #{port}", e
+          else
+            console.log "SERVER SPUN UP ON PORT #{port}"
+          if cb then cb()
+      server: undefined
+    }
   ##### stylus #####
   # Compiles Stylus into css
   stylus: (src, dest) ->
@@ -207,8 +227,8 @@ module.exports =
   # @params: cb -> function
   watch: (path, cb)->
     {src} = fixPath path
-    console.log "Should be watching #{src}"
     gulp.watch src, cb
+
 
   ##### watchify #####
   # Description

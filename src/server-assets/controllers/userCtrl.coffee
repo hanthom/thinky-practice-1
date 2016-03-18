@@ -11,7 +11,7 @@ crudHelper = require "#{__dirname}/../helpers/crudHelper"
 module.exports =
 
 ################################################################################
-#                           USER ENDPOINTS FUNCTIONS                           #
+#                          USER ENDPOINT FUNCTIONS                             #
 ################################################################################
 
 
@@ -22,20 +22,20 @@ module.exports =
   createUser: (user) ->
     console.log "USER >>> ", user
     dfd = q.defer()
-    module.exports.getUserByUsername user.username
+    # module.exports.getUserByUsername user.username
+    # .then (res) ->
+    #   console.log "RES FROM getUserByUsername >>> ", res
+    #   dfd.reject msg: "Username Exists", status: 403
+    # .catch (err) ->
+    #   module.exports.getUserByEmail user.email
+    #   .then (res) ->
+    #     dfd.reject msg: "Email Exists", status: 403
+    #   .catch (err) ->
+    crudCreate User, user
     .then (res) ->
-      console.log "RES FROM getUserByUsername >>> ", res
-      dfd.reject msg: "Username Exists", status: 403
+      dfd.resolve res
     .catch (err) ->
-      module.exports.getUserByEmail user.email
-      .then (res) ->
-        dfd.reject msg: "Email Exists", status: 403
-      .catch (err) ->
-        crudCreate User, user
-        .then (res) ->
-          dfd.resolve res
-        .catch (err) ->
-          dfd.reject msg: "Welp, this is awkward", status: 418
+      dfd.reject msg: "Welp, this is awkward", status: 418
     dfd.promise
 
   ##### getUserByUsername #####
@@ -43,7 +43,6 @@ module.exports =
   # @params: string
   # @returns: promise
   getUserByUsername: (username) ->
-    console.log "USERNAME >>> ", username
     dfd = q.defer()
     query = User
       .filter username: username
@@ -62,7 +61,7 @@ module.exports =
   ##### getUserByEmail #####
   # Gets user by email
   # @params: string
-  # @returns: promise
+  # @resolves: object
   getUserByEmail:(email)->
     dfd = q.defer()
     query = User
@@ -72,7 +71,6 @@ module.exports =
         user = res[0]
         if user
           trimResponse user, ['password', 'id']
-          console.log user
           dfd.resolve user
         else
           dfd.reject msg: 'NO EMAIL FOUND', status: 404
@@ -109,7 +107,7 @@ module.exports =
   # Deletes user permanently
   # @params: string
   # @returns: promise
-  deleteUser : (id)->
+  deleteUser: (id)->
     crudDelete User, id
 
 ################################################################################
@@ -127,7 +125,6 @@ module.exports =
     crudRead query
       .then (res) ->
         user = res[0]
-        trimResponse user, ['id', 'email', 'createdAt']
         dfd.resolve user.password
       .catch (err) ->
         dfd.reject msg: 'NO USER FOUND', status: 404

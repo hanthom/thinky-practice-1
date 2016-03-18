@@ -1,8 +1,8 @@
 gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
-{browserify, coffee, coffeelint, jade, nodemon} = tasks
-{setEnv, setup, stylus, test, tunnel, watchify, watch} = tasks
+{browserify, coffee, coffeelint, jade} = tasks
+{setEnv, setup, serverRunner, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
 # Place to store paths that will be used again
@@ -36,33 +36,26 @@ paths =
 
 gulp.task 'default', (cb)->
   runSequence 'setup'
-    , ['tunnel', 'build',]
-    , ['watchify', 'nodemon', 'watch']
+    , ['tunnel', 'build']
+    , 'server:start'
+    , ['watchify', 'watch']
     , 'test'
     , cb
-
-gulp.task 'build-dev', (cb)->
-  setEnv paths.env, NODE_ENV: "development"
 
 gulp.task 'build', (cb)->
   runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
 
-gulp.task 'browserify', () ->
+gulp.task 'browserify', ->
   browserify paths.bundle.root, paths.bundle.dest
 
-gulp.task 'coffeelint', ()->
+gulp.task 'coffeelint', ->
   coffeelint paths.coffee.compile
 
-gulp.task 'coffee', ()->
+gulp.task 'coffee', ->
   coffee paths.coffee.compile, 'build'
 
-gulp.task 'jade', () ->
+gulp.task 'jade', ->
   jade paths.jade.compile, 'build'
-
-gulp.task 'nodemon', ()->
-  nodemon paths.server
-    .on 'start', ()->
-      runSequence 'test'
 
 gulp.task 'setup', (done)->
 
@@ -94,22 +87,41 @@ gulp.task 'setup', (done)->
     setEnv paths.env, overwrites
     done()
 
-gulp.task 'stylus', () ->
+{close, listen} = serverRunner paths.server
+gulp.task 'server:start', ->
+  listen()
+
+gulp.task 'server:restart', ->
+  close ->
+    listen()
+
+gulp.task 'server:close', ->
+  close()
+
+gulp.task 'stylus', ->
   stylus paths.stylus.compile, 'build'
 
-gulp.task 'test', () ->
+gulp.task 'test', ->
   test paths.test.src, 'nyan'
 
-gulp.task 'tunnel', ()->
+gulp.task 'tunnel', ->
+  ######
+  # This gets called after setup task has run.
+  # Will need to accomodate for potential overwites due to 'setEnv'
+  # getting called twice
+  ######
   setEnv paths.env
   tunnel()
 
-gulp.task 'watch', ()->
-  watch paths.coffee.all, ()->
-    runSequence 'coffeelint', 'coffee'
-  watch paths.jade.all, ['jade']
-  watch paths.stylus.all, ['stylus']
-  watch paths.test.src, ['test']
+gulp.task 'watch', ->
+  watch paths.coffee.all, ->
+    runSequence 'coffeelint', 'coffee', 'test', 'server:restart'
+  watch paths.jade.all, ->
+    runSequence 'jade', 'server:restart'
+  watch paths.stylus.all,
+    runSequence 'stylus', 'server:restart'
+  watch paths.test.src, ->
+    runSequence 'test'
 
-gulp.task 'watchify', () ->
+gulp.task 'watchify', ->
   watchify './build/client/js/app.js', './build/client/'
