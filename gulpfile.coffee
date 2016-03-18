@@ -66,7 +66,6 @@ gulp.task 'setup', (done)->
         switch task
           when 'DB' then overwrites.WATCH_DB = true
           when 'Server' then overwrites.WATCH_SERVER = true
-          when 'Test' then overwrites.RUN_TESTS = true
     if answerObj.tests.length
       ######
       # Only turn tests on if files are selected
@@ -88,15 +87,16 @@ gulp.task 'setup', (done)->
     done()
 
 {close, listen} = serverRunner paths.server
-gulp.task 'server:start', ->
-  listen()
+gulp.task 'server:start', (done)->
+  listen undefined, done
 
 gulp.task 'server:restart', ->
   close ->
     listen()
 
-gulp.task 'server:close', ->
-  close()
+gulp.task 'server:close', (done)->
+  close ->
+    done()
 
 gulp.task 'stylus', ->
   stylus paths.stylus.compile, 'build'
@@ -107,7 +107,7 @@ gulp.task 'test', ->
 gulp.task 'tunnel', ->
   ######
   # This gets called after setup task has run.
-  # Will need to accomodate for potential overwites due to 'setEnv'
+  # We'll need to accomodate for potential overwites due to 'setEnv'
   # getting called twice
   ######
   setEnv paths.env
@@ -115,11 +115,11 @@ gulp.task 'tunnel', ->
 
 gulp.task 'watch', ->
   watch paths.coffee.all, ->
-    runSequence 'coffeelint', 'coffee', 'test', 'server:restart'
+    runSequence 'server:close', 'coffeelint', 'coffee', 'test', 'server:start'
   watch paths.jade.all, ->
-    runSequence 'jade', 'server:restart'
-  watch paths.stylus.all,
-    runSequence 'stylus', 'server:restart'
+    runSequence 'server:close', 'jade', 'server:start'
+  watch paths.stylus.all, ->
+    runSequence 'server:close', 'stylus', 'server:start'
   watch paths.test.src, ->
     runSequence 'test'
 

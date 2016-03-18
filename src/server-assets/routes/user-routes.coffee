@@ -3,7 +3,6 @@ userCtrl = require "#{__dirname}/../controllers/userCtrl"
 {createUser, getUserByUsername, getUserByEmail} = userCtrl
 {getUsers, updateUser, deleteUser} = userCtrl
 {sendErr} = require "#{__dirname}/../helpers/utilsHelper"
-
 module.exports = (app) ->
 
   app.route '/api/users/:username'
@@ -27,10 +26,19 @@ module.exports = (app) ->
           sendErr err, res
 
   app.route '/api/users'
-    .post passport.authenticate 'localSignup',
-      successRedirect: '/'
-      failureRedirect: '/'
-      failureFlash: true
+    .post (req, res, next)->
+      passport.authenticate('localSignup', (err, user, info)->
+        if err then sendErr err, res
+        if info
+          if !info.status
+            info.status = 400
+          sendErr info, res
+        if user
+          res
+            .status 201
+            .send user
+      )(req, res, next)
+
     .get (req, res)->
       getUsers()
         .then (users)->

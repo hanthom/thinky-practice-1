@@ -13,16 +13,17 @@ module.exports =
     req.logout()
     next()
   ######
-  # Calls createUser after checking that email and username are valid.
+  # Calls createUser after checking that email and username are unclaimed.
   ######
   localSignup: new LocalStrategy
     passReqToCallback: true,
     (req, username, password, done)->
       newUser = req.body
       userCtrl.getUserByUsername username
-        .then (user)->
-          if user
-            done null, false, {message: "'#{username}' is already taken"}
+        .then (user1)->
+          console.log 'USER 1'
+          if user1
+            done null, false, msg: 'username', status: 400
         .catch (e)->
           if e.status is 404
             ######
@@ -31,7 +32,7 @@ module.exports =
             userCtrl.getUserByEmail newUser.email
               .then (user)->
                 if user
-                  done null, false, {message: "'#{newUser.email}' is taken"}
+                  done null, false,  msg: 'email', status: 400
               .catch (e)->
                 if e.status is 404
                   ######
@@ -40,6 +41,8 @@ module.exports =
                   userCtrl.createUser newUser
                     .then (user)->
                       done null, user
+                    .catch (e)->
+                      done e, false
                 else
                   done e, false
           else
@@ -50,14 +53,14 @@ module.exports =
   ######
   localLogin: new LocalStrategy (username, password, done) ->
     getUserByUsername username
-    .then (res) ->
-      if !bcrypt.compareSync password, res
-        console.log "Failed Password"
-        done null, false, {message: 'Invalid password'}
-      else
-        done null, res
-    .catch (err) ->
-      if err.status is 404
-        done null, false, {message: 'Wrong username'}
-      else
-        done err, false, {message: 'Server Error'}
+      .then (res) ->
+        if !bcrypt.compareSync password, res
+          console.log "Failed Password"
+          done null, false, 'Invalid password'
+        else
+          done null, res
+      .catch (err) ->
+        if err.status is 404
+          done null, false, 'Wrong username'
+        else
+          done err, false, 'Server Error'
