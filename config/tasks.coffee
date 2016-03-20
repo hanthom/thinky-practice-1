@@ -116,6 +116,14 @@ module.exports =
     gulp.src src
       .pipe gulp.dest dest
 
+  ##### nodemon #####
+  # Runs nodemon with the given script
+  nodemon: (script)->
+    script = addBase script
+    nodemon = require 'gulp-nodemon'
+    nodemon
+      script: script
+      delay: 1000
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
   setup: (cb)->
@@ -217,6 +225,7 @@ module.exports =
           @emit 'end'
     else
       console.log 'MOCHA >>>> TESTS TURNED OFF'
+      
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object

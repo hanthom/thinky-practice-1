@@ -1,7 +1,7 @@
 gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
-{browserify, coffee, coffeelint, jade} = tasks
+{browserify, coffee, coffeelint, jade, nodemon} = tasks
 {setEnv, setup, serverRunner, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
@@ -37,8 +37,7 @@ paths =
 gulp.task 'default', (cb)->
   runSequence 'setup'
     , ['tunnel', 'build']
-    , 'server:start'
-    , ['watchify', 'watch']
+    , ['nodemon','watchify', 'watch']
     , 'test'
     , cb
 
@@ -56,6 +55,9 @@ gulp.task 'coffee', ->
 
 gulp.task 'jade', ->
   jade paths.jade.compile, 'build'
+
+gulp.task 'nodemon', ->
+  nodemon paths.server
 
 gulp.task 'setup', (done)->
 
@@ -115,11 +117,11 @@ gulp.task 'tunnel', ->
 
 gulp.task 'watch', ->
   watch paths.coffee.all, ->
-    runSequence 'server:close', 'coffeelint', 'coffee', 'test', 'server:start'
+    runSequence 'coffeelint', 'coffee', 'test'
   watch paths.jade.all, ->
-    runSequence 'server:close', 'jade', 'server:start'
+    runSequence 'jade'
   watch paths.stylus.all, ->
-    runSequence 'server:close', 'stylus', 'server:start'
+    runSequence 'stylus'
   watch paths.test.src, ->
     runSequence 'test'
 
