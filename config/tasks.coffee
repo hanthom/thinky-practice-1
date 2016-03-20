@@ -95,6 +95,16 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
 
+  ##### nodemon #####
+  # Runs nodemon with the given script
+  nodemon: (script)->
+    script = addBase script
+    nodemon = require 'gulp-nodemon'
+    nodemon
+      script: script
+      delay: 1000
+      exec: 'node --debug'
+
   ##### jade #####
   # Compiles JADE into HTML
   # Uses 'prettify' to make HTML readable
@@ -115,16 +125,6 @@ module.exports =
     {src, dest} = fixPath src, dest
     gulp.src src
       .pipe gulp.dest dest
-
-  ##### nodemon #####
-  # Runs nodemon with the given script
-  nodemon: (script)->
-    script = addBase script
-    nodemon = require 'gulp-nodemon'
-    nodemon
-      script: script
-      delay: 1000
-      exec: 'node --debug'
 
   ##### debug #####
   # Runs node-inspector on the given script
