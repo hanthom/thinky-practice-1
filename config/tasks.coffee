@@ -73,12 +73,15 @@ module.exports =
   # Compiles coffeescript files to js
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
+    sourcemaps = require 'gulp-sourcemaps'
     {src, dest} = fixPath src, dest
     stream = gulp.src src
     if process.env.NODE_ENV is 'development'
       stream = devStream stream, dest
     stream
+      .pipe sourcemaps.init()
       .pipe coffee()
+      .pipe sourcemaps.write()
       .on 'error', (e)->
         console.log "COFFEE ERROR >>>> #{e.message}"
         this.emit 'end'
@@ -94,6 +97,16 @@ module.exports =
     gulp.src src
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
+
+  ##### nodemon #####
+  # Runs nodemon with the given script
+  nodemon: (script)->
+    script = addBase script
+    nodemon = require 'gulp-nodemon'
+    nodemon
+      script: script
+      delay: 1000
+      exec: 'node --debug'
 
   ##### jade #####
   # Compiles JADE into HTML
@@ -116,14 +129,17 @@ module.exports =
     gulp.src src
       .pipe gulp.dest dest
 
-  ##### nodemon #####
-  # Runs nodemon with the given script
-  nodemon: (script)->
+  ##### debug #####
+  # Runs node-inspector on the given script
+  debug: (script)->
+    inspector = require 'gulp-node-inspector'
     script = addBase script
-    nodemon = require 'gulp-nodemon'
-    nodemon
-      script: script
-      delay: 1000
+    gulp.src script
+      .pipe inspector
+        webPort: process.env.EXPRESS_PORT
+
+
+
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
   setup: (cb)->
@@ -225,7 +241,7 @@ module.exports =
           @emit 'end'
     else
       console.log 'MOCHA >>>> TESTS TURNED OFF'
-      
+
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
