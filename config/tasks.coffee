@@ -1,5 +1,6 @@
 gulp = require 'gulp'
 {exec} = require 'child_process'
+sourcemaps = require 'gulp-sourcemaps'
 
 ######
 # All @params will be strings unless specified
