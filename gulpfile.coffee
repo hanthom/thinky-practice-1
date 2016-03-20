@@ -37,8 +37,8 @@ paths =
 gulp.task 'default', (cb)->
   runSequence 'setup'
     , ['tunnel', 'build']
-    , ['debug','nodemon','watchify', 'watch']
     , 'test'
+    , ['debug','nodemon','watchify', 'watch']
     , cb
 
 gulp.task 'build', (cb)->
