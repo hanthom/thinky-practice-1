@@ -73,12 +73,15 @@ module.exports =
   # Compiles coffeescript files to js
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
+    sourcemaps = require 'gulp-sourcemaps'
     {src, dest} = fixPath src, dest
     stream = gulp.src src
     if process.env.NODE_ENV is 'development'
       stream = devStream stream, dest
     stream
+      .pipe sourcemaps.init()
       .pipe coffee()
+      .pipe sourcemaps.write()
       .on 'error', (e)->
         console.log "COFFEE ERROR >>>> #{e.message}"
         this.emit 'end'
