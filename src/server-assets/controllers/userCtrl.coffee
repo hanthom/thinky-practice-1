@@ -2,10 +2,10 @@ q          = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
 {User}                    = require '../models/models'
-{db}                      = require "#{__dirname}/../config/dbConfig"
+{db, r}                      = require "#{__dirname}/../config/dbConfig"
 {handleErr, trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
 
-{r} = db
+
 {crudCreate, crudRead, crudUpdate, crudDelete} = crudHelper
 
 module.exports =
