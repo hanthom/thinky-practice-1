@@ -3,7 +3,7 @@ path = "#{__dirname}/../build/"
 {db} = require "#{path}server-assets/config/dbConfig"
 {r} = db
 module.exports =
-  app: require "#{path}server-assets/server"
+  app: require "#{path}server-assets/app"
   db:
     clean: (table)->
       dfd = q.defer()

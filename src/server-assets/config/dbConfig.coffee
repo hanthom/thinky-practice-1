@@ -14,4 +14,4 @@ db = thinky opts
 module.exports =
   config: opts
   db: db
-  r: r
+  r: db.r
