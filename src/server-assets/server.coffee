@@ -5,4 +5,5 @@ server = app.listen port, (e)->
   if e
     console.log "ERROR LISTENING ON PORT #{port}", e
   else
+    debugger
     console.log "SERVER SPUN UP ON PORT #{port}"

@@ -124,6 +124,19 @@ module.exports =
     nodemon
       script: script
       delay: 1000
+      exec: 'node --debug'
+
+  ##### debug #####
+  # Runs node-inspector on the given script
+  debug: (script)->
+    inspector = require 'gulp-node-inspector'
+    script = addBase script
+    gulp.src script
+      .pipe inspector
+        webPort: process.env.EXPRESS_PORT
+
+
+
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
   setup: (cb)->
@@ -225,7 +238,7 @@ module.exports =
           @emit 'end'
     else
       console.log 'MOCHA >>>> TESTS TURNED OFF'
-      
+
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
