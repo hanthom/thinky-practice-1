@@ -1,5 +1,5 @@
 {
-  "name": "chip-thinky-practice",
+  "name": "starter-repo",
   "description": "Practice with dev flow on hosted services",
   "scripts": {
   },
@@ -17,6 +17,9 @@
       "required": true
     },
     "DB_NAME":{
+      "required": true
+    },
+    "SESSION_SECRET": {
       "required": true
     }
   },

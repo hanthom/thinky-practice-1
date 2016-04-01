@@ -1,17 +1,8 @@
-express = require 'express'
-{port} = require "#{__dirname}/config/serverConfig"
+app = require "#{__dirname}/app"
+port = require("#{__dirname}/config/serverConfig").port
 
-app = express()
-app.listen port, (e)->
+server = app.listen port, (e)->
   if e
-    console.log "SPIN UP ERROR >>>> #{e.message}"
+    console.log "ERROR LISTENING ON PORT #{port}", e
   else
     console.log "SERVER SPUN UP ON PORT #{port}"
-
-# Passes the app to the middleware and routes.
-# These files export a function that expects the express app as an argument.
-require("#{__dirname}/config/middleware") app
-require("#{__dirname}/routes/todo-routes") app
-require("#{__dirname}/routes/user-routes") app
-
-module.exports = app

@@ -1,5 +1,5 @@
-{db} = require "#{__dirname}/../config/dbConfig"
-{type, r} = db
+{db, r} = require "#{__dirname}/../config/dbConfig"
+{type} = db
 
 #---------#
 # Creates Todo model with given object

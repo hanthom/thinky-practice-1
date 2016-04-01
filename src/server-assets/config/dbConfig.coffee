@@ -4,13 +4,14 @@
 thinky = require 'thinky'
 
 opts =
+  authKey: process.env.SSH_TUNNEL_AUTHKEY
   db: process.env.DB_NAME
   host: process.env.DB_HOST
   port: process.env.DB_PORT
-  authKey: process.env.SSH_TUNNEL_AUTHKEY
 
 db = thinky opts
 
 module.exports =
-  db: db
   config: opts
+  db: db
+  r: db.r

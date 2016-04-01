@@ -1,27 +1,16 @@
-q = require 'q'
 url = '/api/auth'
+
 new class AuthService
-  constructor: ($http, $q)->
-    @login = (credentials)->
-      $http
-        method: 'POST'
-        url: "#{url}/local"
-        data: credentials
-    @getAuth = ()->
+  constructor: ($http, $q) ->
+    @localLogin = (user) ->
       dfd = $q.defer()
       $http
-        .get 'api/user'
-        .then (res)->
-          console.log 'Response getting user', res
-          if res.data is '0'
-            msg = 'Invalid username.'
-            console.log msg
-            dfd.reject msg
-          else
-            dfd.resolve res.data
+        .post "#{url}/local", user
+        .then (res) ->
+          console.log "response from server >>>", $q.resolve res
+          dfd.resolve res
+        .catch (err) ->
+          dfd.reject err
       dfd.promise
-    @logout = ()->
-      $http
-        .get "#{url}/logout"
 
 module.exports = AuthService

@@ -1,9 +1,9 @@
-faker = require 'faker'
 q = require 'q'
-src = "#{__dirname}/../src/server-assets/"
-{db} = require "#{src}config/dbConfig"
+path = "#{__dirname}/../build/"
+{db} = require "#{path}server-assets/config/dbConfig"
 {r} = db
 module.exports =
+  app: require "#{path}server-assets/app"
   db:
     clean: (table)->
       dfd = q.defer()
@@ -14,17 +14,17 @@ module.exports =
           console.log 'DB cleaned'
           dfd.resolve()
       dfd.promise
-
     insertDoc: (model, insert)->
       dfd = q.defer()
       new model insert
         .save()
-        .then ()->
+        .then ->
           dfd.resolve()
       dfd.promise
-
     r: r
-  pristineUser: ()->
+
+  pristineUser: ->
+    faker = require 'faker'
     newUser =
       password: 'test'
       test: true

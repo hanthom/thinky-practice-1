@@ -1,5 +1,6 @@
 gulp = require 'gulp'
 {exec} = require 'child_process'
+sourcemaps = require 'gulp-sourcemaps'
 
 ######
 # All @params will be strings unless specified
@@ -73,12 +74,15 @@ module.exports =
   # Compiles coffeescript files to js
   coffee: (src, dest)->
     coffee = require 'gulp-coffee'
+    sourcemaps = require 'gulp-sourcemaps'
     {src, dest} = fixPath src, dest
     stream = gulp.src src
     if process.env.NODE_ENV is 'development'
       stream = devStream stream, dest
     stream
+      .pipe sourcemaps.init()
       .pipe coffee()
+      .pipe sourcemaps.write()
       .on 'error', (e)->
         console.log "COFFEE ERROR >>>> #{e.message}"
         this.emit 'end'
@@ -95,6 +99,15 @@ module.exports =
       .pipe coffeelint()
       .pipe coffeelint.reporter 'coffeelint-stylish'
 
+  ##### nodemon #####
+  # Runs nodemon with the given script
+  nodemon: (script)->
+    script = addBase script
+    nodemon = require 'gulp-nodemon'
+    nodemon
+      script: script
+      delay: 1000
+      exec: 'node --debug'
 
   ##### jade #####
   # Compiles JADE into HTML
@@ -117,15 +130,16 @@ module.exports =
     gulp.src src
       .pipe gulp.dest dest
 
-  ##### nodemon #####
-  # Runs nodemon with provided script
-  # Delays restart by half second to handle for async tasks
-  nodemon: (script)->
-    nodemon = require 'gulp-nodemon'
+  ##### debug #####
+  # Runs node-inspector on the given script
+  debug: (script)->
+    inspector = require 'gulp-node-inspector'
     script = addBase script
-    nodemon
-      script: script
-      delay: 500
+    gulp.src script
+      .pipe inspector
+        webPort: process.env.EXPRESS_PORT
+
+
 
   ##### setup #####
   # Sets up the env based on user inputs using inquirer
@@ -166,6 +180,38 @@ module.exports =
       file: path
       vars: overWrites
 
+  ##### serverRunner #####
+  # Exports fns to start and stop server
+  # @returns: object
+  serverRunner: (script)->
+    script = addBase script
+    {
+      ##### close #####
+      # Closes the serverInst
+      # @params: server -> http.Server object
+      # @params: cb -> function
+      close: (cb)=>
+        # cb = cb || () -> console.log 'Server closing!'
+        @server.close ()=>
+          # delete require.cache[require.resolve("#{script}")]
+          @server = undefined
+          cb()
+      ##### listen #####
+      # Spins up a server with the given port, calls the cb when listening
+      # @params: custPort -> number
+      # @params: cb -> function
+      # @returns: http.Server object
+      listen: (custPort, cb)=>
+        app = require "#{script}"
+        {port} = require "#{__dirname}/../src/server-assets/config/serverConfig"
+        @server = app.listen custPort || port, (e)->
+          if e
+            console.log "ERROR LISTENING ON PORT #{port}", e
+          else
+            console.log "SERVER SPUN UP ON PORT #{port}"
+          if cb then cb()
+      server: undefined
+    }
   ##### stylus #####
   # Compiles Stylus into css
   stylus: (src, dest) ->
@@ -196,6 +242,7 @@ module.exports =
           @emit 'end'
     else
       console.log 'MOCHA >>>> TESTS TURNED OFF'
+
   ##### tunnel #####
   # Digs an SSH tunnel to Compose.io DB instance
   # @params: tunnelEnv -> object
@@ -207,8 +254,8 @@ module.exports =
   # @params: cb -> function
   watch: (path, cb)->
     {src} = fixPath path
-    console.log "Should be watching #{src}"
     gulp.watch src, cb
+
 
   ##### watchify #####
   # Description
@@ -224,5 +271,4 @@ module.exports =
         console.log 'Watchify Updating...'
         bundle watcher, dest
       .on 'log', (log)->
-        console.log 'Watchify Log:'
-        console.log log
+        console.log "Watchify Log: #{log}"

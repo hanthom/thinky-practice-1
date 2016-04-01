@@ -1,18 +1,23 @@
 supertest = require 'supertest'
 should = require('chai').should()
 
-{db, pristineUser} = require "../../util"
+{db, pristineUser, app} = require "../../util"
+
 {clean, insertDoc, r} = db
 
-api = supertest "#{process.env.EXPRESS_HOST}:#{process.env.EXPRESS_PORT}"
+
 userUrl = '/api/users'
 
-describe 'userRoutes', ()->
-  describe 'post', ()->
+describe 'userRoutes', ->
+  describe 'post', ->
     res = {}
     newUser = {}
+    ######
+    # Making a post request before all of the 'it' block assertions
+    # Assigning response & response body to vars so assertions can be made
+    ######
     before (done)->
-      api
+      supertest app
         .post userUrl
         .send pristineUser()
         .end (err, response)->
@@ -22,25 +27,21 @@ describe 'userRoutes', ()->
             res = response
           done()
 
+    ######
+    # After all the asertions are complete we clean up the db
+    ######
     after (done)->
       clean 'User'
         .then ()->
           done()
 
-    it 'should return 201', (done)->
+    it 'should have a 201 status', (done)->
       res.status.should.equal 201
       done()
 
-    it 'should return username', (done)->
-      newUser.should.have.property 'username'
+    it 'should return a userObj', (done)->
+      newUser.should.be.a 'object'
       done()
-
-    it 'should not return password, email, nor id', (done)->
-      newUser.should.not.have.property 'password'
-      newUser.should.not.have.property 'email'
-      newUser.should.not.have.property 'id'
-      done()
-
     # describe 'errors', ()->
     #   it 'should reject misformatted users', (done)->
     #     user = pristineUser()
@@ -52,11 +53,11 @@ describe 'userRoutes', ()->
     #         console.log 'TEST ERROR >>>> ', err
     #         done()
 
-  describe 'get', ()->
-    describe 'all', ()->
+  describe 'get', ->
+    describe 'all', ->
       users = null
       before (done)->
-        api
+        supertest app
           .get userUrl
           .end (err, response)->
             users = response.body
@@ -73,7 +74,7 @@ describe 'userRoutes', ()->
           user.should.not.have.property 'id'
         done()
 
-    describe 'one', ()->
+    describe 'one', ->
       {User} = require "#{__dirname}/../../../src/server-assets/models/models"
       fetchedUser = null
       res = null
@@ -89,11 +90,10 @@ describe 'userRoutes', ()->
             done()
 
       beforeEach (done)->
-        api
+        supertest app
           .get "#{userUrl}/#{newUser.username}"
           .end (err, response)->
             res = response
-            console.log 'res.body', res.body
             fetchedUser = res.body
             done()
 

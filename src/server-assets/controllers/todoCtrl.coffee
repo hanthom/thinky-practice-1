@@ -2,8 +2,8 @@ q = require 'q'
 crudHelper = require "#{__dirname}/../helpers/crudHelper"
 
 {Todo} = require '../models/models'
-{db} = require "#{__dirname}/../config/dbConfig"
-{r} = db
+{db, r} = require "#{__dirname}/../config/dbConfig"
+
 {crudCreate, crudRead, crudUpdate, crudDelete} = crudHelper
 
 module.exports =
