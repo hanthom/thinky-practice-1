@@ -30,8 +30,8 @@ services:
     expose:
       - 10101
       - 9999
-    # links:
-    #   - util
+    links:
+      - util
       # - db
       # - users
   util:

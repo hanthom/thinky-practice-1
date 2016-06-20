@@ -15,5 +15,6 @@ server = app.listen port, (e)->
       role: 'util'
       cmd: 'log'
       type: 'general'
+      service: 'web'
       message: "Express server started on port #{port}"
     act logOpts, 'util'
