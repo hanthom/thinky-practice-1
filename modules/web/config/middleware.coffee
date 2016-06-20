@@ -1,28 +1,25 @@
-bodyParser    = require 'body-parser'
-express       = require 'express'
-cors          = require 'cors'
-passport      = require 'passport'
-session       = require 'express-session'
-authCtrl      = require "#{__dirname}/../controllers/authCtrl"
+bodyParser = require 'body-parser'
+express = require 'express'
+cors = require 'cors'
+passport = require 'passport'
+session = require 'express-session'
 
-{User}        = require "#{__dirname}/../models/models"
-{logger, port}      = require "#{__dirname}/serverConfig"
-{localLogin, localSignup}  = authCtrl
-sessionSecret = process.env.SESSION_SECRET
-if process.env.NODE_ENV is 'development'
-  sessionSecret = require "#{__dirname}/secrets"
+{logger, port} = require "#{__dirname}/server_config"
+{localLogin, localSignup} = require "#{__dirname}/passport_config"
 
 corsOpts =
   origin: "http://localhost:#{port}"
-
-
 
 module.exports = (app)->
 
   app.use express.static "#{__dirname}/../../client"
   app.use bodyParser.json()
   app.use cors corsOpts
-  app.use session sessionSecret
+  app.use session
+    secret: process.env.SESSION_SECRET
+    resave: false
+    saveUninitialized: false
+
   app.use passport.initialize()
   app.use passport.session()
   app.use logger

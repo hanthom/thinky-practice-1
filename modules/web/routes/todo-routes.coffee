@@ -1,13 +1,3 @@
-todoCtrl = require "#{__dirname}/../controllers/todoCtrl"
-{getOneTodo, getAllTodos, addTodo, editTodo, deleteTodo} = todoCtrl
-
-# {handleErr} = require "#{__dirname}/../helpers/utilsHelpers"
-
-handleErr = (e, res)->
-  res
-    .status 500
-    .send e
-
 ######
 # Calls appropriate controller methods with required arguements
 # Handles resolves and handleErr calls

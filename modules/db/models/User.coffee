@@ -1,6 +1,6 @@
-{db, r} = require "#{__dirname}/../config/dbConfig"
+bcrypt = require 'bcrypt'
+{db, r} = require "#{__dirname}/../dbConfig"
 {type} = db
-{trimResponse} = require "#{__dirname}/../helpers/utilsHelper"
 
 ##### User Model #####
 # Schema for User
@@ -21,7 +21,6 @@ User.ensureIndex 'username'
 # @params: string, func
 # @returns: func
 User.pre 'save', (next) ->
-  bcrypt = require 'bcrypt'
   @username = @username.toLowerCase()
   @password = bcrypt.hashSync @password, 12
   # @validation.validated = false

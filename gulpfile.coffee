@@ -1,7 +1,7 @@
 gulp = require 'gulp'
 runSequence = require 'run-sequence'
 tasks = require "#{__dirname}/config/tasks"
-{browserify, coffee, coffeelint, debug, jade, nodemon} = tasks
+{browserify, coffee, coffeelint, debug, pug, nodemon} = tasks
 {setEnv, setup, serverRunner, stylus, test, tunnel, watchify, watch} = tasks
 
 ######
@@ -11,9 +11,9 @@ paths =
     root: 'build/client/js/app.js'
     dest: 'build/client'
   env: '.env.json'
-  jade:
-    compile: 'src/**/*.jade'
-    all: ['src/**/*.jade']
+  pug:
+    compile: 'src/**/*.pug'
+    all: ['src/**/*.pug']
   server: 'build/server-assets/server.js'
   stylus:
     compile: 'src/**/**/*.styl'
@@ -42,7 +42,7 @@ gulp.task 'default', (cb)->
     , cb
 
 gulp.task 'build', (cb)->
-  runSequence ['jade', 'stylus', 'coffee'], 'browserify', cb
+  runSequence ['pug', 'stylus', 'coffee'], 'browserify', cb
 
 gulp.task 'browserify', ->
   browserify paths.bundle.root, paths.bundle.dest
@@ -56,8 +56,8 @@ gulp.task 'coffee', ->
 gulp.task 'debug', ->
   debug paths.server
 
-gulp.task 'jade', ->
-  jade paths.jade.compile, 'build'
+gulp.task 'pug', ->
+  pug paths.pug.compile, 'build'
 
 gulp.task 'nodemon', ->
   nodemon paths.server
@@ -121,8 +121,8 @@ gulp.task 'tunnel', ->
 gulp.task 'watch', ->
   watch paths.coffee.all, ->
     runSequence 'coffeelint', 'coffee', 'test'
-  watch paths.jade.all, ->
-    runSequence 'jade'
+  watch paths.pug.all, ->
+    runSequence 'pug'
   watch paths.stylus.all, ->
     runSequence 'stylus'
   watch paths.test.src, ->
