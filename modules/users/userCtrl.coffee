@@ -15,9 +15,9 @@ module.exports = (options)->
     patterns[pattern].role = plugin
     patterns[pattern].model = 'User'
 
-  @add patterns.get.username, getUserByUsername
-  @add patterns.get.email, getUserByEmail
-  @add patterns.get.all, getUsers
+  @add patterns.username, getUserByUsername
+  @add patterns.email, getUserByEmail
+  @add patterns.all, getUsers
 
 
   _act = (actionOpts)=>
