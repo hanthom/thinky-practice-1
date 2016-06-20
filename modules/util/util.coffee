@@ -1,4 +1,5 @@
 q = require 'q'
+
 module.exports = (options)->
   plugin  = 'util'
   patterns =
@@ -15,12 +16,9 @@ module.exports = (options)->
       # service: string
     trim:
       cmd: 'trim'
+
   for pattern, val of patterns
     patterns[pattern].role = plugin
-
-  @add patterns.handleErr, handleErr
-  @add patterns.log, log
-  @add patterns.trim, trimResponse
 
   _act = (actionOpts)=>
     dfd = q.defer()
@@ -37,12 +35,22 @@ module.exports = (options)->
   # @params: promise -> q.defer object
   handleErr = (args, done)->
     {message, err, service, status} = args
-    message = "---- Error in #{service} service ----\n
-    -- Message --\n
-    #{message}
+    message = """
+    _*_*_*_*_ ERROR _*_*_*_*_\n
+    -- Error in #{service} service ----\n
+    #{message}\n
+    """
+    if status
+      message = """
+      #{message}\n
+      -- Status --\n
+      #{status}\n
+      """
+    message = """
     -- Error Object --\n
     #{JSON.stringify err}"
-    if status then message = "#{message}\n-- Status --\n--#{status}"
+    _*_*_*_*_ END _*_*_*_*_\n
+    """
     console.log message
     done()
 
@@ -63,7 +71,11 @@ module.exports = (options)->
         service: 'util'
       _act errOpts
     else
-      console.log "Message from -- #{service}\n-- Message --\n#{message}"
+      console.log """
+      _*_*_*_*_ Message from -- #{service} _*_*_*_*_\n
+      #{message}\n
+      _*_*_*_*_  END  _*_*_*_*_\n
+      """
       done()
 
   ##### trimResponse #####
@@ -101,3 +113,7 @@ module.exports = (options)->
       else
         trimmed = trim obj
       done null, trimmed
+
+  @add patterns.handleErr, handleErr
+  @add patterns.log, log
+  @add patterns.trim, trimResponse

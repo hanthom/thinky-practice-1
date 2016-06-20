@@ -1,7 +1,6 @@
 app = require "#{__dirname}/app"
 act = require "#{__dirname}/config/seneca_config"
 {port} = require "#{__dirname}/config/server_config"
-
 server = app.listen port, (e)->
   if e
     errOpts =
@@ -11,10 +10,11 @@ server = app.listen port, (e)->
       service: 'express web app'
     console.log "ERROR LISTENING ON PORT #{port}", e
     act errOpts, 'util'
-  # else
-  #   logOpts =
-  #     role: 'util'
-  #     cmd: 'log'
-  #     type: 'general'
-  #     message: "Express server started on port #{port}"
-  #   act logOpts, 'util'
+  else
+    logOpts =
+      role: 'util'
+      cmd: 'log'
+      type: 'general'
+      service: 'web'
+      message: "Express server started on port #{port}"
+    act logOpts, 'util'
