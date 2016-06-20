@@ -1,0 +1,51 @@
+version: '2'
+services:
+  # db:
+  #   build: ./modules/db
+  #   command: sh -c 'coffee seneca_config.coffee'
+  #   ports:
+  #     - "10101:10102"
+  #   volumes:
+  #     - ./modules/db:/usr/microserv/db/
+  #     - /usr/microserv/db/node_modules/
+  # users:
+  #   build: ./modules/users
+  #   command: sh -c 'coffee seneca_config.coffee'
+  #   ports:
+  #     - "10101:10103"
+  #   volumes:
+  #     - ./modules/users:/usr/microserv/users/
+  #     - /usr/microserv/users/node_modules/
+  web:
+    env_file: ./modules/web/web.env
+    build: ./modules/web
+    command: sh -c 'coffee server.coffee'
+    networks:
+      - general
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./modules/web/:/usr/microserv/web/
+      - /usr/microserv/web/node_modules/
+    expose:
+      - 10101
+      - 9999
+    # links:
+    #   - util
+      # - db
+      # - users
+  util:
+    build: ./modules/util
+    command: sh -c 'coffee seneca_config.coffee'
+    networks:
+      - general
+    volumes:
+      - ./modules/util/:/usr/microserv/util/
+      - /usr/microserv/util/node_modules/
+    expose:
+      - 10101
+    # links:
+    #   - web
+networks:
+  general:
+    driver: "bridge"

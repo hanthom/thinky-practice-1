@@ -1,6 +1,6 @@
-/node_modules
+/**/node_modules
 /build
-.env
+/**/.env
 .env.json
 npm-*.***
 *.log

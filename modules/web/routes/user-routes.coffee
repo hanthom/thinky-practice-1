@@ -1,8 +1,6 @@
 passport = require 'passport'
-userCtrl = require "#{__dirname}/../controllers/userCtrl"
-{createUser, getUserByUsername, getUserByEmail} = userCtrl
-{getUsers, updateUser, deleteUser} = userCtrl
-{sendErr} = require "#{__dirname}/../helpers/utilsHelper"
+q = require 'q'
+act = require "#{__dirname}/../config/seneca_config"
 module.exports = (app) ->
 
   app.route '/api/users/:username'

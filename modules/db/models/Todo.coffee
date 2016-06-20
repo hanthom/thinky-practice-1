@@ -1,4 +1,4 @@
-{db, r} = require "#{__dirname}/../config/dbConfig"
+{db, r} = require "#{__dirname}/../dbConfig"
 {type} = db
 
 #---------#

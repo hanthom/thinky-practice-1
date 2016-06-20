@@ -1,0 +1,19 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "description": "Thinky ORM on RethinkDB module for todo application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "coffee-script": "^1.10.0",
+    "q": "^1.4.1",
+    "rethinkdb": "^2.2.1",
+    "seneca": "^2.1.0",
+    "thinky": "^2.2.4"
+  }
+}

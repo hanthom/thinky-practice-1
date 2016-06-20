@@ -109,18 +109,18 @@ module.exports =
       delay: 1000
       exec: 'node --debug'
 
-  ##### jade #####
-  # Compiles JADE into HTML
+  ##### pug #####
+  # Compiles pug into HTML
   # Uses 'prettify' to make HTML readable
-  jade: (src, dest) ->
-    jade = require 'gulp-jade'
+  pug: (src, dest) ->
+    pug = require 'gulp-pug'
     {src, dest} = fixPath src, dest
     gulp.src src
     stream = gulp.src src
     if process.env.NODE_ENV is 'development'
       stream = devStream stream, dest
     stream
-      .pipe jade()
+      .pipe pug()
       .pipe gulp.dest dest
 
   ##### move #####
