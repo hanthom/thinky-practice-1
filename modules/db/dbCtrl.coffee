@@ -1,33 +1,41 @@
 q = require 'q'
 models = require "#{__dirname}/models"
+{r} = require "#{__dirname}/dbConfig"
 module.exports = (options)->
   plugin = 'db'
   patterns =
     create:
       cmd: 'create'
+      # model: string
     read:
       cmd: 'read'
+      # model: string
     update:
       cmd: 'update'
+      # model: string
     remove:
       cmd: 'remove'
+      # model: string
     watch:
       cmd: 'watch'
-  for pattern, val of patterns
-    patterns[pattern].role = plugin
-  @add patterns.create, create
-  @add patterns.read, read
-  @add pattters.update, update
-  @add patterns.remove, remove
-  @add patterns.watch, watchModelFeed
+      # model: string
 
-  _act = (actionOpts)=>
+  _act = (actionOpts, host)->
     dfd = q.defer()
-    @act actionOpts, (err, res)->
-      if err
-        dfd.reject err
-      else
-        dfd.resolve res
+    client = require('seneca')()
+      .client
+        host: host
+        port: 10101
+    client.ready ->
+      client.act actionOpts, (err, res)->
+        client.close ->
+          if err
+            dfd.reject err
+          else
+            if res.err
+              dfd.reject res.err
+            else
+              dfd.resolve res.data
     dfd.promise
 
   _buildMessage = (type, args)->
@@ -45,8 +53,8 @@ module.exports = (options)->
       message: message
       service: plugin
       err: err
-    _act logOpts
-    done message: message
+    _act logOpts, 'util'
+    done null, err: message
 
   ##### crudCreate #####
   # Creates an item on the DB
@@ -55,14 +63,31 @@ module.exports = (options)->
   # @resolves: object
   create = (args, done) ->
     {model, insert} = args
-    new models[model] insert
-      .save()
-      .then (res) ->
-        done null, res
-      .catch (err)->
-        _dbError 'create', err, done,
-          model: model
-          insert: insert
+    if !model or !insert
+      errOpts =
+        role: 'util'
+        cmd: 'handleErr'
+        type: 'missing_args'
+        given: [
+          {name: 'model'
+          value: model},
+          {name: 'insert'
+          value: insert}
+        ]
+        name: 'create'
+        service: 'db'
+      _act errOpts, 'util'
+      .then (builtErr)->
+        done null, err: builtErr
+    else
+      new models[model] insert
+        .save()
+        .then (res) ->
+          done null, data: res
+        .catch (err)->
+          _dbError 'create', err, done,
+            model: model
+            insert: insert
 
 
 
@@ -76,7 +101,7 @@ module.exports = (options)->
     query.build model
       .run()
       .then (res) ->
-        done null, res
+        done null, data: res
       .catch (err)->
         _dbError 'read', err, done,
           model: model
@@ -89,11 +114,11 @@ module.exports = (options)->
   # @resolves: Updated object or array of updated objects
   update = (args, done) ->
     {model, query} = args
-    query
+    query.build models[model]
       .update changes
       .run()
       .then (res) ->
-        done null, res
+        done null, data: res
       .catch (err)->
         _dbError 'update', err, done,
           model: model
@@ -105,13 +130,17 @@ module.exports = (options)->
   # @params: id -> string
   # @resolves: Object
   remove = (args, done) ->
-    {model, id} = args
-    models[model]
-      .get id
+    {model, id, query} = args
+    _query = models[model]
+    if id
+      _query = query.get id
+    else
+      _query = query.build query
+    _query
       .delete()
       .run()
       .then (res) ->
-        done null, res
+        done null, data: res
       .catch (err)->
         _dbError 'remove', err, done,
           model: model
@@ -140,7 +169,16 @@ module.exports = (options)->
                 cmd: 'log'
                 type: 'general'
                 message: message
-              _act logOpts
+              _act logOpts, 'util'
         else
           cb feed
-    done()
+    done null, message: "Change feed for #{model} started"
+
+  for pattern, val of patterns
+    patterns[pattern].role = plugin
+
+  @add patterns.create, create
+  @add patterns.read, read
+  @add patterns.update, update
+  @add patterns.remove, remove
+  @add patterns.watch, watchModelFeed

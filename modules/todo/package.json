@@ -1,7 +1,7 @@
 {
-  "name": "util",
+  "name": "todo",
   "version": "1.0.0",
-  "description": "Utility module for todo application",
+  "description": "Todo module for todo application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

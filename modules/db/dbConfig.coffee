@@ -4,10 +4,8 @@
 thinky = require 'thinky'
 
 opts =
-  authKey: process.env.SSH_TUNNEL_AUTHKEY
-  db: process.env.DB_NAME
-  host: process.env.DB_HOST
-  port: process.env.DB_PORT
+  db: 'test_db'
+  host: 'rethinkdb'
 
 db = thinky opts
 

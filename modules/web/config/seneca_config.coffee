@@ -1,14 +1,18 @@
 q = require 'q'
-seneca = require 'seneca'
 module.exports = (actionOpts, host)->
+  seneca = require('seneca')()
   dfd = q.defer()
-  client = seneca().client
+  client = seneca.client
     host: host
     port: 10101
   client.ready ->
     client.act actionOpts, (err, res)->
-      if err
-        dfd.reject err
-      else
-        dfd.resolve res
+      client.close ->
+        if err
+          dfd.reject err
+        else
+          if res.err
+            dfd.reject res.err
+          else
+            dfd.resolve res.data
   dfd.promise

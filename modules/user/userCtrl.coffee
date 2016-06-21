@@ -1,4 +1,5 @@
 q = require 'q'
+seneca = require('seneca')()
 module.exports = (options)->
   plugin  = 'user'
   patterns =
@@ -15,13 +16,11 @@ module.exports = (options)->
     patterns[pattern].role = plugin
     patterns[pattern].model = 'User'
 
-  @add patterns.username, getUserByUsername
-  @add patterns.email, getUserByEmail
-  @add patterns.all, getUsers
-
-
-  _act = (actionOpts)=>
+  _act = (actionOpts, host)=>
     dfd = q.defer()
+    client =
+      host: host
+      port: 10101
     @act actionOpts, (err, res)->
       if err
         dfd.reject err
@@ -109,3 +108,8 @@ module.exports = (options)->
         _checkAndTrim users,
         "filters: #{JSON.stringify args.filters}", done, true
       .catch done
+
+
+  @add patterns.username, getUserByUsername
+  @add patterns.email, getUserByEmail
+  @add patterns.all, getUsers

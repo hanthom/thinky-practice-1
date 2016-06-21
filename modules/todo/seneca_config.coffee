@@ -1,27 +1,27 @@
-seneca = require('seneca')()
-listener = seneca
-  .use './dbCtrl'
+seneca = require 'seneca'
+listener = seneca()
+  .use './todoCtrl'
   .ready (err)->
-    client = seneca.client host: 'util', port: 10101
+    client = seneca().client host: 'util', port: 10101
     client.ready ->
       if err
         args =
           role: 'util'
           cmd: 'handleErr'
-          service: 'db'
-          message: 'Error with starting seneca listener in db'
+          service: 'todo'
+          message: 'Error with starting seneca listener in todo'
           err: err
         client
           .act args, (err)->
             if err then console.log 'UNABLE TO SEND ERR MSG'
       else
-        listener.listen host: 'db', port: 10101
+        listener.listen host: 'todo', port: 10101
         args =
           role: 'util'
           cmd: 'log'
-          service: 'db'
+          service: 'todo'
           type: 'general'
-          message: 'DB service started'
+          message: 'Todo service started'
         client
           .act args, (err)->
             if err

@@ -7,7 +7,7 @@ server = app.listen port, (e)->
       role: 'util'
       cmd: 'handleErr'
       message: "Could not start server on #{port}"
-      service: 'express web app'
+      service: 'web'
     console.log "ERROR LISTENING ON PORT #{port}", e
     act errOpts, 'util'
   else

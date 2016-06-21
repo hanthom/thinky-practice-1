@@ -2,26 +2,33 @@ passport = require 'passport'
 q = require 'q'
 act = require "#{__dirname}/../config/seneca_config"
 module.exports = (app) ->
-
   app.route '/api/users/:username'
     .get (req, res)->
-      getUserByUsername req.params.username
-        .then (user) ->
-          res
-            .status 200
-            .send user
-        .catch (err) ->
-          sendErr err, res
+      getOpts =
+        role: 'users'
+        cmd: 'get'
+        type: 'username'
+        username: req.params.username
+      act getOpts, 'users'
+      .then (user)->
+        res
+          .status 200
+          .send user
+      .catch sendErr res
 
   app.route '/api/users/email/:email'
     .get (req, res) ->
-      getUserByEmail req.params.email
-        .then (user) ->
-          res
-            .status 200
-            .send user
-        .catch (err) ->
-          sendErr err, res
+      getOpts =
+        role: 'users'
+        cmd: 'get'
+        type: 'email'
+        email: req.params.email
+      act getOpts, 'users'
+      .then (user)->
+        res
+          .status 200
+          .send user
+      .catch sendErr res
 
   app.route '/api/users'
     .post (req, res, next)->

@@ -1,12 +1,12 @@
-seneca = require 'seneca'
+seneca = require('seneca')()
 config =
   host: 'util'
   port: 10101
-listener = seneca()
+listener = seneca
   .use './util'
-  .listen config
   .ready ->
-    client = seneca().client config
+    listener.listen config
+    client = seneca.client config
     client
       .ready ->
         args =
@@ -15,6 +15,6 @@ listener = seneca()
           type: 'general'
           service: 'util'
           message: 'Util service started'
-        client.act args, (err)->
+        client.act args, (err, res)->
           if err
             console.log 'UNABLE TO LOG STARTUP'
