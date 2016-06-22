@@ -24,4 +24,4 @@ listener = seneca
           message: 'DB service started'
         client.act args, (err)->
           # client.close ->
-          if err console.log 'UNABLE TO LOG STARTUP'
+          if err then console.log 'UNABLE TO LOG STARTUP'
