@@ -5,10 +5,10 @@ services:
     ports:
       - "localhost:8080:8080"
   util:
-    build: ./modules/util
+    build: ./modules/PH_MODULE_util
     command: sh -c 'nodemon seneca_config.coffee'
     volumes:
-      - ./modules/util/:/usr/microserv/util/
+      - ./modules/PH_MODULE_util/:/usr/microserv/util/
       - /usr/microserv/util/node_modules/
     expose:
       - 10101
@@ -16,10 +16,10 @@ services:
       - rethinkdb
 
   db:
-    build: ./modules/db
+    build: ./modules/PH_MODULE_db
     command: sh -c 'nodemon seneca_config.coffee'
     volumes:
-      - ./modules/db:/usr/microserv/db/
+      - ./modules/PH_MODULE_db:/usr/microserv/db/
       - /usr/microserv/db/node_modules/
     expose:
       - 10101
@@ -28,10 +28,10 @@ services:
       - rethinkdb
 
   todo:
-    build: ./modules/todo
+    build: ./modules/PH_MODULE_todo
     command: sh -c 'nodemon seneca_config.coffee'
     volumes:
-      - ./modules/todo:/usr/microserv/todo/
+      - ./modules/PH_MODULE_todo:/usr/microserv/todo/
       - /usr/microserv/todo/node_modules/
     expose:
       - 10101
@@ -40,10 +40,10 @@ services:
       - db
 
   web:
-    build: ./modules/web
+    build: ./modules/PH_MODULE_web
     command: sh -c 'nodemon server.coffee'
     volumes:
-      - ./modules/web/:/usr/microserv/web/
+      - ./modules/PH_MODULE_web/:/usr/microserv/web/
       - /usr/microserv/web/node_modules/
     expose:
       - 10101
