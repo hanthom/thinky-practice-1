@@ -1,0 +1,18 @@
+[submodule "modules/PH_MODULE_web"]
+	path = modules/PH_MODULE_web
+	url = https://github.com/chippawah/PH_MODULE_web.git
+[submodule "modules/PH_MODULE_todo"]
+	path = modules/PH_MODULE_todo
+	url = https://github.com/chippawah/PH_MODULE_todo.git
+[submodule "modules/PH_MODULE_util"]
+	path = modules/PH_MODULE_util
+	url = https://github.com/chippawah/PH_MODULE_util.git
+[submodule "modules/PH_MODULE_db"]
+	path = modules/PH_MODULE_db
+	url = https://github.com/chippawah/PH_MODULE_db.git
+[submodule "modules/PH_MODULE_auth"]
+	path = modules/PH_MODULE_auth
+	url = https://github.com/chippawah/PH_MODULE_auth.git
+[submodule "modules/PH_MODULE_user"]
+	path = modules/PH_MODULE_user
+	url = https://github.com/chippawah/PH_MODULE_user.git
