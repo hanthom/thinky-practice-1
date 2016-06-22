@@ -19,22 +19,27 @@ module.exports = (options)->
       cmd: 'deleteTodo'
       # id: string
 
+  _clients = {}
   _act = (actionOpts, host)->
     dfd = q.defer()
-    client = require('seneca')()
-      .client
-        host: host
-        port: 10101
+    client = null
+    if !_clients[host]
+      client = require('seneca')()
+        .client
+          host: host
+          port: 10101
+      _clients[host] = client
+    else
+      client = _clients[host]
     client.ready ->
       client.act actionOpts, (err, res)->
-        client.close ->
-          if err
-            dfd.reject err
+        if err
+          dfd.reject err
+        else
+          if res.err
+            dfd.reject res.err
           else
-            if res.err
-              dfd.reject res.err
-            else
-              dfd.resolve res.data
+            dfd.resolve res.data
     dfd.promise
 
   _error = (done, message, status)->

@@ -30,7 +30,6 @@ module.exports = (options)->
       cmd: 'trim'
 
   _act = (actionOpts)=>
-    console.log 'ACTION IN UTIL', actionOpts
     dfd = q.defer()
     @act actionOpts, (err, res)->
       if err
@@ -50,7 +49,7 @@ module.exports = (options)->
         service: 'util'
         message: message
         status: status or err.status
-        err: err
+        err: JSON.stringify err
       _act errOpts
       done null, err: errOpts
 
@@ -102,7 +101,7 @@ module.exports = (options)->
         builtMessage = """#{builtMessage}\n
         - Arguement Set -
         Argument Name --> #{name}
-        Given Value --> #{value}
+        Given Value --> #{JSON.stringify value}
         -----------------"""
       message = _wrapMessage 'Error', builtMessage, service
       console.log message

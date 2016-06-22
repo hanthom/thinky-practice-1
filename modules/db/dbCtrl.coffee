@@ -33,29 +33,34 @@ module.exports = (options)->
       cmd: 'watch'
       # model: string
 
+  _clients = {}
   _act = (actionOpts, host)->
     dfd = q.defer()
-    client = require('seneca')()
-      .client
-        host: host
-        port: 10101
+    client = null
+    if !_clients[host]
+      client = require('seneca')()
+        .client
+          host: host
+          port: 10101
+      _clients[host] = client
+    else
+      client = _clients[host]
     client.ready ->
       client.act actionOpts, (err, res)->
-        client.close ->
-          if err
-            dfd.reject err
+        if err
+          dfd.reject err
+        else
+          if res.err
+            dfd.reject res.err
           else
-            if res.err
-              dfd.reject res.err
-            else
-              dfd.resolve res.data
+            dfd.resolve res.data
     dfd.promise
 
   _buildMessage = (type, args)->
     base = "Error during #{type} on db\n
     --- Arguements ---\n"
     for arg, val of args
-      base = "#{base}-- #{arg}: #{val}\n"
+      base = "#{base}-- #{arg}: #{JSON.stringify val}\n"
     base
 
   _buildQuery = (query, modelName)->

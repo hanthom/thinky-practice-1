@@ -1,8 +1,8 @@
-seneca = require('seneca')()
-listener = seneca
+seneca = require 'seneca'
+listener = seneca()
   .use './dbCtrl'
   .ready (err)->
-    client = seneca.client host: 'util', port: 10101
+    client = seneca().client host: 'util', port: 10101
     client.ready ->
       if err
         args =
@@ -12,8 +12,8 @@ listener = seneca
           message: 'Error with starting seneca listener in db'
           err: err
         client.act args, (err)->
-          # client.close ->
-          if err then console.log 'UNABLE TO SEND ERR MSG'
+          client.close ->
+            if err then console.log 'UNABLE TO SEND ERR MSG'
       else
         listener.listen host: 'db', port: 10101
         args =
@@ -23,5 +23,5 @@ listener = seneca
           type: 'general'
           message: 'DB service started'
         client.act args, (err)->
-          # client.close ->
-          if err then console.log 'UNABLE TO LOG STARTUP'
+          client.close ->
+            if err then console.log 'UNABLE TO LOG STARTUP'
