@@ -8,9 +8,8 @@ module.exports = (app)->
   app.get '/api/todos/:status', (req, res)->
     getOpts =
       role: 'todo'
-      cmd: 'get'
-      type: 'many'
-      status: req.params.status or 'all'
+      cmd: 'get_many'
+      status: req.params.status
     act getOpts, 'todo'
     .then (todos)->
       res
@@ -18,24 +17,24 @@ module.exports = (app)->
         .send todos
     .catch sendErr res
 
-  app.post '/api/todos', (req, res)->
-    postOpts =
-      role: 'todo'
-      cmd: 'addTodo'
-      todo: req.body
-    act postOpts, 'todo'
-    .then (todo)->
-      res
-        .status 201
-        .send todo
-    .catch sendErr res
+  app.route '/api/todos'
+    .post (req, res)->
+      postOpts =
+        role: 'todo'
+        cmd: 'addTodo'
+        todo: req.body
+      act postOpts, 'todo'
+      .then (todo)->
+        res
+          .status 201
+          .send todo
+      .catch sendErr res
 
-  app.route '/api/todos/:id'
+  app.route '/api/todo/:id'
     .get (req, res)->
       getOpts =
         role: 'todo'
-        cmd: 'get'
-        type: 'many'
+        cmd: 'get_one'
         id: req.params.id
       act getOpts, 'todo'
       .then (todo)->

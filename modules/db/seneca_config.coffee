@@ -11,8 +11,8 @@ listener = seneca
           service: 'db'
           message: 'Error with starting seneca listener in db'
           err: err
-        client
-          .act args, (err)->
+        client.act args, (err)->
+          client.close ->
             if err then console.log 'UNABLE TO SEND ERR MSG'
       else
         listener.listen host: 'db', port: 10101
@@ -22,7 +22,7 @@ listener = seneca
           service: 'db'
           type: 'general'
           message: 'DB service started'
-        client
-          .act args, (err)->
+        client.act args, (err)->
+          client.close ->
             if err
               console.log 'UNABLE TO LOG STARTUP'

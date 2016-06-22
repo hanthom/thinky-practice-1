@@ -5,15 +5,12 @@ module.exports = (options)->
     addTodo:
       cmd: 'addTodo'
       # insert: object
-    get:
-      one:
-        cmd: 'get'
-        type: 'one'
-        # id: string
-      many:
-        cmd: 'get'
-        type: 'many'
-        # status: string
+    get_one:
+      cmd: 'get_one'
+      # id: string
+    get_many:
+      cmd: 'get_many'
+      # status: string
     updateTodo:
       cmd: 'updateTodo'
       # id: string
@@ -55,8 +52,8 @@ module.exports = (options)->
     handler
 
   addTodo = (args, done)->
-    {insert} = args
-    if !insert
+    {todo} = args
+    if !todo
       errOpts =
         role: 'util'
         cmd: 'handleErr'
@@ -64,8 +61,8 @@ module.exports = (options)->
         service: 'todo'
         name: 'addTodo'
         given:[
-          {name: 'insert'
-          value: insert}
+          {name: 'todo'
+          value: todo}
         ]
       _act errOpts, 'util'
       .then _error done, 'Missing Arguements', 400
@@ -73,7 +70,7 @@ module.exports = (options)->
       addOptions =
         role: 'db'
         cmd: 'create'
-        insert: insert
+        insert: todo
         model: 'Todo'
       _act addOptions, 'db'
       .then (todo)->
@@ -83,17 +80,31 @@ module.exports = (options)->
         handler(err)
 
   getOneTodo = (args, done)->
-    getOptions =
-      role: 'db'
-      cmd: 'read'
-      model: 'Todo'
-      query:
-        build: (Todo)->
-          Todo.get args.id
-    _act getOptions, 'db'
-    .then (todo)->
-      done null, data: todo
-    .catch _error done, "Could not get todo with id: #{id}"
+    {id} = args
+    if !id
+      errOpts =
+        role: 'util'
+        cmd: 'handleErr'
+        type: 'missing_args'
+        service: 'todo'
+        name: 'get_one'
+        given:[
+          {name: 'id'
+          value: id}
+        ]
+      _act errOpts, 'util'
+      .then _error done, 'Missing Arguements'
+    else
+      getOptions =
+        role: 'db'
+        cmd: 'read'
+        model: 'Todo'
+        query:
+          primary_key: id
+      _act getOptions, 'db'
+      .then (todos)->
+        done null, data: todos[0]
+      .catch _error done, "Could not get todo with id: #{id}"
 
   getTodos = (args, done)->
     {status} = args
@@ -102,8 +113,8 @@ module.exports = (options)->
       cmd: 'read'
       model: 'Todo'
       query:
-        build: (Todo)->
-          Todo.filter status: status
+        filters:
+          status: status
     _act getManyOptions, 'db'
     .then (todos)->
       done null, data: todos
@@ -111,15 +122,32 @@ module.exports = (options)->
 
   updateTodo = (args, done)->
     {id, changes} = args
-    updateOptions =
-      role: 'db'
-      model: 'Todo'
-      id: id
-      changes: changes
-    _act updateOptions, 'db'
-    .then (updatedTodo)->
-      done null, data: updatedTodo
-    .catch _error done, "Updating todo: #{id}"
+    if !id or !changes
+      errOpts =
+        role: 'util'
+        cmd: 'handleErr'
+        type: 'missing_args'
+        service: 'todo'
+        name: 'updateTodo'
+        given:[
+          {name: 'changes', value: changes}
+          {name: 'id', values: id}
+          {name: 'query', values: query}
+        ]
+      _act errOpts, 'util'
+      .then _error done, 'Missing Arguements'
+    else
+      updateOptions =
+        role: 'db'
+        cmd: 'update'
+        model: 'Todo'
+        query:
+          primary_key: id
+        changes: changes
+      _act updateOptions, 'db'
+      .then (updatedTodo)->
+        done null, data: updatedTodo
+      .catch _error done, "Updating todo: #{id}"
 
   deleteTodo = (args, done)->
     deleteOptions =
@@ -139,7 +167,7 @@ module.exports = (options)->
       patterns[pattern].role = plugin
 
   @add patterns.addTodo, addTodo
-  @add patterns.get.one, getOneTodo
-  @add patterns.get.many, getTodos
+  @add patterns.get_one, getOneTodo
+  @add patterns.get_many, getTodos
   @add patterns.updateTodo, updateTodo
   @add patterns.deleteTodo, deleteTodo

@@ -7,15 +7,28 @@ module.exports = (options)->
     create:
       cmd: 'create'
       # model: string
+      # insert: object
     read:
       cmd: 'read'
       # model: string
+      # query:
+      #   primary_key: string
+      #   filters: object
+      #   without: array
+      #   pluck: array
+      #   joins: Unsupported RN
     update:
       cmd: 'update'
       # model: string
+      # query:
+      #   primary_key: string
+      #   filters: object
     remove:
       cmd: 'remove'
       # model: string
+      # query:
+      #   primary_key: string
+      #   filters: object
     watch:
       cmd: 'watch'
       # model: string
@@ -45,22 +58,69 @@ module.exports = (options)->
       base = "#{base}-- #{arg}: #{val}\n"
     base
 
+  _buildQuery = (query, modelName)->
+    {primary_key, filters, joins, without, pluck} = query
+    model = models[modelName]
+    base = model
+    if primary_key
+      base = base.get primary_key
+    else if filters
+      base = base.filter filters
+    if without
+      base = base.without without
+    if pluck
+      base = base.pluck pluck
+    if joins
+      console.log 'NO LOGIC FOR JOINS YET'
+    base
+
   _dbError = (type, err, done, args)->
     message = _buildMessage type, args
     logOpts =
       role: 'util'
       cmd: 'handleErr'
+      type: 'general'
       message: message
       service: plugin
       err: err
     _act logOpts, 'util'
     done null, err: message
 
-  ##### crudCreate #####
-  # Creates an item on the DB
-  # @params: model -> string
-  # @params: insert -> object
-  # @resolves: object
+  read = (args, done)->
+    {model, query} = args
+    if !model or !query
+      errOpts =
+        role: 'util'
+        cmd: 'handleErr'
+        type: 'missing_args'
+        given: [
+          {name: 'model', value: model},
+          {name: 'query', value: query}
+        ]
+        name: 'read'
+        service: 'db'
+      _act errOpts, 'util'
+      .then (builtErr)->
+        done null, err: builtErr
+    else
+      _buildQuery query, model
+        .run()
+        .then (doc)->
+          if Array.isArray(doc) and doc.length is 0
+            err =
+              status: 404
+              message: 'No documents returned'
+            _dbError 'read', err, done,
+              model: model
+              query: query
+          else
+            done null, data: doc
+        .catch (err)->
+          _dbError 'read', err, done,
+            model: model
+            query: query
+
+
   create = (args, done) ->
     {model, insert} = args
     if !model or !insert
@@ -69,10 +129,8 @@ module.exports = (options)->
         cmd: 'handleErr'
         type: 'missing_args'
         given: [
-          {name: 'model'
-          value: model},
-          {name: 'insert'
-          value: insert}
+          {name: 'model', value: model},
+          {name: 'insert', value: JSON.stringify insert}
         ]
         name: 'create'
         service: 'db'
@@ -80,7 +138,8 @@ module.exports = (options)->
       .then (builtErr)->
         done null, err: builtErr
     else
-      new models[model] insert
+      Model = models[model]
+      new Model insert
         .save()
         .then (res) ->
           done null, data: res
@@ -89,62 +148,60 @@ module.exports = (options)->
             model: model
             insert: insert
 
-
-
-  ##### crudRead #####
-  # Gets the requested info from the DB
-  # @params: query.build -> fn that expects thinky model and returns a query
-  # @resolves: Object or Array based on query
-  read = (args, done) ->
-    {model, query} = args
-    model = models[model]
-    query.build model
-      .run()
-      .then (res) ->
-        done null, data: res
-      .catch (err)->
-        _dbError 'read', err, done,
-          model: model
-          query: query
-
-
-  ##### crudUpdate #####
-  # Updates the queried doc(s) with the changes
-  # @params: query.build -> fn that expects thinky model and returns a query
-  # @resolves: Updated object or array of updated objects
   update = (args, done) ->
+    {model, query, changes} = args
     {model, query} = args
-    query.build models[model]
-      .update changes
-      .run()
-      .then (res) ->
-        done null, data: res
-      .catch (err)->
-        _dbError 'update', err, done,
-          model: model
-          query: query
-
-  ##### crudDelete #####
-  # Deletes the specifed object
-  # @params: modelObj -> Thinky Model
-  # @params: id -> string
-  # @resolves: Object
-  remove = (args, done) ->
-    {model, id, query} = args
-    _query = models[model]
-    if id
-      _query = query.get id
+    if !model or !query
+      errOpts =
+        role: 'util'
+        cmd: 'handleErr'
+        type: 'missing_args'
+        given: [
+          {name: 'model', value: model},
+          {name: 'query', value: query}
+        ]
+        name: 'update'
+        service: 'db'
+      _act errOpts, 'util'
+      .then (builtErr)->
+        done null, err: builtErr
     else
-      _query = query.build query
-    _query
-      .delete()
-      .run()
-      .then (res) ->
-        done null, data: res
-      .catch (err)->
-        _dbError 'remove', err, done,
-          model: model
-          query: query
+      _buildQuery query, model
+        .update changes
+        .run()
+        .then (res) ->
+          done null, data: res
+        .catch (err)->
+          _dbError 'update', err, done,
+            model: model
+            build: build
+
+  remove = (args, done) ->
+    {model, query} = args
+    if !model or !query
+      errOpts =
+        role: 'util'
+        cmd: 'handleErr'
+        type: 'missing_args'
+        given: [
+          {name: 'model', value: model},
+          {name: 'query', value: query}
+        ]
+        name: 'remove'
+        service: 'db'
+      _act errOpts, 'util'
+      .then (builtErr)->
+        done null, err: builtErr
+    else
+      _buildQuery model, query
+        .delete()
+        .run()
+        .then (res) ->
+          done null, data: res
+        .catch (err)->
+          _dbError 'remove', err, done,
+            model: model
+            query: query
 
   ##### watchModelFeed #####
   # Watches a model table for changes and handles with cb if provided
